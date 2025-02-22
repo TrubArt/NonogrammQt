@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm";
+    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm\\levels\\1";
     Solution maintask(directoryPath + "\\Condition", directoryPath + "\\Additional color condition");
 
     // для добавления новых методов нужно изменить конструктор по умолчанию MethodsVectorShell
