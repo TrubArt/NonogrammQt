@@ -2,12 +2,16 @@ project(mainApp)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
+set(QT_FILES
+    mainwindow.h
+    mainwindow.cpp
+    mainwindow.ui
+    mainwindow.qrc
+)
+
 set(SOURCE_FILES
-	main.cpp
-        mainwindow.h
-	mainwindow.cpp
-	mainwindow.ui
-	mainwindow.qrc
+    main.cpp
+    ${QT_FILES}
 )
 
 add_executable(${PROJECT_NAME}

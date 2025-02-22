@@ -4,11 +4,12 @@
 
 FileLoader::FileLoader(const std::string& fileName)
 {
-	file.open(fileName + ".txt");
+    std::string newFileName = fileName + ".txt";
+    file.open(newFileName);
 	if (!file.is_open())
 	{
-		std::cerr << "Файл с данными не открыт!\n";
-        // std::exit(1);
+        std::cerr << "File \"" << newFileName << "\" not open!\n";
+        std::exit(1);
 	}
 }
 
