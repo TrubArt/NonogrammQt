@@ -107,7 +107,7 @@ void Condition::printToConsoleDifferences(const Condition& cond, int color) cons
 		return;
 	}
 
-	std::cout << "\tНачало: ";
+    std::cout << "\tStart: ";
 
 	if (start != cond.start)
 	{
@@ -116,7 +116,7 @@ void Condition::printToConsoleDifferences(const Condition& cond, int color) cons
 	std::cout << start;
 	SetConsoleTextAttribute(console, 15);
 
-	std::cout << ", Конец: ";
+    std::cout << ", End: ";
 
 	if (end != cond.end)
 	{
@@ -125,7 +125,7 @@ void Condition::printToConsoleDifferences(const Condition& cond, int color) cons
 	std::cout << end;
 	SetConsoleTextAttribute(console, 15);
 
-	std::cout << "\n\tСписок:";
+    std::cout << "\n\tList:";
 
 	for (auto thisIt = numInfo.cbegin(), condIt = cond.numInfo.cbegin(); thisIt != numInfo.cend(); ++thisIt, ++condIt)
 	{
@@ -144,8 +144,8 @@ std::string Condition::toString() const
 	}
 
 	std::string answer;
-	answer.append("\tНачало: " + std::to_string(start) + ", Конец: " + std::to_string(end) + "\n");
-	answer.append("\tСписок:");
+    answer.append("\tStart: " + std::to_string(start) + ", End: " + std::to_string(end) + "\n");
+    answer.append("\tList:");
 
 	for (const auto& i : numInfo)
 	{

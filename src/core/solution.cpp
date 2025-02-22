@@ -101,7 +101,7 @@ void Solution::callingMethods(const std::vector<IMethod*>& methods)
 
 		// вывод в консоль изменений после работы метода
 
-		std::cout << "\nИзменения после работы метода" << i->methodName() << ":\n\n";
+        std::cout << "\nChanges after " << i->methodName() << " method work:\n\n";
 		this->printToConsoleDifferences(copy, 4);
 
 		copy = *this;

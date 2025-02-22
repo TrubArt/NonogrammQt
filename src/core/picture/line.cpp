@@ -103,7 +103,7 @@ int Line::getCountTypeCell(size_t startIndex, size_t endIndex, CellType cType) c
 	int answer = 0;
 	if (endIndex > data.size())
 	{
-		std::cout << "Выход за границы Line\n";
+        std::cout << "Out of Line\n";
 		return answer;
 	}
 
@@ -123,7 +123,7 @@ int Line::getLeftIndexTypeCell(size_t startIndex, size_t endIndex, CellType cTyp
 	int answer = -1;
 	if (endIndex > data.size())
 	{
-		std::cout << "Выход за границы Line\n";
+        std::cout << "Out of Line\n";
 		return answer;
 	}
 
@@ -143,7 +143,7 @@ int Line::getRightIndexTypeCell(size_t startIndex, size_t endIndex, CellType cTy
 	int answer = -1;
 	if (endIndex > data.size())
 	{
-		std::cout << "Выход за границы Line\n";
+        std::cout << "Out of Line\n";
 		return answer;
 	}
 
