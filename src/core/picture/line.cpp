@@ -1,8 +1,6 @@
 ﻿#include "line.h"
 
 #include <algorithm>
-#define NOMINMAX
-#include <Windows.h>
 
 Line::Line(size_t size)
 {
@@ -68,8 +66,8 @@ bool Line::operator==(const Line& x) const
 			return false;
 		}
 	}
-	return true;
 
+	return true;
 }
 
 bool Line::operator!=(const Line& x) const
@@ -92,18 +90,18 @@ size_t Line::getSize() const
 	return data.size();
 }
 
-int Line::getCountTypeCell(CellType cType) const
+size_t Line::getCountTypeCell(CellType cType) const
 {
 	//return std::count_if(data.begin(), data.end(), [cType](Cell* x) { return x->get() == cType ? true : false; });
-	return this->getCountTypeCell(0, data.size(), cType);
+	return getCountTypeCell(0, data.size(), cType);
 }
 
-int Line::getCountTypeCell(size_t startIndex, size_t endIndex, CellType cType) const
+size_t Line::getCountTypeCell(size_t startIndex, size_t endIndex, CellType cType) const
 {
-	int answer = 0;
+	size_t answer = 0;
 	if (endIndex > data.size())
 	{
-        std::cout << "Out of Line\n";
+		std::cout << "Out of Line\n";
 		return answer;
 	}
 
@@ -123,7 +121,7 @@ int Line::getLeftIndexTypeCell(size_t startIndex, size_t endIndex, CellType cTyp
 	int answer = -1;
 	if (endIndex > data.size())
 	{
-        std::cout << "Out of Line\n";
+		std::cout << "Out of Line\n";
 		return answer;
 	}
 
@@ -141,9 +139,9 @@ int Line::getLeftIndexTypeCell(size_t startIndex, size_t endIndex, CellType cTyp
 int Line::getRightIndexTypeCell(size_t startIndex, size_t endIndex, CellType cType) const
 {
 	int answer = -1;
-	if (endIndex > data.size())
+	if (endIndex == 0 || endIndex > data.size())
 	{
-        std::cout << "Out of Line\n";
+		std::cout << "Out of Line\n";
 		return answer;
 	}
 
@@ -159,37 +157,44 @@ int Line::getRightIndexTypeCell(size_t startIndex, size_t endIndex, CellType cTy
 	return answer;
 }
 
-void Line::printToConsoleDifferences(const Line& line, int color) const
+void Line::printToConsoleDifferences(const Line& line, Color color) const
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	WORD lightDifferens = static_cast<WORD>(color);
+	WORD undefinedColor = static_cast<WORD>(Color::white);
+
 	for (size_t index = 0; index < data.size(); ++index)
 	{
 		if (data[index]->get() != line.data[index]->get())
 		{
-			SetConsoleTextAttribute(console, color);
+			SetConsoleTextAttribute(console, lightDifferens);
 		}
 		std::cout << " " << data[index]->toString();
 
-		SetConsoleTextAttribute(console, 15);
+		SetConsoleTextAttribute(console, undefinedColor);
 	}
 }
 
-void Line::printToConsoleColor(int whiteColor, int blackColor) const
+void Line::printToConsoleColor(Color whiteColor, Color blackColor) const
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	WORD undefinedColor = static_cast<WORD>(Color::white);
+	WORD whiteColorw = static_cast<WORD>(whiteColor);
+	WORD blackColorw = static_cast<WORD>(blackColor);
+
 	for (size_t index = 0; index < data.size(); ++index)
 	{
 		if (data[index]->get() == CellType::black)
 		{
-			SetConsoleTextAttribute(console, blackColor);
+			SetConsoleTextAttribute(console, blackColorw);
 		}
 		if (data[index]->get() == CellType::white)
 		{
-			SetConsoleTextAttribute(console, whiteColor);
+			SetConsoleTextAttribute(console, whiteColorw);
 		}
 		std::cout << " " << data[index]->toString();
 
-		SetConsoleTextAttribute(console, 15);
+		SetConsoleTextAttribute(console, undefinedColor);
 	}
 }
 

@@ -8,9 +8,9 @@
 // класс, хранящий число и его характеристики
 class NumberAndBorders
 {
-	using myP = std::pair<int, int>;
+	using myP = std::pair<size_t, size_t>;
 
-	int number;		// число
+	size_t number;	// число
 	myP dia;		// (D) диапазон, в котором может теоретически находиться число
 	bool isExistRD;	// флаг, показывающий, существует ли реальный диапазон
 	myP realDia;	// (RD) диапазон, в котором находится только это число
@@ -18,13 +18,13 @@ class NumberAndBorders
 public:
 	// ctors, dtor, operators
 
-	NumberAndBorders(int number, const myP& dia, const myP& realdia);
+	NumberAndBorders(size_t number, const myP& dia, const myP& realdia);
 
 	// getters & setters
 
-	int getNum() const;
-	const myP& getD() const;
-	const myP& getRD() const;
+	size_t getNum() const;
+	myP getD() const;
+	myP getRD() const;
 	bool getFlagExistRd() const;
 	void setD(const myP& x);
 	void setFlagExistRd(bool flag);
@@ -35,7 +35,7 @@ public:
 	void updateNumberAndBorders(const Line* data);
 
 	// выводит в консоль this, подсвечивая color различия между this и data
-	void printToConsoleDifferences(const NumberAndBorders& data, int color) const;
+	void printToConsoleDifferences(const NumberAndBorders& data, Color color) const;
 	std::string toString() const;
 
 private:
@@ -43,7 +43,7 @@ private:
 	void updateRDviaD();
 
 	// уменьшает D, если на краях число не помещается из-за расположения 0
-	void updateDIf0InEdges(const Line* data);
+	void updateDIfWhiteInEdges(const Line* data);
 
 	// улучшает D, если в RD есть хоть одна black клетка
 	// недосягаемость https://www.nonograms.ru/methods

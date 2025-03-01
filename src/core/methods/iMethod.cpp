@@ -1,13 +1,35 @@
 ﻿#include "iMethod.h"
 
-void IMethod::setColorWithInformation(Picture* pict, const std::pair<int, int>& posit, int index, CellType cType) const
+void IMethod::setColorAndAddInQueue(Picture& pict, CellQueue& queue, bool isColumn, size_t rowOrColIndex
+									, size_t lineIndex, CellType cType) const
 {
-	if (posit.first == 0)
+	bool isPaint = false;
+	if (!isColumn)
 	{
-		pict->setColor(posit.second, index, cType);
+		isPaint = setColorWithInformation(pict, rowOrColIndex, lineIndex, cType);
+
+		if (isPaint)
+		{
+			addInfoInQueue(queue, rowOrColIndex, lineIndex, cType);
+		}
+
+		return;
 	}
-	else
+
+	isPaint = setColorWithInformation(pict, lineIndex, rowOrColIndex, cType);
+
+	if (isPaint)
 	{
-		pict->setColor(index, posit.second, cType);
+		addInfoInQueue(queue, lineIndex, rowOrColIndex, cType);
 	}
+}
+
+bool IMethod::setColorWithInformation(Picture& pict, size_t rowIndex, size_t lineIndex, CellType cType) const
+{
+	return pict.setColor(rowIndex, lineIndex, cType);
+}
+
+void IMethod::addInfoInQueue(CellQueue& queue, size_t rowIndex, size_t lineIndex, CellType cType) const
+{
+	queue.customPush(PaintCellInfo(rowIndex, lineIndex, cType));
 }

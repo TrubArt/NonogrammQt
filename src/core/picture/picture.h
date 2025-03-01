@@ -26,17 +26,24 @@ public:
 
 	// getters & setters
 
-    const Line* getPtr(const std::pair<int, int>&) const;
-	void setColor(int rowNumber, size_t index, CellType cType);
+	const Line* getPtr(const std::pair<size_t, size_t>&) const;
+
+	// true, если произошла закраска, иначе false
+	bool setColor(size_t rowNumber, size_t index, CellType cType);
 
 	// functions
 
 	// выводит в консоль this, подсвечивая color различия между this и pict
-	void printToConsoleDifferences(const Picture& pict, int color) const;
+	void printToConsoleDifferences(const Picture& pict, Color color) const;
 
 	// выводит в консоль Picture, где CellType::white подсвечены цветом whiteColor, а CellType::black подсвечены цветом blackColor
-	void printToConsoleColor(int whiteColor, int blackColor) const;
+	void printToConsoleColor(Color whiteColor, Color blackColor) const;
 	std::string toString() const;
 	friend std::ostream& operator<<(std::ostream& out, const Picture& pict); // печать изображения
+
+private:
+	// определяет необходимо ли вносить измененияв изображение или нет
+	bool needChanges(size_t rowNumber, size_t index, CellType cType) const;
+	void paint(size_t rowNumber, size_t index, CellType cType);
 };
 #endif // !PICTURE_NONOGRAM

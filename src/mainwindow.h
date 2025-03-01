@@ -7,6 +7,9 @@
 #include <qgraphicsscene.h>
 #include <qgraphicsview.h>
 
+#include "colorstore.h"
+#include "queueCells/cellQueue.h"
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -14,16 +17,23 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget* parent = nullptr);
 	~MainWindow();
-	void setFieldsSize(int heightCountRect, int widthCountRect);
+    void changeTableSize(int rowCount, int columnCount);
+    void paintCell(const PaintCellInfo& cellInfo);
 
 public slots:
 	void handlerSpinBox(int index);
 
 private:
-	void createTable();
-	void setRectSize();
+    void setCellSize();
+    void createTable();
+    void removeTable();
+    void setTableSize(int heightCountRect, int widthCountRect);
 
-	QPoint findPositionInScene(int heightIndex, int widthIndex) const;
+    QPoint findTopLeftPointCell(int heightIndex, int widthIndex) const;
+    QPoint findCenterCell(int heightIndex, int widthIndex) const;
+
+    void addCell(int heightIndex, int widthIndex, const QPen& pen, const QColor& col);
+    void removeCell(int heightIndex, int widthIndex);
 
 	Ui::mainwindowClass ui;
 
@@ -31,8 +41,9 @@ private:
 	QGraphicsView* mp_view;
 
 	QSizeF m_rectSize;
-	int m_widthCountRect;
-	int m_heightCountRect;
+    int m_widthCountCell;
+    int m_heightCountCell;
+    ColorStore colors;
 };
 
 #endif // MAINWINDOW_H

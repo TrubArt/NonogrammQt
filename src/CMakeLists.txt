@@ -16,6 +16,7 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES}
+    colorstore.h colorstore.cpp
 )
 
 add_subdirectory(core)

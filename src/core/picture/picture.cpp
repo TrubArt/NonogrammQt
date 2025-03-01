@@ -117,42 +117,27 @@ bool Picture::operator!=(const Picture& x) const
 	return !(*this == x);
 }
 
-const Line* Picture::getPtr(const std::pair<int, int>& x) const
+const Line* Picture::getPtr(const std::pair<size_t, size_t>& x) const
 {
 	return x.first == 0 ? rows[x.second] : columns[x.second];
 }
 
-void Picture::setColor(int rowNumber, size_t index, CellType cType)
+bool Picture::setColor(size_t rowNumber, size_t index, CellType cType)
 {
-	if (!checkSynchronization(rows, columns))
+	if (!needChanges(rowNumber, index, cType))
 	{
-        std::cerr << "Picture synchronization failed!!!\n";
-		std::exit(1);
+		return false;
 	}
 
-    // обработка ситуации, если клетка уже закрашена
-    if (CellType cellColor = rows[rowNumber]->getCellType(index); cellColor != CellType::undefined)
-    {
-        if (cellColor == cType)
-        {
-            return;
-        }
-
-        std::cerr << "Repainting of an already painted cell!!!\n";
-        std::exit(1);
-    }
-
-	// необходимо 2 вызова, чтобы была однозначная картинка
-	// и с точки зрения строк и с точки зрения столбцов
-	rows[rowNumber]->setCellType(index, cType);
-	columns[index]->setCellType(rowNumber, cType);
+	paint(rowNumber, index, cType);
+	return true;
 }
 
-void Picture::printToConsoleDifferences(const Picture& pict, int color) const
+void Picture::printToConsoleDifferences(const Picture& pict, Color color) const
 {
 	if (pict.rows.size() != rows.size() || pict.columns.size() != columns.size())
 	{
-        std::cout << "Error in Picture::printToConsoleDifferences. Different picture sizes\n";
+		std::cout << "Error in Picture::printToConsoleDifferences. Different picture sizes\n";
 		return;
 	}
 
@@ -163,7 +148,7 @@ void Picture::printToConsoleDifferences(const Picture& pict, int color) const
 	}
 }
 
-void Picture::printToConsoleColor(int whiteColor, int blackColor) const
+void Picture::printToConsoleColor(Color whiteColor, Color blackColor) const
 {
 	for (size_t strNum = 0; strNum < rows.size(); ++strNum)
 	{
@@ -186,4 +171,40 @@ std::ostream& operator<<(std::ostream& out, const Picture& pict)
 {
 	out << pict.toString();
 	return out;
+}
+
+bool Picture::needChanges(size_t rowNumber, size_t index, CellType cType) const
+{
+	if (!checkSynchronization(rows, columns))
+	{
+		std::cerr << "Picture synchronization failed!!!\n";
+		std::exit(1);
+	}
+
+	enum NeedToDraw { no, yes };
+	CellType cellColor = rows[rowNumber]->getCellType(index);
+
+	if (cellColor == CellType::undefined)
+	{
+		return NeedToDraw::yes;
+	}
+
+	// обработка ситуации, если клетка уже закрашена
+	if (cellColor == cType)
+	{
+		return NeedToDraw::no;
+	}
+
+	std::cerr << "Repainting of an already painted cell!!!\n";
+	std::exit(1);
+
+	return NeedToDraw::no;
+}
+
+void Picture::paint(size_t rowNumber, size_t index, CellType cType)
+{
+	// необходимо 2 вызова, чтобы была однозначная картинка
+	// и с точки зрения строк и с точки зрения столбцов
+	rows[rowNumber]->setCellType(index, cType);
+	columns[index]->setCellType(rowNumber, cType);
 }

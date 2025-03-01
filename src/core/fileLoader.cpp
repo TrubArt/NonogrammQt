@@ -2,14 +2,14 @@
 
 #include <iostream>
 
-FileLoader::FileLoader(const std::string& fileName)
+FileLoader::FileLoader(const std::string& _fileName)
+	: fileName(_fileName + ".txt")
+	, file(fileName)
 {
-    std::string newFileName = fileName + ".txt";
-    file.open(newFileName);
 	if (!file.is_open())
 	{
-        std::cerr << "File \"" << newFileName << "\" not open!\n";
-        std::exit(1);
+		std::cerr << "File " << fileName << " not open!\n";
+		std::exit(1);
 	}
 }
 
@@ -23,17 +23,26 @@ bool FileLoader::isEmpty() const
 	return file.eof();
 }
 
-int FileLoader::getNumber(const std::string& str, size_t& index) const
+size_t FileLoader::getNumber(const std::string& str, size_t& index) const
 {
 	std::string tmp;
 	while (str[index] != ' ' && index < str.length())
 	{
 		tmp.push_back(str[index++]);
 	}
-	return std::stoi(tmp);
+	int number = std::stoi(tmp);
+
+	if (number <= 0)
+	{
+		std::cerr << "Uncorrect input data.\n";
+		std::cerr << "File: " << fileName << "\n";
+		std::cerr << "Data: " << str << "\n";
+	}
+
+	return number;
 }
 
-std::vector<int> FileLoader::getNumbersSequence()
+std::vector<size_t> FileLoader::getNumbersSequence()
 {
 	std::string str;
 	do								// пропуск пустых строчек
@@ -41,7 +50,7 @@ std::vector<int> FileLoader::getNumbersSequence()
 		std::getline(file, str);
 	} while (str.empty() && !isEmpty());
 
-	std::vector<int> tmpvec;		// вектор с ответом
+	std::vector<size_t> tmpvec;		// вектор с ответом
 
 	for (size_t i = 0; i < str.length(); ++i)
 	{

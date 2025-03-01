@@ -4,13 +4,13 @@
 
 MethodsVectorShell::MethodsVectorShell()
 {
-	methods.push_back(new UnambiguousBlack());
-	methods.push_back(new UnambiguousWhite());
+	list.push_back(new UnambiguousBlack());
+	list.push_back(new UnambiguousWhite());
 }
 
 MethodsVectorShell::~MethodsVectorShell()
 {
-	for (auto& i : methods)
+	for (auto& i : list)
 	{
 		delete i;
 	}
@@ -18,15 +18,15 @@ MethodsVectorShell::~MethodsVectorShell()
 
 void MethodsVectorShell::clear()
 {
-	methods.clear();
+	list.clear();
 }
 
 void MethodsVectorShell::pushMehod(IMethod* x)
 {
-	methods.push_back(x);
+	list.push_back(x);
 }
 
 const std::vector<IMethod*>& MethodsVectorShell::get() const
 {
-	return methods;
+	return list;
 }

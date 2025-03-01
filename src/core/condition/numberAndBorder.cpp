@@ -1,23 +1,20 @@
 ﻿#include "numberAndBorder.h"
 
-#define NOMINMAX
-#include <Windows.h>
-
-NumberAndBorders::NumberAndBorders(int number, const myP& dia, const myP& realdia) 
+NumberAndBorders::NumberAndBorders(size_t number, const myP& dia, const myP& realdia) 
 	: dia(dia), realDia(realdia), number(number), isExistRD(false) 
 {}
 
-int NumberAndBorders::getNum() const
+size_t NumberAndBorders::getNum() const
 {
 	return number;
 }
 
-const NumberAndBorders::myP& NumberAndBorders::getD() const
+NumberAndBorders::myP NumberAndBorders::getD() const
 {
 	return dia;
 }
 
-const NumberAndBorders::myP& NumberAndBorders::getRD() const
+NumberAndBorders::myP NumberAndBorders::getRD() const
 {
 	return realDia;
 }
@@ -44,33 +41,35 @@ void NumberAndBorders::setRD(const myP& x)
 
 void NumberAndBorders::updateNumberAndBorders(const Line* data)
 {
-	this->updateDIf0InEdges(data);
-	this->updateRDviaD();
-	this->updateDviaRD(data);
+	updateDIfWhiteInEdges(data);
+	updateRDviaD();
+	updateDviaRD(data);
 }
 
-void NumberAndBorders::printToConsoleDifferences(const NumberAndBorders& data, int color) const
+void NumberAndBorders::printToConsoleDifferences(const NumberAndBorders& data, Color color) const
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(console, 15);
+	WORD lightDifferens = static_cast<WORD>(color);
+	WORD undefinedColor = static_cast<WORD>(Color::white);
+	SetConsoleTextAttribute(console, undefinedColor);
 
 	std::cout << number << "{D[";
 
 	if (dia.first != data.dia.first)
 	{
-		SetConsoleTextAttribute(console, 4);
+		SetConsoleTextAttribute(console, lightDifferens);
 	}
 	std::cout << dia.first;
-	SetConsoleTextAttribute(console, 15);
+	SetConsoleTextAttribute(console, undefinedColor);
 
 	std::cout << ",";
 
 	if (dia.second != data.dia.second)
 	{
-		SetConsoleTextAttribute(console, 4);
+		SetConsoleTextAttribute(console, lightDifferens);
 	}
 	std::cout << dia.second;
-	SetConsoleTextAttribute(console, 15);
+	SetConsoleTextAttribute(console, undefinedColor);
 
 	std::cout << "), RD[";
 
@@ -78,19 +77,19 @@ void NumberAndBorders::printToConsoleDifferences(const NumberAndBorders& data, i
 	{
 		if (realDia.first != data.realDia.first)
 		{
-			SetConsoleTextAttribute(console, 4);
+			SetConsoleTextAttribute(console, lightDifferens);
 		}
 		std::cout << realDia.first;
-		SetConsoleTextAttribute(console, 15);
+		SetConsoleTextAttribute(console, undefinedColor);
 
 		std::cout << ",";
 
 		if (realDia.second != data.realDia.second)
 		{
-			SetConsoleTextAttribute(console, 4);
+			SetConsoleTextAttribute(console, lightDifferens);
 		}
 		std::cout << realDia.second;
-		SetConsoleTextAttribute(console, 15);
+		SetConsoleTextAttribute(console, undefinedColor);
 	}
 	else
 	{
@@ -130,44 +129,56 @@ void NumberAndBorders::updateRDviaD()
 	{
 		realDia.first = dia.first;
 	}
+
 	if (realDia.second > dia.second)
 	{
 		realDia.second = dia.second;
 	}
 }
 
-void NumberAndBorders::updateDIf0InEdges(const Line* data)
+void NumberAndBorders::updateDIfWhiteInEdges(const Line* data)
 {
-	int leftBlack = data->getLeftIndexTypeCell(dia.first, dia.second, CellType::white);		// первый левый CellType::white в D
-	while (leftBlack != -1 && leftBlack - dia.first < number) {	// если leftBlack находится и расстояние от него до dia.first меньше самого number,
-		dia.first = leftBlack + 1;								// то number туда не поместится, соответственно сдвигаем границу
-		leftBlack = data->getLeftIndexTypeCell(dia.first, dia.second, CellType::white);
+	int leftWhite = data->getLeftIndexTypeCell(dia.first, dia.second, CellType::white);		// первый левый CellType::white в D
+	while (leftWhite != -1 && leftWhite - dia.first < number)	// если leftWhite находится и расстояние от него до dia.first меньше самого number,
+	{	
+		dia.first = leftWhite + 1;								// то number туда не поместится, соответственно сдвигаем границу
+		leftWhite = data->getLeftIndexTypeCell(dia.first, dia.second, CellType::white);
 	}
 
-	int rightBlack = data->getRightIndexTypeCell(dia.first, dia.second, CellType::white);	// первый правый CellType::white в D
-	while (rightBlack != -1 && (dia.second - 1) - rightBlack < number) {	// если rightBlack находится и расстояние от него до dia.second меньше самого number,
-		dia.second = rightBlack;											// то number туда не поместится, соответственно сдвигаем границу
-		rightBlack = data->getRightIndexTypeCell(dia.first, dia.second, CellType::white);
+	int rightWhite = data->getRightIndexTypeCell(dia.first, dia.second, CellType::white);	// первый правый CellType::white в D
+	while (rightWhite != -1 && (dia.second - 1) - rightWhite < number)		// если rightWhite находится и расстояние от него до dia.second меньше самого number,
+	{
+		dia.second = rightWhite;											// то number туда не поместится, соответственно сдвигаем границу
+		rightWhite = data->getRightIndexTypeCell(dia.first, dia.second, CellType::white);
 	}
 }
 
 void NumberAndBorders::updateDviaRD(const Line* data)
 {
-	int numberOfBlack = data->getCountTypeCell(realDia.first, realDia.second, CellType::black);
-	if (numberOfBlack != 0)
+	int leftBlack = data->getLeftIndexTypeCell(realDia.first, realDia.second, CellType::black);
+	if (leftBlack == -1)
 	{
-		int leftBlack = data->getLeftIndexTypeCell(realDia.first, realDia.second, CellType::black);
-		int rightBlack = data->getRightIndexTypeCell(realDia.first, realDia.second, CellType::black);
-
-		if (dia.first < leftBlack - (number - numberOfBlack))
-		{
-			dia.first = leftBlack - (number - numberOfBlack);
-		}
-		if (dia.second > rightBlack + (number - numberOfBlack) + 1)
-		{
-			dia.second = rightBlack + (number - numberOfBlack) + 1;
-		}
-
-		this->updateRDviaD();
+		// эквивалентно тому, что чёрных клеток нет
+		return;
 	}
+
+	size_t rightBlack = data->getRightIndexTypeCell(realDia.first, realDia.second, CellType::black);
+	size_t countOfPossibleCells = rightBlack - leftBlack + 1;
+	size_t countOfRemainingCells = number - countOfPossibleCells;
+
+	// обязательно int, тк при вычислениях может получиться отрицательное число
+	int possiblyLeftBorder = leftBlack - static_cast<int>(countOfRemainingCells);
+	if (possiblyLeftBorder >= 0 && dia.first < possiblyLeftBorder)
+	{
+		dia.first = possiblyLeftBorder;
+	}
+
+
+	size_t possiblyRightBorder = rightBlack + countOfRemainingCells + 1;
+	if (dia.second > possiblyRightBorder)
+	{
+		dia.second = possiblyRightBorder;
+	}
+
+	updateRDviaD();
 }

@@ -1,9 +1,11 @@
 ﻿#ifndef SOLUTION_NONOGRAM
 #define SOLUTION_NONOGRAM
 
-#include "methods/iMethod.h"
 #include "picture/picture.h"
 #include "condition/condition.h"
+#include "methods/iMethod.h"
+#include "methods/methodsVectorShell.h"
+#include "queueCells/cellQueue.h"
 
 #include <array>
 #include <vector>
@@ -14,6 +16,9 @@ class Solution
 {
 	Picture pict;										// изображение в котором закрашиваются клетки
 	std::array<std::vector<Condition>, 2> conditions;	// массив с условиями для строк и столбцов
+
+	static const MethodsVectorShell methods;			// набор методов для анализа
+	CellQueue queue;									// очередь в которой хранятся данные о закрашенных клетках
 
 public:
 	// ctors, dctor, operators
@@ -28,15 +33,18 @@ public:
 
 	Picture getPicture() const;
 	bool isEndOfWork() const;
+	CellQueue getQueue() const;
 
 	// functions
 
-	// метод, представляющий из себя шаблон для прогонки каждого метода
-	void callingMethods(const std::vector<IMethod*>& methods);
+	bool nonogramSolution();
 
 	// выводит в консоль this, подсвечивая color различия между this и copy
-	void printToConsoleDifferences(const Solution& copy, int color) const;
+	void printToConsoleDifferences(const Solution& copy, Color color) const;
 	std::string pictToString() const;
 	std::string conditionsToString() const;
+private:
+	// метод, представляющий из себя шаблон для прогонки каждого метода
+	void callingMethods();
 };
 #endif // !SOLUTION_NONOGRAM

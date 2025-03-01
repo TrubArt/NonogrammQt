@@ -7,7 +7,7 @@
 class UnambiguousBlack : public IMethod
 {
 public:
-	void realization(const Condition& cond, Picture* pict, const std::pair<int, int>& posit) const override;
+	void realization(const Condition& cond, Picture& pict, CellQueue& queue, bool isColumn, size_t rowOrColIndex) const override;
 	std::string methodName() const override;
 	std::string principleOfMethodWork() const override;
 };

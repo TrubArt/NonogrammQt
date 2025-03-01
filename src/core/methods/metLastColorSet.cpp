@@ -1,7 +1,34 @@
 ﻿#include "metLastColorSet.h"
 
-void LastColorSet::realization(const Condition& cond, Picture* pict, const std::pair<int, int>& posit) const
-{}
+void LastColorSet::realization(const Condition& cond, Picture& pict, CellQueue& queue, bool isColumn, size_t rowOrColIndex) const
+{
+	const Line* analyzedLine = cond.getLinePtr();
+
+	CellType remainedColorCells = CellType::undefined;
+	if (analyzedLine->getCountTypeCell(CellType::white) == cond.getAllCountWhiteCell())
+	{
+		remainedColorCells = CellType::black;
+	}
+	if (analyzedLine->getCountTypeCell(CellType::black) == cond.getAllCountBlackCell())
+	{
+		remainedColorCells = CellType::white;
+	}
+
+	if (remainedColorCells == CellType::undefined)
+	{
+		return;
+	}
+
+	for (size_t index = cond.getStart(); index < cond.getEnd(); ++index)
+	{
+		if (analyzedLine->getCellType(index) != CellType::undefined)
+		{
+			continue;
+		}
+
+		setColorAndAddInQueue(pict, queue, isColumn, rowOrColIndex, index, remainedColorCells);
+	}
+}
 
 std::string LastColorSet::methodName() const
 {
@@ -11,24 +38,7 @@ std::string LastColorSet::methodName() const
 std::string LastColorSet::principleOfMethodWork() const
 {
 	std::string answ;
-	answ.append("Метод принимает на вход UpdCondReturnParam param, который сообщает классу о том, что\n");
-	answ.append("необходимо все оставшиеся в линии CellType::undefined закрасить в цвет param");
+	answ.append("Если количество закрашенных белых(чёрных) клеток совпадает с общим количеством белых(чёрных) клеток, то\n");
+	answ.append("необходимо все оставшиеся клетки CellType::undefined закрасить в чёрный(белый) цвет");
 	return answ;
-}
-
-void LastColorSet::anotrealization(const Condition& cond, Picture* pict, const std::pair<int, int>& posit, UpdCondReturnParam param) const
-{
-	if (param == UpdCondReturnParam::lineNotCompleted)
-	{
-		return;
-	}
-
-	const Line* analyzedLine = cond.getLinePtr();
-	for (int i = cond.getStart(); i < cond.getEnd(); ++i)
-	{
-		if (analyzedLine->getCellType(i) == CellType::undefined)
-		{
-			this->setColorWithInformation(pict, posit, i, static_cast<CellType>(param));
-		}
-	}
 }

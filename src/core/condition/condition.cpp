@@ -1,8 +1,5 @@
 ﻿#include "condition.h"
 
-#define NOMINMAX
-#include <Windows.h>
-
 Condition::Condition()
 	: allCountWhiteCell(0)
 	, allCountBlackCell(0)
@@ -12,12 +9,12 @@ Condition::Condition()
 	, end(0)
 {}
 
-Condition::Condition(size_t lineSize, const Line* ptr, const std::vector<int>& info)
+Condition::Condition(size_t lineSize, const Line* ptr, const std::vector<size_t>& info)
 	: allCountBlackCell(0)
 	, data(ptr)
 	, isFull(false)
 	, start(0)
-	, end(static_cast<int>(lineSize))
+	, end(lineSize)
 	, statLine(lineSize + 1) // делаем *data != statLine
 {
 	for (size_t i = 0; i < info.size(); ++i)
@@ -32,7 +29,17 @@ Condition::Condition(size_t lineSize, const Line* ptr, const std::vector<int>& i
 	}
 	allCountWhiteCell = lineSize - allCountBlackCell;
 
-	this->updateBorders();
+	updateBorders();
+}
+
+size_t Condition::getAllCountWhiteCell() const
+{
+	return allCountWhiteCell;
+}
+
+size_t Condition::getAllCountBlackCell() const
+{
+	return allCountBlackCell;
 }
 
 bool Condition::getIsFullFlag() const
@@ -45,12 +52,12 @@ const Line* Condition::getLinePtr() const
 	return data;
 }
 
-int Condition::getStart() const
+size_t Condition::getStart() const
 {
 	return start;
 }
 
-int Condition::getEnd() const
+size_t Condition::getEnd() const
 {
 	return end;
 }
@@ -60,72 +67,69 @@ const std::list<NumberAndBorders>& Condition::getNumInfo() const
 	return numInfo;
 }
 
-UpdCondReturnParam Condition::updateCondition()
+void Condition::updateCondition()
 {
 	if (*data == statLine)
 	{
-		return UpdCondReturnParam::lineNotCompleted;
+		return;
+	}
+
+	// проверка на то, что строку можно однозначно определить
+	if (data->getCountTypeCell(CellType::white) == allCountWhiteCell
+		|| data->getCountTypeCell(CellType::black) == allCountBlackCell)
+	{
+		isFull = true;
+		return;
 	}
 
 	statLine = *data; // обновляем состояние строки до актуального
 
 	// обновление start
-	this->updateStart();
+	updateStart();
 
 	// обновление end
-	this->updateEnd();
+	updateEnd();
 
 	// обновление диапазонов в numInfo
-	this->updateBorders();
-
-	// проверка на то, что строку можно однозначно определить
-	if (data->getCountTypeCell(CellType::white) == allCountWhiteCell)
-	{
-		isFull = true;
-		return UpdCondReturnParam::setBlack;
-	}
-	if (data->getCountTypeCell(CellType::black) == allCountBlackCell)
-	{
-		isFull = true;
-		return UpdCondReturnParam::setWhite;
-	}
-
-	return UpdCondReturnParam::lineNotCompleted;
+	updateBorders();
 }
 
-void Condition::printToConsoleDifferences(const Condition& cond, int color) const
+void Condition::printToConsoleDifferences(const Condition& cond, Color color) const
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	WORD lightDifferens = static_cast<WORD>(color);
+	WORD undefinedColor = static_cast<WORD>(Color::white);
+
 	if (isFull)
 	{
 		if (isFull != cond.isFull)
 		{
-			SetConsoleTextAttribute(console, 4);
+			SetConsoleTextAttribute(console, lightDifferens);
 		}
 		std::cout << "-\n";
-		SetConsoleTextAttribute(console, 15);
+		SetConsoleTextAttribute(console, undefinedColor);
 		return;
 	}
 
-    std::cout << "\tStart: ";
+	std::cout << "\tStart: ";
 
 	if (start != cond.start)
 	{
-		SetConsoleTextAttribute(console, 4);
+		SetConsoleTextAttribute(console, lightDifferens);
 	}
 	std::cout << start;
-	SetConsoleTextAttribute(console, 15);
+	SetConsoleTextAttribute(console, undefinedColor);
 
-    std::cout << ", End: ";
+	std::cout << ", End: ";
 
 	if (end != cond.end)
 	{
-		SetConsoleTextAttribute(console, 4);
+		SetConsoleTextAttribute(console, lightDifferens);
 	}
 	std::cout << end;
-	SetConsoleTextAttribute(console, 15);
+	SetConsoleTextAttribute(console, undefinedColor);
 
-    std::cout << "\n\tList:";
+	std::cout << "\n\tList:";
 
 	for (auto thisIt = numInfo.cbegin(), condIt = cond.numInfo.cbegin(); thisIt != numInfo.cend(); ++thisIt, ++condIt)
 	{
@@ -144,8 +148,8 @@ std::string Condition::toString() const
 	}
 
 	std::string answer;
-    answer.append("\tStart: " + std::to_string(start) + ", End: " + std::to_string(end) + "\n");
-    answer.append("\tList:");
+	answer.append("\tStart: " + std::to_string(start) + ", End: " + std::to_string(end) + "\n");
+	answer.append("\tList:");
 
 	for (const auto& i : numInfo)
 	{
@@ -172,7 +176,7 @@ void Condition::updateStart()
 		{
 			// данный случай обрабатывается методом StartEndNum. Он закрашивает необходимые клетки.
 			// здесь же остаётся только обновить данные о начале
-			int number = numInfo.front().getNum();
+			size_t number = numInfo.front().getNum();
 			numInfo.pop_front();
 			start += number + 1;
 		}
@@ -201,7 +205,7 @@ void Condition::updateEnd()
 		{
 			// данный случай обрабатывается методом StartEndNum. Он закрашивает необходимые клетки.
 			// здесь же остаётся только обновить данные о конце
-			int number = numInfo.back().getNum();
+			size_t number = numInfo.back().getNum();
 			numInfo.pop_back();
 			end -= number + 1;
 		}
@@ -215,8 +219,8 @@ void Condition::updateEnd()
 
 void Condition::updateBorders()
 {
-	this->updateDia();
-	this->updateRealDia();
+	updateDia();
+	updateRealDia();
 	for (auto& i : numInfo)
 	{
 		i.updateNumberAndBorders(data);
@@ -227,7 +231,7 @@ void Condition::updateDia()
 {
 	enum HelpEnum {space = 1};	// enum обозначающий пробел(одна CellType::whiteCell)
 
-	int rightNums = end;		// количество занятых клеток справа от текущего числа
+	size_t rightNums = end;		// количество занятых клеток справа от текущего числа
 
 	// подсчёт оптимальной правой границы для первого числа
 	for (auto it = numInfo.cbegin(); it != numInfo.cend(); ++it)
@@ -235,7 +239,7 @@ void Condition::updateDia()
 		rightNums -= it->getNum() + space;
 	}
 
-	int leftNums = start;		// количество занятых клеток слева от текущего числа
+	size_t leftNums = start;		// количество занятых клеток слева от текущего числа
 
 	// подсчёт для каждого числа нового диапазона
 	for (auto it = numInfo.begin(); it != numInfo.end(); ++it)
@@ -257,8 +261,8 @@ void Condition::updateDia()
 
 void Condition::updateRealDia()
 {
-	int leftBorder = start;
-	int rightBorder = -1;
+	size_t leftBorder = start;
+	size_t rightBorder = 0;
 
 	for (auto it = numInfo.begin(); it != numInfo.end(); ++it)
 	{

@@ -4,51 +4,43 @@
 
 #include <QApplication>
 
-bool nonogramSolution(Solution& maintask, const std::vector<IMethod*>& methods)
-{
-    bool noChangesAfterCycle = false;
-
-    while (!noChangesAfterCycle && !maintask.isEndOfWork())
-    {
-        Picture pictureToCompare{ maintask.getPicture() };
-
-        // работа методов
-        maintask.callingMethods(methods);
-
-        // если после работы методов нет изменений
-        if (pictureToCompare == maintask.getPicture() && !maintask.isEndOfWork())
-        {
-            noChangesAfterCycle = true;
-        }
-    }
-
-    return noChangesAfterCycle;
-}
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
 
-    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm\\levels\\1";
+    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm\\levels\\2";
     Solution maintask(directoryPath + "\\Condition", directoryPath + "\\Additional color condition");
 
-    // для добавления новых методов нужно изменить конструктор по умолчанию MethodsVectorShell
-    // считаю такое решение приемлимым. Если нужно будет изменить порядок вызова методов, то
-    // всегда можно дописать методы для работы с этим классом
-    MethodsVectorShell vect;
+    std::cout << "Picture before:\n";
+    std::cout << maintask.getPicture();
 
-    bool earlyCycleOut = nonogramSolution(maintask, vect.get());
+    bool earlyCycleOut = maintask.nonogramSolution();
 
     // обработка причины прекращения цикла
     if (earlyCycleOut)
     {
-        std::cout << "\nPicture dont finished:(\n";
+        std::cout << "\nPicture dont finish:(\n";
     }
 
-   std::cout << "Finaly picture:\n";
-    maintask.getPicture().printToConsoleColor(0, 1);
+    std::cout << "Finaly picture:\n";
+    maintask.getPicture().printToConsoleColor(Color::black, Color::darkBlue);
+    std::cin.get();
+
+    std::vector<PaintCellInfo> cells = maintask.getQueue().get();
+    std::cout << "Cells queue:\n";
+
+    size_t index = 0;
+    for (const auto& cell : cells)
+    {
+        // std::cout << ++index << ": ";
+        // std::cout << cell.rowNumber << " ";
+        // std::cout << cell.indexInRow << " ";
+        // std::cout << static_cast<int>(cell.color);
+        // std::cout << "\n";
+        w.paintCell(cell);
+    }
 
     return a.exec();
 }
