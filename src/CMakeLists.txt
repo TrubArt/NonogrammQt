@@ -7,6 +7,10 @@ set(QT_FILES
     mainwindow.cpp
     mainwindow.ui
     mainwindow.qrc
+    colorstore.h
+    colorstore.cpp
+    table.h
+    table.cpp
 )
 
 set(SOURCE_FILES
@@ -16,7 +20,6 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES}
-    colorstore.h colorstore.cpp
 )
 
 add_subdirectory(core)

@@ -4,10 +4,9 @@
 #include "ui_mainwindow.h"
 #include <QMainWindow>
 
-#include <qgraphicsscene.h>
 #include <qgraphicsview.h>
 
-#include "colorstore.h"
+#include "table.h"
 #include "queueCells/cellQueue.h"
 
 class MainWindow : public QMainWindow
@@ -24,26 +23,10 @@ public slots:
 	void handlerSpinBox(int index);
 
 private:
-    void setCellSize();
-    void createTable();
-    void removeTable();
-    void setTableSize(int heightCountRect, int widthCountRect);
-
-    QPoint findTopLeftPointCell(int heightIndex, int widthIndex) const;
-    QPoint findCenterCell(int heightIndex, int widthIndex) const;
-
-    void addCell(int heightIndex, int widthIndex, const QPen& pen, const QColor& col);
-    void removeCell(int heightIndex, int widthIndex);
-
 	Ui::mainwindowClass ui;
 
-	QGraphicsScene* mp_scene;
 	QGraphicsView* mp_view;
-
-	QSizeF m_rectSize;
-    int m_widthCountCell;
-    int m_heightCountCell;
-    ColorStore colors;
+    Table picture;
 };
 
 #endif // MAINWINDOW_H
