@@ -20,18 +20,18 @@ namespace
 	} // на релизе убрать
 }
 
-Picture::Picture(size_t N, size_t M)
+Picture::Picture(size_t rowCount, size_t colCount)
 {
-	rows.resize(N);
-	columns.resize(M);
+	rows.resize(rowCount);
+	columns.resize(colCount);
 
 	for (auto& i : rows)
 	{
-		i = new Line(M);
+		i = new Line(colCount);
 	}
 	for (auto& i : columns)
 	{
-		i = new Line(N);
+		i = new Line(rowCount);
 	}
 }
 

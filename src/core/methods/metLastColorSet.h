@@ -1,5 +1,5 @@
-﻿#ifndef METHOD_LAST_COLOR_SET
-#define METHOD_LAST_COLOR_SET
+﻿#ifndef METHOD_LASTCOLORSET_NONOGRAM
+#define METHOD_LASTCOLORSET_NONOGRAM
 
 #include "iMethod.h"
 
@@ -11,4 +11,4 @@ public:
 	std::string principleOfMethodWork() const override;
 };
 
-#endif // !METHOD_LAST_COLOR_SET
+#endif // !METHOD_LASTCOLORSET_NONOGRAM

@@ -5,6 +5,7 @@
 
 #include <vector>
 
+// класс, иммитирующий очередь из закрашенных клеток в изображении
 class CellQueue
 {
 	std::vector<PaintCellInfo> data;

@@ -17,7 +17,7 @@ public:
 	// constructors, destructor, operators
 
 	Picture() = default;
-	Picture(size_t N, size_t M);
+	Picture(size_t rowCount, size_t colCount);
 	Picture(const Picture&);
 	~Picture();
 	Picture& operator=(const Picture&);

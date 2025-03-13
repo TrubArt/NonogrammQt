@@ -1,52 +1,48 @@
 ﻿#include "solution.h"
-#include "fileLoader.h"
 #include "methods/metLastColorSet.h"
 #include "methods/metStartEndNum.h"
 
 const MethodsVectorShell Solution::methods = MethodsVectorShell();
 
-Solution::Solution(const std::string& fileCondition, const std::string& fileAdditCondit)
+Solution::Solution(ILoadManager& loader)
 {
 	// enum для обращения к строкам/столбцам в conditions
 	enum LineClassifier { row, col };
 
-	FileLoader cond(fileCondition);
-
-	std::vector<size_t> tmp;
-
 	// получение данных о размере изображения
-	tmp = cond.getNumbersSequence();
-	size_t sizeN = tmp[0];
-	size_t sizeM = tmp[1];
+	auto nonSize = loader.getNonogramSize();
+	size_t rowCount = nonSize.first;
+	size_t colCount = nonSize.second;
 
-	pict = Picture(sizeN, sizeM);
-	conditions[row].resize(sizeN);
-	conditions[col].resize(sizeM);
+	pict = Picture(rowCount, colCount);
+	conditions[row].resize(rowCount);
+	conditions[col].resize(colCount);
 
 	// сначала добавление изначально заданных клеток
-	FileLoader f2(fileAdditCondit);
-
-	while (!f2.isEmpty())
+	auto addCond = loader.getAdditionalCondition();
+	for (const auto& condition : addCond)
 	{
-		tmp = f2.getNumbersSequence();
-		if (!tmp.empty())
+		PaintCellInfo cellInfo(condition[0], condition[1], static_cast<CellType>(condition[2]));
+		if (pict.setColor(cellInfo.rowNumber, cellInfo.indexInRow, cellInfo.color))
 		{
-			PaintCellInfo cellInfo(tmp[0], tmp[1], static_cast<CellType>(tmp[2]));
-			if (pict.setColor(cellInfo.rowNumber, cellInfo.indexInRow, cellInfo.color))
-			{
-				queue.customPush(cellInfo);
-			}
+			queue.customPush(cellInfo);
 		}
 	}
 
 	// потом получение данных о строках и столбцах
-	for (size_t i = 0; i < sizeN; ++i)
+	for (size_t i = 0; i < rowCount; ++i)
 	{
-		conditions[row][i] = Condition(sizeM, pict.getPtr(std::make_pair(row, i)), cond.getNumbersSequence());
+		std::pair<size_t, size_t> lineDestination = std::make_pair(row, i);
+		const Line* line = pict.getPtr(lineDestination);
+
+		conditions[row][i] = Condition(line->getSize(), line, loader.getLineSequence(row, i));
 	}
-	for (size_t i = 0; i < sizeM; ++i)
+	for (size_t i = 0; i < colCount; ++i)
 	{
-		conditions[col][i] = Condition(sizeN, pict.getPtr(std::make_pair(col, i)), cond.getNumbersSequence());
+		std::pair<size_t, size_t> lineDestination = std::make_pair(col, i);
+		const Line* line = pict.getPtr(lineDestination);
+
+		conditions[col][i] = Condition(line->getSize(), line, loader.getLineSequence(col, i));
 	}
 }
 

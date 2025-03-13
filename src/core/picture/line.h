@@ -12,7 +12,7 @@
 class Line
 {
 	std::vector<Cell*> data;	// вектор клеток
-	// переход на умные указатели
+	// REWORK переход на умные указатели
 
 public:
 	// ctors, dtor, operators

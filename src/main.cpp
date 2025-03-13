@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "solution.h"
-#include "methods/methodsVectorShell.h"
+#include "core/filesWork/loadManagerCpp.h"
 
 #include <QApplication>
 
@@ -10,8 +10,11 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm\\levels\\2";
-    Solution maintask(directoryPath + "\\Condition", directoryPath + "\\Additional color condition");
+    // .txt к названию добавляется в FileLoaderCpp
+    std::vector<std::string> files = { "additional color condition", "condition", "info" };
+    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm\\levels\\3";
+    LoadManagerCpp loadManager(directoryPath, files);
+    Solution maintask(loadManager);
 
     std::cout << "Picture before:\n";
     std::cout << maintask.getPicture();
@@ -26,7 +29,7 @@ int main(int argc, char *argv[])
 
     std::cout << "Finaly picture:\n";
     maintask.getPicture().printToConsoleColor(Color::black, Color::darkBlue);
-    std::cin.get();
+    //std::cin.get();
 
     std::vector<PaintCellInfo> cells = maintask.getQueue().get();
     std::cout << "Cells queue:\n";

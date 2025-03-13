@@ -6,6 +6,7 @@
 #include "methods/iMethod.h"
 #include "methods/methodsVectorShell.h"
 #include "queueCells/cellQueue.h"
+#include "filesWork/iLoadManager.h"
 
 #include <array>
 #include <vector>
@@ -25,9 +26,10 @@ public:
 	
 	Solution() = default;
 
+	/// <param name="fileLoader:">Загрузчик условия</param>
 	/// <param name="fileCondition:">файл с условиями строк</param>
 	/// <param name="fileAdditCondit:">файл с доп условиями цвета</param>
-	Solution(const std::string& fileCondition, const std::string& fileAdditCondit);
+	Solution(ILoadManager& loader);
 
 	// getters & setters
 

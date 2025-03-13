@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow
 
 public:
 	explicit MainWindow(QWidget* parent = nullptr);
-	~MainWindow();
+    ~MainWindow() override;
     void changeTableSize(int rowCount, int columnCount);
     void paintCell(const PaintCellInfo& cellInfo);
 
@@ -26,7 +26,7 @@ private:
 	Ui::mainwindowClass ui;
 
 	QGraphicsView* mp_view;
-    Table picture;
+    Table m_picture;
 };
 
 #endif // MAINWINDOW_H
