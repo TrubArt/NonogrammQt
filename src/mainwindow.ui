@@ -14,14 +14,7 @@
    <string>mainwindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QSpinBox" name="spinBox_heightNum"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QSpinBox" name="spinBox_widthNum"/>
-    </item>
-   </layout>
+   <layout class="QGridLayout" name="gridLayout"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

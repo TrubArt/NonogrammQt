@@ -1,7 +1,9 @@
 #include "table.h"
 
 Table::Table()
-    :    mp_scene(new QGraphicsScene())
+    : mp_scene(new QGraphicsScene())
+    , m_height(0)
+    , m_width(0)
 {
     setCellSize();
 }

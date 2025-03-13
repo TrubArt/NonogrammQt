@@ -14,22 +14,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     mp_view->setScene(m_picture.get());
     //setCentralWidget(m_pView);
-
-    ui.spinBox_heightNum->setMaximum(m_picture.getHeight() - 1);
-    ui.spinBox_widthNum->setMaximum(m_picture.getWidth() - 1);
-
-    connect(ui.spinBox_heightNum, QSpinBox::valueChanged, this, MainWindow::handlerSpinBox);
-    connect(ui.spinBox_widthNum, QSpinBox::valueChanged, this, MainWindow::handlerSpinBox);
 }
 
 MainWindow::~MainWindow()
 {
     delete mp_view;
-}
-
-void MainWindow::handlerSpinBox(int)
-{
-    // STUB
 }
 
 void MainWindow::paintCell(const PaintCellInfo& cellInfo)

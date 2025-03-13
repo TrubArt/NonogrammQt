@@ -20,7 +20,6 @@ public:
     void paintCell(const PaintCellInfo& cellInfo);
 
 public slots:
-	void handlerSpinBox(int index);
 
 private:
 	Ui::mainwindowClass ui;
