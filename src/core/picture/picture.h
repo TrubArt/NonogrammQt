@@ -27,6 +27,8 @@ public:
 	// getters & setters
 
 	const Line* getPtr(const std::pair<size_t, size_t>&) const;
+    size_t getRowCount() const;
+    size_t getColumnCount() const;
 
 	// true, если произошла закраска, иначе false
 	bool setColor(size_t rowNumber, size_t index, CellType cType);

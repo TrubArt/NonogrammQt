@@ -8,6 +8,7 @@
 
 #include "table.h"
 #include "queueCells/cellQueue.h"
+#include "solution.h"
 
 class MainWindow : public QMainWindow
 {
@@ -16,16 +17,26 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
-    void changeTableSize(int rowCount, int columnCount);
+    void repaintTable(int rowCount, int columnCount);
     void paintCell(const PaintCellInfo& cellInfo);
 
 public slots:
+    void startSolution();
+    void changeNonogram();
+    void resetTableCells();
+
+signals:
+    void changeNon();
 
 private:
+    void connectInitialization();
+
 	Ui::mainwindowClass ui;
 
-	QGraphicsView* mp_view;
+    QGraphicsView m_view;
     Table m_picture;
+
+    Solution* mp_currSolution;
 };
 
 #endif // MAINWINDOW_H

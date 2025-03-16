@@ -46,7 +46,7 @@ Solution::Solution(ILoadManager& loader)
 	}
 }
 
-Picture Solution::getPicture() const
+const Picture& Solution::getPicture() const
 {
 	return pict;
 }
@@ -66,7 +66,7 @@ bool Solution::isEndOfWork() const
 	return true;
 }
 
-CellQueue Solution::getQueue() const
+const CellQueue& Solution::getQueue() const
 {
 	return queue;
 }

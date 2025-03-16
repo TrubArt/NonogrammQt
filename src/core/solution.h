@@ -33,9 +33,9 @@ public:
 
 	// getters & setters
 
-	Picture getPicture() const;
+    const Picture& getPicture() const;
 	bool isEndOfWork() const;
-	CellQueue getQueue() const;
+    const CellQueue& getQueue() const;
 
 	// functions
 

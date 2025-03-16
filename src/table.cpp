@@ -1,24 +1,24 @@
 #include "table.h"
 
 Table::Table()
-    : mp_scene(new QGraphicsScene())
+    : m_scene()
     , m_height(0)
     , m_width(0)
 {
     setCellSize();
 }
 
-Table::~Table()
+const QGraphicsScene* Table::get() const
 {
-    delete mp_scene;
+    return &m_scene;
 }
 
 QGraphicsScene* Table::get()
 {
-    return mp_scene;
+    return &m_scene;
 }
 
-void Table::setTableSize(int heightCountCell, int widthCountCell)
+void Table::repaintTable(int heightCountCell, int widthCountCell)
 {
     removeTable();
 
@@ -50,8 +50,7 @@ void Table::setCellSize()
 
 QPoint Table::findTopLeftPointCell(int heightIndex, int widthIndex) const
 {
-    QPoint answer(widthIndex * m_rectSize.width(), heightIndex * m_rectSize.height());
-    return answer;
+    return QPoint(widthIndex * m_rectSize.width(), heightIndex * m_rectSize.height());
 }
 
 QPoint Table::findCenterCell(int heightIndex, int widthIndex) const
@@ -64,15 +63,15 @@ QPoint Table::findCenterCell(int heightIndex, int widthIndex) const
 void Table::removeCell(int heightIndex, int widthIndex)
 {
     QPoint centerElem = findCenterCell(heightIndex, widthIndex);
-    QGraphicsItem * elem = mp_scene->itemAt(centerElem, QTransform());
-    mp_scene->removeItem(elem);
+    QGraphicsItem * elem = m_scene.itemAt(centerElem, QTransform());
+    m_scene.removeItem(elem);
 }
 
 void Table::addCell(int heightIndex, int widthIndex, const QPen& pen, const QColor& col)
 {
     QPoint topleft = findTopLeftPointCell(heightIndex, widthIndex);
     QRectF rect(topleft, m_rectSize);
-    mp_scene->addRect(rect, pen, QBrush(col));
+    m_scene.addRect(rect, pen, QBrush(col));
 }
 
 void Table::repaintCell(int heightIndex, int widthIndex, CellType col)
@@ -80,6 +79,12 @@ void Table::repaintCell(int heightIndex, int widthIndex, CellType col)
     removeCell(heightIndex, widthIndex);
     QColor color = colors.convertColorFromCore(col);
     addCell(heightIndex, widthIndex, QPen(Qt::black), color);
+}
+
+void Table::resetTableCells()
+{
+    removeTable();
+    createTable();
 }
 
 void Table::createTable()

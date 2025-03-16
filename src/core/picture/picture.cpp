@@ -122,6 +122,16 @@ const Line* Picture::getPtr(const std::pair<size_t, size_t>& x) const
 	return x.first == 0 ? rows[x.second] : columns[x.second];
 }
 
+size_t Picture::getRowCount() const
+{
+    return rows.size();
+}
+
+size_t Picture::getColumnCount() const
+{
+    return columns.size();
+}
+
 bool Picture::setColor(size_t rowNumber, size_t index, CellType cType)
 {
 	if (!needChanges(rowNumber, index, cType))
