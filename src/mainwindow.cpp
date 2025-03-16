@@ -1,18 +1,21 @@
-#include "mainwindow.h"
+#include <memory>
 
+#include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
+#include "levelChangeDlg/levelchangedialog.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
+    , ui(new Ui::mainwindowClass)
     , m_picture()
     , mp_currSolution(nullptr)
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
     m_view.setParent(this);
 
     setWindowState(Qt::WindowState::WindowMaximized);
 
-    ui.gridLayout->addWidget(&m_view, 0, 1, 1, 1);
+    ui->gridLayout->addWidget(&m_view, 0, 1, 1, 1);
 
     m_view.setScene(m_picture.get());
 
@@ -21,12 +24,19 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::connectInitialization()
 {
-    connect(ui.pushButton, &QPushButton::clicked, this, &MainWindow::startSolution);
     connect(this, &MainWindow::changeNon, this, &MainWindow::changeNonogram);
+
+    // actions
+    connect(ui->actionExit, &QAction::triggered, this, &MainWindow::actionExit);
+    connect(ui->actionStart, &QAction::triggered, this, &MainWindow::actionStartSolution);
+    connect(ui->actionChangeLevel, &QAction::triggered, this, &MainWindow::actionChangeLevel);
+    connect(ui->actionResetPicture, &QAction::triggered, this, &MainWindow::actiontResetTableCells);
 }
 
 MainWindow::~MainWindow()
 {
+    delete ui;
+
     if (mp_currSolution)
     {
         delete mp_currSolution;
@@ -44,28 +54,6 @@ void MainWindow::paintCell(const PaintCellInfo& cellInfo)
 void MainWindow::repaintTable(int rowCount, int columnCount)
 {
     m_picture.repaintTable(rowCount, columnCount);
-}
-
-void MainWindow::startSolution()
-{
-    emit changeNon();
-
-    bool earlyCycleOut = mp_currSolution->nonogramSolution();
-
-    // обработка причины прекращения цикла
-    if (earlyCycleOut)
-    {
-        std::cout << "\nPicture dont finish:(\n";
-    }
-
-    // maintask.getPicture().printToConsoleColor(Color::black, Color::darkBlue);
-
-    // добавление на рисунок полученного решения
-    const std::vector<PaintCellInfo>& cells = mp_currSolution->getQueue().get();
-    for (const PaintCellInfo& cell : cells)
-    {
-        paintCell(cell);
-    }
 }
 
 void MainWindow::changeNonogram()
@@ -91,6 +79,16 @@ void MainWindow::changeNonogram()
     repaintTable(pict.getRowCount(), pict.getColumnCount());
 
     // добавление на рисунок клеток из additionColor.txt
+    drawCellsFromQueue();
+}
+
+void MainWindow::actiontResetTableCells()
+{
+    m_picture.resetTableCells();
+}
+
+void MainWindow::drawCellsFromQueue()
+{
     const std::vector<PaintCellInfo>& cells = mp_currSolution->getQueue().get();
     for (const PaintCellInfo& cell : cells)
     {
@@ -98,7 +96,36 @@ void MainWindow::changeNonogram()
     }
 }
 
-void MainWindow::resetTableCells()
+void MainWindow::actionExit()
 {
-    m_picture.resetTableCells();
+    QApplication::quit();
+}
+
+void MainWindow::actionStartSolution()
+{
+    //emit changeNon();
+
+    bool earlyCycleOut = mp_currSolution->nonogramSolution();
+
+    // обработка причины прекращения цикла
+    if (earlyCycleOut)
+    {
+        ui->statusBar->showMessage(tr("Picture dont finish:("));
+    }
+    else
+    {
+        ui->statusBar->showMessage(tr("Picture successfully finished"));
+    }
+
+    // добавление на рисунок полученного решения
+    drawCellsFromQueue();
+}
+
+void MainWindow::actionChangeLevel()
+{
+    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>();
+    if (lvlChangeDlg->exec())
+    {
+        emit changeNon();
+    }
 }

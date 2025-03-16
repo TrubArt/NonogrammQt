@@ -20,6 +20,9 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES}
+    levelChangeDlg/levelchangedialog.h
+    levelChangeDlg/levelchangedialog.cpp
+    levelChangeDlg/levelchangedialog.ui
 )
 
 add_subdirectory(core)

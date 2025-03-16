@@ -3,7 +3,6 @@
 
 #include "ui_mainwindow.h"
 #include <QMainWindow>
-
 #include <qgraphicsview.h>
 
 #include "table.h"
@@ -21,17 +20,21 @@ public:
     void paintCell(const PaintCellInfo& cellInfo);
 
 public slots:
-    void startSolution();
     void changeNonogram();
-    void resetTableCells();
+    void actiontResetTableCells();
+
+    void actionExit();
+    void actionStartSolution();
+    void actionChangeLevel();
 
 signals:
     void changeNon();
 
 private:
     void connectInitialization();
+    void drawCellsFromQueue();
 
-	Ui::mainwindowClass ui;
+    Ui::mainwindowClass* ui;
 
     QGraphicsView m_view;
     Table m_picture;
