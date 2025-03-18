@@ -22,9 +22,9 @@ public:
     QColor convertColorFromCore(CellType cellColor) const;
 
 private:
-    QColor undefined;
-    QColor white;
-    QColor black;
+    QColor m_undefined;
+    QColor m_white;
+    QColor m_black;
 };
 
 #endif // COLORSTORE_H

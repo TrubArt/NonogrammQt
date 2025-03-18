@@ -39,7 +39,7 @@ private:
     int m_height;
     int m_width;
 
-    ColorStore colors;
+    ColorStore m_colors;
 };
 
 #endif // TABLE_H

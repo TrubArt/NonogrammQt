@@ -14,32 +14,32 @@ void ColorStore::returnToStandart()
 
 void ColorStore::setUndefine(const QColor& u)
 {
-    undefined = u;
+    m_undefined = u;
 }
 
 void ColorStore::setWhite(const QColor& w)
 {
-    white = w;
+    m_white = w;
 }
 
 void ColorStore::setBlack(const QColor& b)
 {
-    black = b;
+    m_black = b;
 }
 
 QColor ColorStore::getUndefine() const
 {
-    return undefined;
+    return m_undefined;
 }
 
 QColor ColorStore::getWhite() const
 {
-    return white;
+    return m_white;
 }
 
 QColor ColorStore::getBlack() const
 {
-    return black;
+    return m_black;
 }
 
 QColor ColorStore::convertColorFromCore(CellType cellColor) const

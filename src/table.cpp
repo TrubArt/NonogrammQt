@@ -76,7 +76,7 @@ void Table::addCell(int heightIndex, int widthIndex, const QPen& pen, const QCol
 void Table::repaintCell(int heightIndex, int widthIndex, CellType col)
 {
     removeCell(heightIndex, widthIndex);
-    QColor color = colors.convertColorFromCore(col);
+    QColor color = m_colors.convertColorFromCore(col);
     addCell(heightIndex, widthIndex, QPen(Qt::black), color);
 }
 
@@ -89,7 +89,7 @@ void Table::resetTableCells()
 void Table::createTable()
 {
     QPen pen(Qt::black);
-    QColor color(colors.getUndefine());
+    QColor color(m_colors.getUndefine());
 
     for (int hIndex = 0; hIndex < m_height; ++hIndex)
     {
