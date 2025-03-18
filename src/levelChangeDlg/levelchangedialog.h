@@ -16,8 +16,17 @@ public:
     explicit LevelChangeDialog(QWidget* parent = nullptr);
     ~LevelChangeDialog() override;
 
+    const QString& getChosenLevelName() const;
+
 private:
+    void connectInitialization();
+    void setLevels();
+
+    void nameChanged();
+
     Ui::LevelChangeDialog* ui;
+
+    QString m_chosenLvlName;
 };
 
 #endif // LEVELCHANGEDIALOG_H

@@ -1,8 +1,7 @@
 #include "table.h"
 
 Table::Table()
-    : m_scene()
-    , m_height(0)
+    : m_height(0)
     , m_width(0)
 {
     setCellSize();

@@ -8,6 +8,7 @@
 #include "table.h"
 #include "queueCells/cellQueue.h"
 #include "solution.h"
+#include "levelsDirectory/levelsDirectory.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,7 +21,7 @@ public:
     void paintCell(const PaintCellInfo& cellInfo);
 
 public slots:
-    void changeNonogram();
+    void changeNonogram(const QString& lvlName);
     void actiontResetTableCells();
 
     void actionExit();
@@ -28,7 +29,7 @@ public slots:
     void actionChangeLevel();
 
 signals:
-    void changeNon();
+    void changeNon(const QString&);
 
 private:
     void connectInitialization();
@@ -40,6 +41,7 @@ private:
     Table m_picture;
 
     Solution* mp_currSolution;
+    LevelsDirectory m_levelsPathDir;
 };
 
 #endif // MAINWINDOW_H

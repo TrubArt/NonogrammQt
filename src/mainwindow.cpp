@@ -7,17 +7,18 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::mainwindowClass)
-    , m_picture()
     , mp_currSolution(nullptr)
 {
     ui->setupUi(this);
     m_view.setParent(this);
 
     setWindowState(Qt::WindowState::WindowMaximized);
+    setWindowTitle("NonogrammSolver");
 
     ui->gridLayout->addWidget(&m_view, 0, 1, 1, 1);
-
     m_view.setScene(m_picture.get());
+
+    m_levelsPathDir.setPath("C:\\Users\\user\\Qttest\\Nonogramm\\levels");
 
     connectInitialization();
 }
@@ -56,7 +57,7 @@ void MainWindow::repaintTable(int rowCount, int columnCount)
     m_picture.repaintTable(rowCount, columnCount);
 }
 
-void MainWindow::changeNonogram()
+void MainWindow::changeNonogram(const QString& lvlName)
 {
     if (mp_currSolution)
     {
@@ -67,7 +68,7 @@ void MainWindow::changeNonogram()
 
     // .txt к названию добавляется в FileLoaderCpp
     std::vector<std::string> files = { "additional color condition", "condition", "info" };
-    std::string directoryPath = "C:\\Users\\user\\Qttest\\Nonogramm\\levels\\3";
+    std::string directoryPath = (m_levelsPathDir.getPath() + "\\" + lvlName).toStdString();
     LoadManagerCpp loadManager(directoryPath, files);
 
     // *****************************************************************************************************
@@ -103,8 +104,6 @@ void MainWindow::actionExit()
 
 void MainWindow::actionStartSolution()
 {
-    //emit changeNon();
-
     bool earlyCycleOut = mp_currSolution->nonogramSolution();
 
     // обработка причины прекращения цикла
@@ -126,6 +125,6 @@ void MainWindow::actionChangeLevel()
     std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>();
     if (lvlChangeDlg->exec())
     {
-        emit changeNon();
+        emit changeNon(lvlChangeDlg->getChosenLevelName());
     }
 }

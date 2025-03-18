@@ -1,4 +1,4 @@
-project(mainApp)
+project(NonogrammSolver)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
@@ -23,6 +23,8 @@ add_executable(${PROJECT_NAME}
     levelChangeDlg/levelchangedialog.h
     levelChangeDlg/levelchangedialog.cpp
     levelChangeDlg/levelchangedialog.ui
+    levelsDirectory/levelsDirectory.h
+    levelsDirectory/levelsDirectory.cpp
 )
 
 add_subdirectory(core)
