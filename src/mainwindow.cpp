@@ -1,4 +1,5 @@
 #include <memory>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
@@ -13,7 +14,7 @@ MainWindow::MainWindow(QWidget* parent)
     m_view.setParent(this);
 
     setWindowState(Qt::WindowState::WindowMaximized);
-    setWindowTitle("NonogrammSolver");
+    setWindowTitle(tr("NonogrammSolver"));
 
     ui->gridLayout->addWidget(&m_view, 0, 1, 1, 1);
     m_view.setScene(m_picture.get());
@@ -104,6 +105,17 @@ void MainWindow::actionExit()
 
 void MainWindow::actionStartSolution()
 {
+    if (!mp_currSolution)
+    {
+        QMessageBox msgChange;
+        msgChange.setWindowTitle(tr("Hint"));
+        msgChange.setText(tr("Select a level before starting the solution!"));
+        msgChange.exec();
+
+        actionChangeLevel();
+        return;
+    }
+
     bool earlyCycleOut = mp_currSolution->nonogramSolution();
 
     // обработка причины прекращения цикла

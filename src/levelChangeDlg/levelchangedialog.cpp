@@ -6,6 +6,8 @@ LevelChangeDialog::LevelChangeDialog(QWidget* parent)
     , ui(new Ui::LevelChangeDialog)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("Level selection"));
+
     setLevels();
     connectInitialization();
 }
