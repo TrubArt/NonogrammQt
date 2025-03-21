@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
-#include "levelChangeDlg/levelchangedialog.h"
+#include "levelChangeDialog/levelchangedialog.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)

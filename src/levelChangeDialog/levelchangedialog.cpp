@@ -10,6 +10,8 @@ LevelChangeDialog::LevelChangeDialog(QWidget* parent)
 
     setLevels();
     connectInitialization();
+
+    ui->levelsList->setCurrentRow(0);
 }
 
 LevelChangeDialog::~LevelChangeDialog()

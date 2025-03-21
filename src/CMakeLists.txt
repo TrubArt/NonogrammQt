@@ -20,9 +20,9 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES}
-    levelChangeDlg/levelchangedialog.h
-    levelChangeDlg/levelchangedialog.cpp
-    levelChangeDlg/levelchangedialog.ui
+    levelChangeDialog/levelchangedialog.h
+    levelChangeDialog/levelchangedialog.cpp
+    levelChangeDialog/levelchangedialog.ui
     levelsDirectory/levelsDirectory.h
     levelsDirectory/levelsDirectory.cpp
 )
