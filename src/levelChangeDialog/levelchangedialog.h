@@ -8,24 +8,24 @@ namespace Ui
 class LevelChangeDialog;
 }
 
+class LevelsDirectory;
+
 class LevelChangeDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit LevelChangeDialog(const QString& lastLvlName, QWidget* parent = nullptr);
+    explicit LevelChangeDialog(const QString& lastLvlName, const LevelsDirectory& lvlDir, QWidget* parent = nullptr);
     ~LevelChangeDialog() override;
 
     const QString& getChosenLevelName() const;
 
 private:
     void connectInitialization();
-    void setLevels();
-
+    void setLevels(const LevelsDirectory& lvlDir);
     void nameChanged();
 
     Ui::LevelChangeDialog* ui;
-
     QString m_chosenLvlName;
 };
 

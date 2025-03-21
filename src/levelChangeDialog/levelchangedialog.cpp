@@ -1,14 +1,15 @@
 #include "levelchangedialog.h"
 #include "ui_levelchangedialog.h"
+#include "../levelsDirectory/levelsDirectory.h"
 
-LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, QWidget* parent)
+LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, const LevelsDirectory& lvlDir, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::LevelChangeDialog)
 {
     ui->setupUi(this);
     setWindowTitle(tr("Level selection"));
 
-    setLevels();
+    setLevels(lvlDir);
     connectInitialization();
 
     QList<QListWidgetItem*> names = ui->levelsList->findItems(lastLvlName, Qt::MatchExactly);
@@ -30,6 +31,7 @@ LevelChangeDialog::~LevelChangeDialog()
 void LevelChangeDialog::connectInitialization()
 {
     connect(ui->levelsList, &QListWidget::itemSelectionChanged, this, LevelChangeDialog::nameChanged);
+    connect(ui->levelsList, &QListWidget::itemDoubleClicked, this, LevelChangeDialog::accept);
 }
 
 const QString& LevelChangeDialog::getChosenLevelName() const
@@ -37,16 +39,15 @@ const QString& LevelChangeDialog::getChosenLevelName() const
     return m_chosenLvlName;
 }
 
-void LevelChangeDialog::setLevels()
+void LevelChangeDialog::setLevels(const LevelsDirectory& lvlDir)
 {
-    QListWidget* levels = ui->levelsList;
+    QListWidget* uiLevels = ui->levelsList;
+    QStringList levels = lvlDir.levelsList();
 
-    // изменить подгрузку с помощью класса анализирующего директорию
-    // пока подгружаем фиксированные папки
-
-    levels->addItem("1");
-    levels->addItem("2");
-    levels->addItem("3");
+    for (const auto& levelName : levels)
+    {
+        uiLevels->addItem(levelName);
+    }
 }
 
 void LevelChangeDialog::nameChanged()

@@ -39,7 +39,6 @@ private:
 
     QGraphicsView m_view;
     Table m_picture;
-
     Solution* mp_currSolution;
     LevelsDirectory m_levelsPathDir;
     QString m_currentLevelName;

@@ -141,7 +141,7 @@ void MainWindow::actionStartSolution()
 
 void MainWindow::actionChangeLevel()
 {
-    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>(m_currentLevelName);
+    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>(m_currentLevelName, m_levelsPathDir);
     if (lvlChangeDlg->exec())
     {
         emit changeNon(lvlChangeDlg->getChosenLevelName());

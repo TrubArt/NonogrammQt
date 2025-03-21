@@ -8,6 +8,7 @@ class LevelsDirectory
 public:
     LevelsDirectory();
     QString path() const;
+    QStringList levelsList() const;
 
 private:
     QDir m_directory;
