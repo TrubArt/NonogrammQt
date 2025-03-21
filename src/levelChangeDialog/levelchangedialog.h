@@ -13,7 +13,7 @@ class LevelChangeDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LevelChangeDialog(QWidget* parent = nullptr);
+    explicit LevelChangeDialog(const QString& lastLvlName, QWidget* parent = nullptr);
     ~LevelChangeDialog() override;
 
     const QString& getChosenLevelName() const;

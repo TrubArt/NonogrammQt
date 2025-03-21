@@ -1,5 +1,6 @@
 #include <memory>
 #include <QMessageBox>
+#include <QErrorMessage>
 
 #include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
@@ -18,8 +19,6 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->gridLayout->addWidget(&m_view, 0, 1, 1, 1);
     m_view.setScene(m_picture.get());
-
-    m_levelsPathDir.setPath("C:\\Users\\user\\Qttest\\Nonogramm\\levels");
 
     connectInitialization();
 }
@@ -60,6 +59,14 @@ void MainWindow::repaintTable(int rowCount, int columnCount)
 
 void MainWindow::changeNonogram(const QString& lvlName)
 {
+    QString fullName = m_levelsPathDir.path() + "/" + lvlName;
+    if (!QDir(fullName).exists())
+    {
+        QErrorMessage(this).showMessage(tr("The selected level does not exist!"));
+    }
+
+    m_currentLevelName = lvlName;
+
     if (mp_currSolution)
     {
         delete mp_currSolution;
@@ -69,7 +76,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
 
     // .txt к названию добавляется в FileLoaderCpp
     std::vector<std::string> files = { "additional color condition", "condition", "info" };
-    std::string directoryPath = (m_levelsPathDir.getPath() + "\\" + lvlName).toStdString();
+    std::string directoryPath = fullName.toStdString();
     LoadManagerCpp loadManager(directoryPath, files);
 
     // *****************************************************************************************************
@@ -105,7 +112,7 @@ void MainWindow::actionExit()
 
 void MainWindow::actionStartSolution()
 {
-    if (!mp_currSolution)
+    if (!mp_currSolution || m_currentLevelName.isEmpty())
     {
         QMessageBox msgChange;
         msgChange.setWindowTitle(tr("Hint"));
@@ -134,7 +141,7 @@ void MainWindow::actionStartSolution()
 
 void MainWindow::actionChangeLevel()
 {
-    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>();
+    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>(m_currentLevelName);
     if (lvlChangeDlg->exec())
     {
         emit changeNon(lvlChangeDlg->getChosenLevelName());

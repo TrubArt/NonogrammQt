@@ -42,6 +42,7 @@ private:
 
     Solution* mp_currSolution;
     LevelsDirectory m_levelsPathDir;
+    QString m_currentLevelName;
 };
 
 #endif // MAINWINDOW_H

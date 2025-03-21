@@ -1,19 +1,16 @@
 #ifndef LEVELSDIRECTORY_H
 #define LEVELSDIRECTORY_H
 
-#include <QString>
+#include <QDir>
 
 class LevelsDirectory
 {
 public:
-    LevelsDirectory() = default;
-    explicit LevelsDirectory(const QString& path);
-
-    void setPath(const QString& path);
-    const QString& getPath() const;
+    LevelsDirectory();
+    QString path() const;
 
 private:
-    QString m_dir;
+    QDir m_directory;
 };
 
 #endif // LEVELSDIRECTORY_H

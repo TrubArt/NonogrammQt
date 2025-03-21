@@ -1,7 +1,7 @@
 #include "levelchangedialog.h"
 #include "ui_levelchangedialog.h"
 
-LevelChangeDialog::LevelChangeDialog(QWidget* parent)
+LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::LevelChangeDialog)
 {
@@ -11,7 +11,15 @@ LevelChangeDialog::LevelChangeDialog(QWidget* parent)
     setLevels();
     connectInitialization();
 
-    ui->levelsList->setCurrentRow(0);
+    QList<QListWidgetItem*> names = ui->levelsList->findItems(lastLvlName, Qt::MatchExactly);
+    if (!names.empty())
+    {
+        ui->levelsList->setCurrentItem(names[0]);
+    }
+    else
+    {
+        ui->levelsList->setCurrentRow(0);
+    }
 }
 
 LevelChangeDialog::~LevelChangeDialog()
