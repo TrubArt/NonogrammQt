@@ -25,14 +25,14 @@ public:
 	void setFile(const std::string& fileName) override;
 	std::string getFileName() const override;
 
-	std::vector<std::vector<size_t>> getAdditionalCondition() override;
+	std::vector<std::array<size_t, 3>> getAdditionalCondition() override;
 	std::pair<size_t, size_t> getNonogramSize() override;
 
 	// возвращает vector c последовательностью чисел из строки
 	std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
 
 	// возвращает true, если читать из потока больше нечего
-	bool isEmpty() const;
+	bool isEndOfFile() const;
 
 private:
 	// возвращает первое число из str начиная с index

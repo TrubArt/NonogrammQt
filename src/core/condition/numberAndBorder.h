@@ -23,8 +23,8 @@ public:
 	// getters & setters
 
 	size_t getNum() const;
-	myP getD() const;
-	myP getRD() const;
+    const myP& getD() const;
+    const myP& getRD() const;
 	bool getFlagExistRd() const;
 	void setD(const myP& x);
 	void setFlagExistRd(bool flag);

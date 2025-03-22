@@ -9,12 +9,12 @@ size_t NumberAndBorders::getNum() const
 	return number;
 }
 
-NumberAndBorders::myP NumberAndBorders::getD() const
+const NumberAndBorders::myP& NumberAndBorders::getD() const
 {
 	return dia;
 }
 
-NumberAndBorders::myP NumberAndBorders::getRD() const
+const NumberAndBorders::myP& NumberAndBorders::getRD() const
 {
 	return realDia;
 }

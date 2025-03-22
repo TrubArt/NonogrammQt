@@ -41,17 +41,30 @@ std::string FileLoaderCpp::getFileName() const
 	return oldFileName;
 }
 
-std::vector<std::vector<size_t>> FileLoaderCpp::getAdditionalCondition()
+std::vector<std::array<size_t, 3>> FileLoaderCpp::getAdditionalCondition()
 {
-	std::vector<std::vector<size_t>> allConditions;
+	std::vector<std::array<size_t, 3>> allConditions;
 
-	while (!isEmpty())
+	constexpr int mustCountNumberInRow = 3;
+	size_t strNumber = 1;
+
+	while (!isEndOfFile())
 	{
-		std::vector<size_t> oneCondition = getLineSequence(false, 0);
-		if (!oneCondition.empty())
+		std::vector<size_t> oneConditionVector = getLineSequence(false, 0);
+		if (!oneConditionVector.empty())
 		{
+			if (oneConditionVector.size() != mustCountNumberInRow)
+			{
+				std::cerr	<< "Error in read " << fileName << "\n"
+							<< "Count number in Line = " << oneConditionVector.size() << ". Must be " << mustCountNumberInRow << ".\n"
+							<< "Line : " << strNumber << "!\n";
+				std::exit(1);
+			}
+
+			std::array<size_t, 3> oneCondition = { oneConditionVector[0], oneConditionVector[1], oneConditionVector[2] };
 			allConditions.push_back(oneCondition);
 		}
+		++strNumber;
 	}
 
 	return allConditions;
@@ -60,15 +73,15 @@ std::vector<std::vector<size_t>> FileLoaderCpp::getAdditionalCondition()
 std::pair<size_t, size_t> FileLoaderCpp::getNonogramSize()
 {
 	std::vector<size_t> line = getLineSequence(false, 0);
-	if (line.empty())
+	if (line.size() < 2)
 	{
-		std::cerr << "Dont find any numbers in " << fileName;
+		std::cerr << "Incorrect data in" << fileName;
 		return std::make_pair(0, 0);
 	}
 	return std::make_pair(line[0], line[1]);
 }
 
-bool FileLoaderCpp::isEmpty() const
+bool FileLoaderCpp::isEndOfFile() const
 {
 	return file.eof();
 }
@@ -100,9 +113,9 @@ size_t FileLoaderCpp::getNumber(const std::string& str, size_t& index) const
 
 	if (numberToInt < 0)
 	{
-		std::cerr << "Uncorrect input data.\n";
-		std::cerr << "File: " << fileName << "\n";
-		std::cerr << "Data: " << str << "\n";
+		std::cerr	<< "Uncorrect input data.\n"
+					<< "File: " << fileName << "\n"
+					<< "Data: " << str << "\n";
 	}
 
 	return numberToInt;
@@ -114,7 +127,7 @@ std::string FileLoaderCpp::skipEmptyFileLine()
 	do
 	{
 		std::getline(file, str);
-	} while (str.empty() && !isEmpty());
+	} while (str.empty() && !isEndOfFile());
 
 	return str;
 }

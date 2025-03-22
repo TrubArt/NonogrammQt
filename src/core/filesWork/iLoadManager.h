@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <vector>
+#include <array>
 #include <string>
 
 // интерфейс для менеджера над загрузчиком информации из файла
@@ -19,7 +20,7 @@ public:
 	virtual ~ILoadManager() = default;
 
 	virtual std::pair<size_t, size_t> getNonogramSize() = 0;
-	virtual std::vector<std::vector<size_t>> getAdditionalCondition() = 0;
+	virtual std::vector<std::array<size_t, 3>> getAdditionalCondition() = 0;
 	virtual std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) = 0;
 };
 

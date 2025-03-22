@@ -28,7 +28,7 @@ std::pair<size_t, size_t> LoadManagerCpp::getNonogramSize()
 	return fileLoader->getNonogramSize();
 }
 
-std::vector<std::vector<size_t>> LoadManagerCpp::getAdditionalCondition()
+std::vector<std::array<size_t, 3>> LoadManagerCpp::getAdditionalCondition()
 {
 	std::string conditionFile = directory + directoryDelimeter + files[0];
 	if (fileLoader->getFileName() != conditionFile)

@@ -25,8 +25,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::connectInitialization()
 {
-    connect(this, &MainWindow::changeNon, this, &MainWindow::changeNonogram);
-
     // actions
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::actionExit);
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::actionStartSolution);
@@ -144,6 +142,6 @@ void MainWindow::actionChangeLevel()
     std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>(m_currentLevelName, m_levelsPathDir);
     if (lvlChangeDlg->exec())
     {
-        emit changeNon(lvlChangeDlg->getChosenLevelName());
+        changeNonogram(lvlChangeDlg->getChosenLevelName());
     }
 }

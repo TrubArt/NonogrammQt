@@ -28,9 +28,6 @@ public slots:
     void actionStartSolution();
     void actionChangeLevel();
 
-signals:
-    void changeNon(const QString&);
-
 private:
     void connectInitialization();
     void drawCellsFromQueue();
