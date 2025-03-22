@@ -7,8 +7,6 @@ set(QT_FILES
     mainwindow.cpp
     mainwindow.ui
     mainwindow.qrc
-    colorstore.h
-    colorstore.cpp
     table.h
     table.cpp
 )
@@ -23,8 +21,14 @@ add_executable(${PROJECT_NAME}
     levelChangeDialog/levelchangedialog.h
     levelChangeDialog/levelchangedialog.cpp
     levelChangeDialog/levelchangedialog.ui
-    levelsDirectory/levelsDirectory.h
-    levelsDirectory/levelsDirectory.cpp
+    levelsManager/levelsDirectory.h
+    levelsManager/levelsDirectory.cpp
+    levelsManager/colorstore.h
+    levelsManager/colorstore.cpp
+    levelsManager/levelLoader.h
+    levelsManager/levelLoader.cpp
+    levelsManager/levelManager.h levelsManager/levelManager.cpp
+
 )
 
 add_subdirectory(core)

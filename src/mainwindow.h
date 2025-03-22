@@ -8,7 +8,7 @@
 #include "table.h"
 #include "queueCells/cellQueue.h"
 #include "solution.h"
-#include "levelsDirectory/levelsDirectory.h"
+#include "levelsManager/levelManager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,7 +17,6 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
-    void repaintTable(int rowCount, int columnCount);
     void paintCell(const PaintCellInfo& cellInfo);
 
 public slots:
@@ -27,8 +26,10 @@ public slots:
     void actionExit();
     void actionStartSolution();
     void actionChangeLevel();
+    void actionSaveLevels();   // undefined
 
 private:
+    void viewInitialization();
     void connectInitialization();
     void drawCellsFromQueue();
 
@@ -36,8 +37,9 @@ private:
 
     QGraphicsView m_view;
     Table m_picture;
+
     Solution* mp_currSolution;
-    LevelsDirectory m_levelsPathDir;
+    LevelManager m_levelsStorage;
     QString m_currentLevelName;
 };
 

@@ -12,15 +12,21 @@ MainWindow::MainWindow(QWidget* parent)
     , mp_currSolution(nullptr)
 {
     ui->setupUi(this);
-    m_view.setParent(this);
 
     setWindowState(Qt::WindowState::WindowMaximized);
     setWindowTitle(tr("NonogrammSolver"));
 
-    ui->gridLayout->addWidget(&m_view, 0, 1, 1, 1);
-    m_view.setScene(m_picture.get());
+    viewInitialization();
+    m_levelsStorage.loadLevels();
 
     connectInitialization();
+}
+
+void MainWindow::viewInitialization()
+{
+    m_view.setParent(this);
+    ui->gridLayout->addWidget(&m_view, 0, 1, 1, 1);
+    m_view.setScene(m_picture.get());
 }
 
 void MainWindow::connectInitialization()
@@ -50,14 +56,9 @@ void MainWindow::paintCell(const PaintCellInfo& cellInfo)
     m_picture.repaintCell(hIndex, wIndex, cellInfo.color);
 }
 
-void MainWindow::repaintTable(int rowCount, int columnCount)
-{
-    m_picture.repaintTable(rowCount, columnCount);
-}
-
 void MainWindow::changeNonogram(const QString& lvlName)
 {
-    QString fullName = m_levelsPathDir.path() + "/" + lvlName;
+    QString fullName = m_levelsStorage.getLevelsDirectory().path() + "/" + lvlName;
     if (!QDir(fullName).exists())
     {
         QErrorMessage(this).showMessage(tr("The selected level does not exist!"));
@@ -83,7 +84,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
 
     // отрисовка нового изображения
     const Picture& pict = mp_currSolution->getPicture();
-    repaintTable(pict.getRowCount(), pict.getColumnCount());
+    m_picture.repaintTable(pict.getRowCount(), pict.getColumnCount());
 
     // добавление на рисунок клеток из additionColor.txt
     drawCellsFromQueue();
@@ -139,9 +140,18 @@ void MainWindow::actionStartSolution()
 
 void MainWindow::actionChangeLevel()
 {
-    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>(m_currentLevelName, m_levelsPathDir);
+    std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>
+        (m_currentLevelName
+        , m_levelsStorage.getLevelsDirectory()
+        );
+
     if (lvlChangeDlg->exec())
     {
         changeNonogram(lvlChangeDlg->getChosenLevelName());
     }
+}
+
+void MainWindow::actionSaveLevels()
+{
+
 }

@@ -4,15 +4,16 @@
 #include <iostream>
 
 LoadManagerCpp::LoadManagerCpp(const std::string& directory, const std::vector<std::string>& files)
-	: ILoadManager(directory, files)
-	, fileLoader(std::make_unique<FileLoaderCpp>())
+    : directory(directory)
+    , files(files)
+    , fileLoader(std::make_unique<FileLoaderCpp>())
 {
 	if (files.size() != 3)
 	{
-		std::cerr << "Class FileLoaderCpp must have only 3 files:\n"
-			<< "additional color condition.txt\n"
-			<< "condition.txt\n"
-			<< "size.txt\n";
+        std::cerr   << "Class FileLoaderCpp must have only 3 files:\n"
+                    << "additional color condition.txt\n"
+                    << "condition.txt\n"
+                    << "size.txt\n";
 		std::exit(1);
 	}
 }

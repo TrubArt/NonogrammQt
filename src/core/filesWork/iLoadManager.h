@@ -9,14 +9,7 @@
 // интерфейс для менеджера над загрузчиком информации из файла
 class ILoadManager
 {
-protected:
-	std::string directory;
-	std::vector<std::string> files;
-
-	std::string directoryDelimeter = "\\";
-
 public:
-	ILoadManager(const std::string& directory, const std::vector<std::string>& files);
 	virtual ~ILoadManager() = default;
 
 	virtual std::pair<size_t, size_t> getNonogramSize() = 0;

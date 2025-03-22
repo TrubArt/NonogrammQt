@@ -3,7 +3,7 @@
 
 #include <qgraphicsscene.h>
 
-#include "colorstore.h"
+#include "levelsManager/colorstore.h"
 
 class Table
 {

@@ -1,6 +1,6 @@
 #include "levelchangedialog.h"
 #include "ui_levelchangedialog.h"
-#include "../levelsDirectory/levelsDirectory.h"
+#include "../levelsManager/levelsDirectory.h"
 
 LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, const LevelsDirectory& lvlDir, QWidget* parent)
     : QDialog(parent)

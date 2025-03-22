@@ -1,7 +1,7 @@
 #ifndef LEVELSDIRECTORY_H
 #define LEVELSDIRECTORY_H
 
-#include <QDir>
+#include <QtCore/qdir.h>
 
 class LevelsDirectory
 {
