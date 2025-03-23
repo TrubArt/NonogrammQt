@@ -11,45 +11,54 @@ Line::Line(size_t size)
 	}
 }
 
-Line::Line(const Line& x)
+Line::Line(const Line& other)
 {
-	data.resize(x.data.size());
+    data.resize(other.data.size());
 
 	for (size_t i = 0; i < data.size(); ++i)
 	{
-		data[i] = new Cell(x.data[i]->get());
+        data[i] = new Cell(other.data[i]->get());
 	}
 }
+
+Line::Line(Line&& other)
+    : data(std::move(other.data))
+{}
 
 Line::~Line()
 {
-	for (const auto& i : data)
-	{
-		delete i;
-	}
+    destruct();
 }
 
-Line& Line::operator=(const Line& x)
+Line& Line::operator=(const Line& other)
 {
-	if (&x != this)
+    if (&other != this)
 	{
-		for (const auto& i : data) // предварительно освобождается память
-		{
-			if (i)
-			{
-				delete i;
-			}
-		}
+        // предварительно освобождается память
+        destruct();
 
-		data.resize(x.data.size());
+        data.resize(other.data.size());
 
 		for (size_t i = 0; i < data.size(); ++i)
 		{
-			data[i] = new Cell(x.data[i]->get());
+            data[i] = new Cell(other.data[i]->get());
 		}
 	}
 
 	return *this;
+}
+
+Line& Line::operator=(Line&& other)
+{
+    if (&other != this)
+    {
+        // предварительно освобождается память
+        destruct();
+
+        data = std::move(other.data);
+    }
+
+    return *this;
 }
 
 bool Line::operator==(const Line& x) const
@@ -207,6 +216,17 @@ std::string Line::toString() const
 	}
 
 	return answer;
+}
+
+void Line::destruct()
+{
+    for (auto& i : data)
+    {
+        if (i)
+        {
+            delete i;
+        }
+    }
 }
 
 std::ostream& operator<<(std::ostream& out, const Line& line)

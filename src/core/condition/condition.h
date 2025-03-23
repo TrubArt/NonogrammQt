@@ -43,6 +43,8 @@ public:
 	size_t getEnd() const;
 	const std::list<NumberAndBorders>& getNumInfo() const;
 
+    void setLinePtr(const Line* ptr);
+
 	// functions
 
 	void updateCondition();

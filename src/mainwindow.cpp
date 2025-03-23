@@ -9,7 +9,6 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::mainwindowClass)
-    , mp_currSolution(nullptr)
 {
     ui->setupUi(this);
     m_view.setParent(this);
@@ -35,11 +34,6 @@ void MainWindow::connectInitialization()
 MainWindow::~MainWindow()
 {
     delete ui;
-
-    if (mp_currSolution)
-    {
-        delete mp_currSolution;
-    }
 }
 
 void MainWindow::paintCell(const PaintCellInfo& cellInfo)
@@ -65,11 +59,6 @@ void MainWindow::changeNonogram(const QString& lvlName)
 
     m_currentLevelName = lvlName;
 
-    if (mp_currSolution)
-    {
-        delete mp_currSolution;
-    }
-
     // ***************************** инициализация loader с нужными файлами из директории ******************
 
     // .txt к названию добавляется в FileLoaderCpp
@@ -79,7 +68,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
 
     // *****************************************************************************************************
 
-    mp_currSolution = new Solution(loadManager);
+    mp_currSolution = Solution(loadManager);
 
     // отрисовка нового изображения
     const Picture& pict = mp_currSolution->getPicture();

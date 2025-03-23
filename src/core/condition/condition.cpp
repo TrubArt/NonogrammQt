@@ -67,6 +67,11 @@ const std::list<NumberAndBorders>& Condition::getNumInfo() const
 	return numInfo;
 }
 
+void Condition::setLinePtr(const Line* ptr)
+{
+    data = ptr;
+}
+
 void Condition::updateCondition()
 {
 	if (*data == statLine)

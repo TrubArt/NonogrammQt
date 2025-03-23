@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h"
 #include <QMainWindow>
 #include <qgraphicsview.h>
+#include <optional>
 
 #include "table.h"
 #include "queueCells/cellQueue.h"
@@ -36,7 +37,7 @@ private:
 
     QGraphicsView m_view;
     Table m_picture;
-    Solution* mp_currSolution;
+    std::optional<Solution> mp_currSolution;
     LevelsDirectory m_levelsPathDir;
     QString m_currentLevelName;
 };
