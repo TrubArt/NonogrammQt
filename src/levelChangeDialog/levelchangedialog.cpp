@@ -2,14 +2,14 @@
 #include "ui_levelchangedialog.h"
 #include "../levelsManager/levelsDirectory.h"
 
-LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, const LevelsDirectory& lvlDir, QWidget* parent)
+LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, const QList<QString>& lvlNames, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::LevelChangeDialog)
 {
     ui->setupUi(this);
     setWindowTitle(tr("Level selection"));
 
-    setLevels(lvlDir);
+    setLevels(lvlNames);
     connectInitialization();
 
     QList<QListWidgetItem*> names = ui->levelsList->findItems(lastLvlName, Qt::MatchExactly);
@@ -39,12 +39,11 @@ const QString& LevelChangeDialog::getChosenLevelName() const
     return m_chosenLvlName;
 }
 
-void LevelChangeDialog::setLevels(const LevelsDirectory& lvlDir)
+void LevelChangeDialog::setLevels(const QList<QString>& levelNames)
 {
     QListWidget* uiLevels = ui->levelsList;
-    QStringList levels = lvlDir.levelsList();
 
-    for (const auto& levelName : levels)
+    for (const auto& levelName : levelNames)
     {
         uiLevels->addItem(levelName);
     }

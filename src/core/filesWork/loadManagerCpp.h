@@ -4,16 +4,12 @@
 #include "iLoadManager.h"
 #include "iFileLoader.h"
 
-#include <memory>
-
 // менеджер работы с файлами на основе класса FileLoaderCpp
 class LoadManagerCpp : public ILoadManager
 {
     std::string directory;
     std::vector<std::string> files;
     std::string directoryDelimeter = "\\";
-
-	std::unique_ptr<iFileLoader> fileLoader;
 
 public:
 	LoadManagerCpp(const std::string& directory, const std::vector<std::string>& files);

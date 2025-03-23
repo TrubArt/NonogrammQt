@@ -8,7 +8,7 @@
 #include "table.h"
 #include "queueCells/cellQueue.h"
 #include "solution.h"
-#include "levelsManager/levelManager.h"
+#include "levelsManager/levelsStorage.h"
 
 class MainWindow : public QMainWindow
 {
@@ -39,7 +39,7 @@ private:
     Table m_picture;
 
     Solution* mp_currSolution;
-    LevelManager m_levelsStorage;
+    LevelsStorage m_levelsStorage;
     QString m_currentLevelName;
 };
 

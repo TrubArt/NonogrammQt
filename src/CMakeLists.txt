@@ -25,10 +25,12 @@ add_executable(${PROJECT_NAME}
     levelsManager/levelsDirectory.cpp
     levelsManager/colorstore.h
     levelsManager/colorstore.cpp
+    levelsManager/levelsStorage.h
+    levelsManager/levelsStorage.cpp
+    levelsManager/levelManager.h
+    levelsManager/levelManager.cpp
     levelsManager/levelLoader.h
     levelsManager/levelLoader.cpp
-    levelsManager/levelManager.h levelsManager/levelManager.cpp
-
 )
 
 add_subdirectory(core)

@@ -58,8 +58,7 @@ void MainWindow::paintCell(const PaintCellInfo& cellInfo)
 
 void MainWindow::changeNonogram(const QString& lvlName)
 {
-    QString fullName = m_levelsStorage.getLevelsDirectory().path() + "/" + lvlName;
-    if (!QDir(fullName).exists())
+    if (m_levelsStorage.getLevelData(lvlName) == std::nullopt)
     {
         QErrorMessage(this).showMessage(tr("The selected level does not exist!"));
     }
@@ -74,13 +73,15 @@ void MainWindow::changeNonogram(const QString& lvlName)
     // ***************************** инициализация loader с нужными файлами из директории ******************
 
     // .txt к названию добавляется в FileLoaderCpp
-    std::vector<std::string> files = { "additional color condition", "condition", "info" };
-    std::string directoryPath = fullName.toStdString();
-    LoadManagerCpp loadManager(directoryPath, files);
+    // std::vector<std::string> files = { "additional color condition", "condition", "info" };
+    // QString fullName = m_levelsStorage.getLevelsDirectory().path() + "/" + lvlName;
+    // std::string directoryPath = fullName.toStdString();
+    // LoadManagerCpp loadManager(directoryPath, files);
 
     // *****************************************************************************************************
 
-    mp_currSolution = new Solution(loadManager);
+    //mp_currSolution = new Solution(loadManager);
+    mp_currSolution = new Solution(m_levelsStorage.getManager(lvlName));
 
     // отрисовка нового изображения
     const Picture& pict = mp_currSolution->getPicture();
@@ -142,7 +143,7 @@ void MainWindow::actionChangeLevel()
 {
     std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>
         (m_currentLevelName
-        , m_levelsStorage.getLevelsDirectory()
+        , m_levelsStorage.getLevelsList()
         );
 
     if (lvlChangeDlg->exec())

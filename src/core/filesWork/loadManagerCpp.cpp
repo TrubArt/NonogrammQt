@@ -4,9 +4,9 @@
 #include <iostream>
 
 LoadManagerCpp::LoadManagerCpp(const std::string& directory, const std::vector<std::string>& files)
-    : directory(directory)
+    : ILoadManager(new FileLoaderCpp())
+    , directory(directory)
     , files(files)
-    , fileLoader(std::make_unique<FileLoaderCpp>())
 {
 	if (files.size() != 3)
 	{

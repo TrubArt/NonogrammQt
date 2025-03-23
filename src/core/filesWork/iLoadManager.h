@@ -5,11 +5,18 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <memory>
+
+#include "iFileLoader.h"
 
 // интерфейс для менеджера над загрузчиком информации из файла
 class ILoadManager
 {
+protected:
+    std::unique_ptr<iFileLoader> fileLoader;
+
 public:
+    ILoadManager(iFileLoader* fileLoader) : fileLoader(fileLoader) {}
 	virtual ~ILoadManager() = default;
 
 	virtual std::pair<size_t, size_t> getNonogramSize() = 0;

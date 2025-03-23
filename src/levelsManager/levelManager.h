@@ -1,21 +1,19 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
-#include "levelsDirectory.h"
-#include "levelLoader.h"
+#include "filesWork/iLoadManager.h"
 
-class LevelManager
+class LevelManager : public ILoadManager
 {
 public:
     LevelManager();
 
-    void loadLevels();
-    const LevelsDirectory& getLevelsDirectory() const;
-    const LevelData* getLevelData(const QString& levelName) const;
+    std::pair<size_t, size_t> getNonogramSize() override;
+    std::vector<std::array<size_t, 3>> getAdditionalCondition() override;
+    std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
 
 private:
-    LevelsDirectory m_dir;
-    QList<LevelLoader> m_levels;
+
 };
 
 #endif // LEVELMANAGER_H
