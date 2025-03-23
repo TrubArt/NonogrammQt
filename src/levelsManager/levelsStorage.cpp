@@ -28,6 +28,7 @@ std::optional<LevelData> LevelsStorage::getLevelData(const QString& levelName) c
 
 LevelManager& LevelsStorage::getManager(const QString& levelName)
 {
-    // настройка нужного менеджера по заданному levelName
+    QString levelDirectoryName = m_levelsDir.path() + "/" + levelName;
+    m_manager.setDirectoryAndData(QDir(levelDirectoryName), getLevelData(levelName));
     return m_manager;
 }

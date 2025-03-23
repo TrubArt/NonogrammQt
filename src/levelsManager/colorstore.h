@@ -1,5 +1,6 @@
 #ifndef COLORSTORE_H
 #define COLORSTORE_H
+
 #include <QColor>
 
 #include "picture/cell.h"

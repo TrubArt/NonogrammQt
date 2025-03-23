@@ -1,19 +1,28 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
+#include <QDir>
+#include <optional>
+
 #include "filesWork/iLoadManager.h"
+#include "levelData.h"
 
 class LevelManager : public ILoadManager
 {
 public:
     LevelManager();
 
+    void setDirectoryAndData(const QDir& dir, const std::optional<LevelData>& loadedData);
+
     std::pair<size_t, size_t> getNonogramSize() override;
     std::vector<std::array<size_t, 3>> getAdditionalCondition() override;
     std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
 
 private:
+    const QList<QString> filesInDirectory = { "additional color condition.txt", "condition.txt", "info.txt" };
 
+    QDir m_levelDir;
+    std::optional<LevelData> m_loadedData;
 };
 
 #endif // LEVELMANAGER_H
