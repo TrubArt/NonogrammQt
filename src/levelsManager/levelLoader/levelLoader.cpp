@@ -1,4 +1,5 @@
 #include <QTextStream>
+#include <memory>
 
 #include "levelLoader.h"
 #include "../../settings/settings.h"
@@ -8,9 +9,9 @@ bool LevelLoader::Checker::checkDataValidation(Categories category, const QStrin
 {
     auto findBadParameter = [](const QString& specialization, const QString& value)
     {
-        qCritical() << QObject::tr("Bad values!")
-                    << QObject::tr(" Parameter: ") << specialization
-                    << QObject::tr(" Value: ") << value;
+        qCritical() << "Bad values!"
+                    << " Parameter: " << specialization
+                    << " Value: " << value;
     };
 
     for (const QString& value : parameters)
@@ -42,11 +43,11 @@ bool LevelLoader::Checker::isOneSettingsInLine(const QStringList& parameters)
     return parameters.size() == 1 ? true : false;
 }
 
-bool LevelLoader::Checker::checkSize(const QString& value)
+bool LevelLoader::Checker::checkSize(const QString& str)
 {
-    bool checkToConversion = true;
-    value.toInt(checkToConversion);
-    if (!checkToConversion || value <= 0)
+    std::unique_ptr<bool> checkToConversion = std::make_unique<bool>(true);
+    int value = str.toInt(checkToConversion.get());
+    if (*checkToConversion == false || value <= 0)
     {
         return false;
     }
@@ -56,10 +57,10 @@ void LevelLoader::setFile(const std::string& fileName)
 {
     m_file.close();
 
-    m_file.setFileName(fileName);
+    m_file.setFileName(QString::fromStdString(fileName));
     if (!m_file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qCritical << QObject::tr("File ") << fileName << QObject::tr(" dont open!");
+        qCritical << "File "s + fileName + " not open!"s;
     }
 }
 
@@ -106,7 +107,7 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
         }
     }
 
-    QString errorMessage = QObject::tr("Dont find parameter: ");
+    QString errorMessage = "Dont find parameter: ";
     if (!findRowCount)
     {
         qCritical() << errorMessage << LevelSettings::rowCount();
@@ -135,7 +136,7 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
 
         FileParser::getLevelData(line, values);
 
-        if (Checker::checkDataValidation(Categories::size, QObject::tr("additional level data value"), values))
+        if (Checker::checkDataValidation(Categories::size, "additional level data value", values))
         {
             if (values.size() != 3)
             {
@@ -144,8 +145,8 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
                 {
                     lineOfValues.push_back(value + " ");
                 }
-                qCritical() << QObject::tr("Error in addition color condition. ")
-                            << QObject::tr("Must have only 3 arguments in line: ") << lineOfValues;
+                qCritical() << "Error in addition color condition. "
+                            << "Must have only 3 arguments in line: " << lineOfValues;
             }
             else
             {
@@ -179,7 +180,7 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
 
         FileParser::getLevelData(line, values);
 
-        if (Checker::checkDataValidation(Categories::size, QObject::tr("level data value"), values))
+        if (Checker::checkDataValidation(Categories::size, "level data value", values))
         {
             condition.reserve(values.size());
             for (const QString& value : values)
@@ -191,9 +192,9 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
 
     if (condition.empty())
     {
-        qCritical() << QObject::tr("Not find condition to") << " "
-                    << isColumn ? QObject::tr("column") : QObject::tr("line") << " "
-                    << QObject::tr("condition number: ") << lineIndex;
+        qCritical() << "Not find condition to" << " "
+                    << isColumn ? "column" : "line" << " "
+                    << "condition number: " << lineIndex;
     }
     return condition;
 }

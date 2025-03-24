@@ -1,5 +1,4 @@
 #include "levelsStorage.h"
-#include "levelLoader.h"
 
 void LevelsStorage::loadLevels()
 {
@@ -28,7 +27,18 @@ std::optional<LevelData> LevelsStorage::getLevelData(const QString& levelName) c
 
 LevelManager& LevelsStorage::getManager(const QString& levelName)
 {
-    QString levelDirectoryName = m_levelsDir.path() + "/" + levelName;
-    m_manager.setDirectoryAndData(QDir(levelDirectoryName), getLevelData(levelName));
+    QString levelDirectoryName = m_levelsDir.path() + QDir::separator() + levelName;
+    m_manager.setDirectoryAndData(QDir(levelDirectoryName), isLoadedData(levelName));
     return m_manager;
+}
+
+std::optional<LevelData> LevelsStorage::isLoadedData(const QString& levelName) const
+{
+    std::optional<LevelData> existLevel = getLevelData(levelName);
+    if (existLevel == std::nullopt || existLevel->conditions.empty())
+    {
+        return std::nullopt;
+    }
+
+    return existLevel;
 }

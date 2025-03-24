@@ -19,6 +19,8 @@ public:
     LevelManager& getManager(const QString& levelName);
 
 private:
+    std::optional<LevelData> isLoadedData(const QString& levelName) const;
+
     LevelsDirectory m_levelsDir;
     QMap<levelname_al, LevelData> m_data;
     LevelManager m_manager;

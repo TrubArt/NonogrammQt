@@ -19,10 +19,12 @@ public:
     std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
 
 private:
-    const QList<QString> filesInDirectory = { "additional color condition.txt", "condition.txt", "info.txt" };
-
     QDir m_levelDir;
     std::optional<LevelData> m_loadedData;
+
+    const std::string additionDataFile =  "additional color condition.txt";
+    const std::string conditionDataFile = "condition.txt";
+    const std::string infoDataFile = "info.txt";
 };
 
 #endif // LEVELMANAGER_H

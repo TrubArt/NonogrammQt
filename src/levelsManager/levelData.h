@@ -10,8 +10,8 @@ struct LevelData
 {
     // data
 
-    QVarLengthArray<QList<size_t>, 2> conditions;
-    QList<QVarLengthArray<size_t, 3>> additionConditions;
+    std::array<std::vector<size_t>, 2> conditions;
+    std::vector<std::array<size_t, 3>> additionConditions;
 
     // properties
 

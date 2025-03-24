@@ -27,7 +27,7 @@ private:
         color
     };
 
-    class Checker
+    struct Checker
     {
         static bool checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters);
         static bool isOneSettingsInLine(const QStringList& parameters);

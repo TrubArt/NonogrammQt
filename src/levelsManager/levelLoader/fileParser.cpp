@@ -1,5 +1,3 @@
-#include <QObject>
-
 #include "fileParser.h"
 
 void FileParser::getSettingsData(const QString& line, QString& category, QStringList& parameters)
@@ -7,12 +5,12 @@ void FileParser::getSettingsData(const QString& line, QString& category, QString
     QStringList listBySplit = line.split(":");
     if (listBySplit.size() == 1)
     {
-        qCritical() << QObject::tr("Absent ':' in line") << line;
+        qCritical() << "Absent ':' in line" << line;
         return;
     }
     if (listBySplit.size() > 2)
     {
-        qCritical() << QObject::tr("To much ':' in line") << line;
+        qCritical() << "To much ':' in line" << line;
         return;
     }
 
