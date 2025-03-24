@@ -20,13 +20,21 @@ public:
 private:
     QFile m_file;
 
+    enum class Categories
+    {
+        size,
+        color
+    };
+
     class Parser
     {
-        static void getDataFromStr(const QString& line, QString& category, QList<int>& parameters);
+        static void getDataFromStr(const QString& line, QString& category, QList<QString>& parameters);
     };
+
     class Checker
     {
-        static bool getDataFromStr(const QString& category, const QList<int>& parameters);
+        static bool checkData(Categories category, const QString& specialization, const QList<QString>& parameters);
+        static bool checkSize(const QString& value);
     };
 };
 

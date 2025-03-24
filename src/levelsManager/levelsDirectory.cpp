@@ -1,7 +1,7 @@
 #include "levelsDirectory.h"
 
 LevelsDirectory::LevelsDirectory()
-    : m_directory(QDir::currentPath() + "/levels")
+    : m_directory(QDir::currentPath() + QDir::separator() + "levels")
 {}
 
 QString LevelsDirectory::path() const
