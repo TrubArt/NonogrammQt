@@ -22,18 +22,15 @@ private:
 
     enum class Categories
     {
+        levelData,
         size,
         color
     };
 
-    class Parser
-    {
-        static void getDataFromStr(const QString& line, QString& category, QList<QString>& parameters);
-    };
-
     class Checker
     {
-        static bool checkData(Categories category, const QString& specialization, const QList<QString>& parameters);
+        static bool checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters);
+        static bool isOneSettingsInLine(const QStringList& parameters);
         static bool checkSize(const QString& value);
     };
 };

@@ -18,9 +18,11 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME}
     ${SOURCE_FILES}
+
     levelChangeDialog/levelchangedialog.h
     levelChangeDialog/levelchangedialog.cpp
     levelChangeDialog/levelchangedialog.ui
+
     levelsManager/levelsDirectory.h
     levelsManager/levelsDirectory.cpp
     levelsManager/colorstore.h
@@ -29,11 +31,15 @@ add_executable(${PROJECT_NAME}
     levelsManager/levelsStorage.cpp
     levelsManager/levelManager.h
     levelsManager/levelManager.cpp
-    levelsManager/levelLoader.h
-    levelsManager/levelLoader.cpp
     levelsManager/levelData.h
     levelsManager/levelData.cpp
+
     settings/settings.h
+
+    levelsManager/levelLoader/levelLoader.h
+    levelsManager/levelLoader/levelLoader.cpp
+    levelsManager/levelLoader/fileParser.h
+    levelsManager/levelLoader/fileParser.cpp
 )
 
 add_subdirectory(core)
