@@ -20,6 +20,8 @@ public:
 
 private:
     std::optional<LevelData> isLoadedData(const QString& levelName) const;
+    LevelData loadLevelSettingsWithoutData(const QString& levelName);
+    void setDirectoryAndData(const QString& levelName, const std::optional<LevelData>& loadedData);
 
     LevelsDirectory m_levelsDir;
     QMap<levelname_al, LevelData> m_data;

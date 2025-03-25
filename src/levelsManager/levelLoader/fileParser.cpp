@@ -1,16 +1,19 @@
 #include "fileParser.h"
 
+const QString FileParser::m_separatorForSettings = ":";
+const QStringList FileParser::m_ignoredValues = { "\t" };
+
 void FileParser::getSettingsData(const QString& line, QString& category, QStringList& parameters)
 {
-    QStringList listBySplit = line.split(":");
+    QStringList listBySplit = line.split(m_separatorForSettings);
     if (listBySplit.size() == 1)
     {
-        qCritical() << "Absent ':' in line" << line;
+        qCritical() << "Absent '" << m_separatorForSettings << "' in line" << line;
         return;
     }
     if (listBySplit.size() > 2)
     {
-        qCritical() << "To much ':' in line" << line;
+        qCritical() << "To much '" << m_separatorForSettings << "' in line" << line;
         return;
     }
 
@@ -23,11 +26,26 @@ void FileParser::getLevelData(const QString& line, QStringList& parameters)
 {
     QStringList listParametres = line.split(" ");
     parameters.reserve(listParametres.size());
-    for (const QString& value : listParametres)
+
+    for (QString& value : listParametres)
     {
+        deleteBadSymbols(value);
         if (!value.isEmpty())
         {
             parameters.push_back(value);
+        }
+    }
+}
+
+void FileParser::deleteBadSymbols(QString& parametr)
+{
+    for (const QString& value : m_ignoredValues)
+    {
+        qsizetype indexValue = parametr.indexOf(value);
+        while (indexValue != -1)
+        {
+            parametr.remove(indexValue, value.size());
+            indexValue = parametr.indexOf(value);
         }
     }
 }

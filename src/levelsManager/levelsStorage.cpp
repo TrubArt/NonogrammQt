@@ -5,8 +5,7 @@ void LevelsStorage::loadLevels()
     QStringList listLevelsName = m_levelsDir.levelsList();
     for (const QString& levelName : listLevelsName)
     {
-        LevelData loadedData;
-        m_data[levelName] = loadedData;
+        m_data[levelName] = loadLevelSettingsWithoutData(levelName);
     }
 }
 
@@ -27,18 +26,36 @@ std::optional<LevelData> LevelsStorage::getLevelData(const QString& levelName) c
 
 LevelManager& LevelsStorage::getManager(const QString& levelName)
 {
-    QString levelDirectoryName = m_levelsDir.path() + QDir::separator() + levelName;
-    m_manager.setDirectoryAndData(QDir(levelDirectoryName), isLoadedData(levelName));
+    setDirectoryAndData(levelName, isLoadedData(levelName));
     return m_manager;
 }
 
 std::optional<LevelData> LevelsStorage::isLoadedData(const QString& levelName) const
 {
     std::optional<LevelData> existLevel = getLevelData(levelName);
-    if (existLevel == std::nullopt || existLevel->conditions.empty())
+    if (existLevel == std::nullopt || existLevel->lineConditions.empty())
     {
         return std::nullopt;
     }
 
     return existLevel;
+}
+
+LevelData LevelsStorage::loadLevelSettingsWithoutData(const QString& levelName)
+{
+    setDirectoryAndData(levelName, std::nullopt);
+    LevelData data_t;
+
+    std::pair<size_t, size_t> sizes = m_manager.getNonogramSize();
+
+    data_t.rowCount = sizes.first;
+    data_t.columnCount = sizes.second;
+    data_t.name = levelName;
+
+    return data_t;
+}
+
+void LevelsStorage::setDirectoryAndData(const QString& levelName, const std::optional<LevelData>& loadedData)
+{
+    m_manager.setDirectoryAndData(QDir(m_levelsDir.getAbsPath(levelName)), loadedData);
 }

@@ -18,7 +18,8 @@ std::pair<size_t, size_t> LevelManager::getNonogramSize()
         return { m_loadedData->rowCount, m_loadedData->columnCount };
     }
 
-    fileLoader->setFile(infoDataFile);
+    QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
+    fileLoader->setFile(fullpath.toStdString());
     return fileLoader->getNonogramSize();
 }
 
@@ -29,7 +30,8 @@ std::vector<std::array<size_t, 3>> LevelManager::getAdditionalCondition()
         return m_loadedData->additionConditions;
     }
 
-    fileLoader->setFile(additionDataFile);
+    QString fullpath = m_levelDir.absolutePath() + QDir::separator() + additionDataFile;
+    fileLoader->setFile(fullpath.toStdString());
     return fileLoader->getAdditionalCondition();
 }
 
@@ -37,12 +39,21 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
 {
     if (m_loadedData)
     {
-        return m_loadedData->conditions[!isColumn][lineIndex];
+        if (isColumn)
+        {
+            return m_loadedData->columnConditions[lineIndex];
+        }
+        else
+        {
+            return m_loadedData->lineConditions[lineIndex];
+        }
     }
 
+    //QString fullpath = m_levelDir.absolutePath() + QDir::separator() + additionDataFile;
     if (fileLoader->getFileName() != conditionDataFile)
     {
-        fileLoader->setFile(conditionDataFile);
+        fileLoader->setFile(conditionDataFile.toStdString());
     }
+
     return fileLoader->getLineSequence(isColumn, lineIndex);
 }

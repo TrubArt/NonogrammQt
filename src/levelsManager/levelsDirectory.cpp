@@ -13,3 +13,8 @@ QStringList LevelsDirectory::levelsList() const
 {
     return m_directory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 }
+
+QString LevelsDirectory::getAbsPath(const QString& levelName) const
+{
+    return path() + QDir::separator() + levelName;
+}

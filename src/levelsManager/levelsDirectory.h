@@ -9,6 +9,7 @@ public:
     LevelsDirectory();
     QString path() const;
     QStringList levelsList() const;
+    QString getAbsPath(const QString& levelName) const;
 
 private:
     QDir m_directory;

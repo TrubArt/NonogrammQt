@@ -51,6 +51,7 @@ bool LevelLoader::Checker::checkSize(const QString& str)
     {
         return false;
     }
+    return true;
 }
 
 void LevelLoader::setFile(const std::string& fileName)
@@ -58,9 +59,9 @@ void LevelLoader::setFile(const std::string& fileName)
     m_file.close();
 
     m_file.setFileName(QString::fromStdString(fileName));
-    if (!m_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!m_file.open(QIODevice::ReadOnly))
     {
-        qCritical << "File "s + fileName + " not open!"s;
+        qCritical() << "File " << fileName << " not open!";
     }
 }
 
@@ -193,7 +194,7 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
     if (condition.empty())
     {
         qCritical() << "Not find condition to" << " "
-                    << isColumn ? "column" : "line" << " "
+                    << (isColumn ? "column" : "line") << " "
                     << "condition number: " << lineIndex;
     }
     return condition;

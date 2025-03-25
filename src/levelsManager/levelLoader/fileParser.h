@@ -12,7 +12,10 @@ public:
     static void getLevelData(const QString& line, QStringList& parameters);
 
 private:
+    static void deleteBadSymbols(QString& parametr);
 
+    static const QString m_separatorForSettings;
+    static const QStringList m_ignoredValues;
 };
 
 #endif // FILEPARSER_H

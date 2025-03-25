@@ -22,9 +22,9 @@ private:
     QDir m_levelDir;
     std::optional<LevelData> m_loadedData;
 
-    const std::string additionDataFile =  "additional color condition.txt";
-    const std::string conditionDataFile = "condition.txt";
-    const std::string infoDataFile = "info.txt";
+    const QString additionDataFile =  "Additional color condition.txt";
+    const QString conditionDataFile = "Condition.txt";
+    const QString infoDataFile = "Info.txt";
 };
 
 #endif // LEVELMANAGER_H
