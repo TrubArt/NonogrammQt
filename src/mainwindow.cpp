@@ -9,7 +9,6 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::mainwindowClass)
-    , mp_currSolution(nullptr)
 {
     ui->setupUi(this);
 
@@ -41,11 +40,6 @@ void MainWindow::connectInitialization()
 MainWindow::~MainWindow()
 {
     delete ui;
-
-    if (mp_currSolution)
-    {
-        delete mp_currSolution;
-    }
 }
 
 void MainWindow::paintCell(const PaintCellInfo& cellInfo)
@@ -65,12 +59,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
 
     m_currentLevelName = lvlName;
 
-    if (mp_currSolution)
-    {
-        delete mp_currSolution;
-    }
-
-    mp_currSolution = new Solution(m_levelsStorage.getManager(lvlName));
+    mp_currSolution = Solution(m_levelsStorage.getManager(lvlName));
 
     // отрисовка нового изображения
     const Picture& pict = mp_currSolution->getPicture();

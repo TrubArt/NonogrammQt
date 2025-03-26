@@ -25,12 +25,17 @@ public:
 	// ctors, dctor, operators
 	
 	Solution() = default;
+    ~Solution() = default;
 
-	/// <param name="fileLoader:">Загрузчик условия</param>
-	/// <param name="fileCondition:">файл с условиями строк</param>
-	/// <param name="fileAdditCondit:">файл с доп условиями цвета</param>
-	Solution(ILoadManager& loader);
+    Solution(const Solution&);
+    Solution& operator=(const Solution&);
+    Solution(Solution&&) = default;
+    Solution& operator=(Solution&&) = default;
 
+    /// <param name="fileLoader:">Загрузчик условия</param>
+    /// <param name="fileCondition:">файл с условиями строк</param>
+    /// <param name="fileAdditCondit:">файл с доп условиями цвета</param>
+    Solution(ILoadManager& loader);
 	// getters & setters
 
     const Picture& getPicture() const;

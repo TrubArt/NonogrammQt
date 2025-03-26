@@ -18,10 +18,13 @@ public:
 	// ctors, dtor, operators
 
 	Line() = default;
-	Line(size_t);
 	Line(const Line&);
+    Line(Line&&);
 	~Line();
 	Line& operator=(const Line&);
+    Line& operator=(Line&&);
+
+    Line(size_t);
 	bool operator==(const Line&) const;
 	bool operator!=(const Line&) const;
 
@@ -52,5 +55,8 @@ public:
 	void printToConsoleColor(Color whiteColor, Color blackColor) const;
 	std::string toString() const;
 	friend std::ostream& operator<<(std::ostream& out, const Line& line);
+
+private:
+    void destruct();
 };
 #endif // !LINE_NONOGRAM

@@ -35,68 +35,68 @@ Picture::Picture(size_t rowCount, size_t colCount)
 	}
 }
 
-Picture::Picture(const Picture& x)
+Picture::Picture(const Picture& other)
 {
-	rows.resize(x.rows.size());
-	columns.resize(x.columns.size());
+    rows.resize(other.rows.size());
+    columns.resize(other.columns.size());
 
 	for (size_t i = 0; i < rows.size(); ++i)
 	{
-		rows[i] = new Line(*x.rows[i]);
+        rows[i] = new Line(*other.rows[i]);
 	}
 	for (size_t i = 0; i < columns.size(); ++i)
 	{
-		columns[i] = new Line(*x.columns[i]);
+        columns[i] = new Line(*other.columns[i]);
 	}
 }
+
+Picture::Picture(Picture&& other)
+    : rows(std::move(other.rows))
+    , columns(std::move(other.columns))
+{}
 
 Picture::~Picture()
 {
-	for (auto& i : rows)
-	{
-		delete i;
-	}
-	for (auto& i : columns)
-	{
-		delete i;
-	}
+    destruct();
 }
 
-Picture& Picture::operator=(const Picture& x)
+Picture& Picture::operator=(const Picture& other)
 {
-	if (&x != this)
+    if (&other != this)
 	{
 
 		// предварительная очистка памяти
-		for (auto& i : rows)
-		{
-			if (i)
-			{
-				delete i;
-			}
-		}
-		for (auto& i : columns)
-		{
-			if (i)
-			{
-				delete i;
-			}
-		}
+        destruct();
 
-		rows.resize(x.rows.size());
-		columns.resize(x.columns.size());
+        rows.resize(other.rows.size());
+        columns.resize(other.columns.size());
 
-		for (size_t i = 0; i < rows.size(); ++i)
-		{
-			rows[i] = new Line(*x.rows[i]);
-		}
-		for (size_t i = 0; i < columns.size(); ++i)
-		{
-			columns[i] = new Line(*x.columns[i]);
-		}
+        for (size_t i = 0; i < rows.size(); ++i)
+        {
+            rows[i] = new Line(*other.rows[i]);
+        }
+        for (size_t i = 0; i < columns.size(); ++i)
+        {
+            columns[i] = new Line(*other.columns[i]);
+        }
 	}
 
 	return *this;
+}
+
+Picture& Picture::operator=(Picture&& other)
+{
+    if (&other != this)
+    {
+
+        // предварительная очистка памяти
+        destruct();
+
+        rows = std::move(other.rows);
+        columns = std::move(other.columns);
+    }
+
+    return *this;
 }
 
 bool Picture::operator==(const Picture& x) const
@@ -181,6 +181,24 @@ std::ostream& operator<<(std::ostream& out, const Picture& pict)
 {
 	out << pict.toString();
 	return out;
+}
+
+void Picture::destruct()
+{
+    for (auto& i : rows)
+    {
+        if (i)
+        {
+            delete i;
+        }
+    }
+    for (auto& i : columns)
+    {
+        if (i)
+        {
+            delete i;
+        }
+    }
 }
 
 bool Picture::needChanges(size_t rowNumber, size_t index, CellType cType) const

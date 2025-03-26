@@ -17,10 +17,14 @@ public:
 	// constructors, destructor, operators
 
 	Picture() = default;
-	Picture(size_t rowCount, size_t colCount);
 	Picture(const Picture&);
+    Picture(Picture&&);
 	~Picture();
 	Picture& operator=(const Picture&);
+    Picture& operator=(Picture&&);
+
+    Picture(size_t rowCount, size_t colCount);
+
 	bool operator==(const Picture&) const;
 	bool operator!=(const Picture&) const;
 
@@ -44,6 +48,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Picture& pict); // печать изображения
 
 private:
+    void destruct();
 	// определяет необходимо ли вносить измененияв изображение или нет
 	bool needChanges(size_t rowNumber, size_t index, CellType cType) const;
 	void paint(size_t rowNumber, size_t index, CellType cType);

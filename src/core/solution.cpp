@@ -46,6 +46,60 @@ Solution::Solution(ILoadManager& loader)
 	}
 }
 
+Solution::Solution(const Solution& other)
+    : pict(other.pict)
+    , conditions(other.conditions)
+    , queue(other.queue)
+{
+    // enum для обращения к строкам/столбцам в conditions
+    enum LineClassifier { row, col };
+
+    for (size_t i = 0; i < pict.getRowCount(); ++i)
+    {
+        std::pair<size_t, size_t> lineDestination = std::make_pair(row, i);
+        const Line* line = pict.getPtr(lineDestination);
+
+        conditions[row][i].setLinePtr(line);
+    }
+    for (size_t i = 0; i < pict.getColumnCount(); ++i)
+    {
+        std::pair<size_t, size_t> lineDestination = std::make_pair(col, i);
+        const Line* line = pict.getPtr(lineDestination);
+
+        conditions[col][i].setLinePtr(line);
+    }
+}
+
+Solution& Solution::operator=(const Solution& other)
+{
+    if (&other != this)
+    {
+        pict = other.pict;
+        conditions = other.conditions;
+        queue = other.queue;
+
+        // enum для обращения к строкам/столбцам в conditions
+        enum LineClassifier { row, col };
+
+        for (size_t i = 0; i < pict.getRowCount(); ++i)
+        {
+            std::pair<size_t, size_t> lineDestination = std::make_pair(row, i);
+            const Line* line = pict.getPtr(lineDestination);
+
+            conditions[row][i].setLinePtr(line);
+        }
+        for (size_t i = 0; i < pict.getColumnCount(); ++i)
+        {
+            std::pair<size_t, size_t> lineDestination = std::make_pair(col, i);
+            const Line* line = pict.getPtr(lineDestination);
+
+            conditions[col][i].setLinePtr(line);
+        }
+    }
+
+    return *this;
+}
+
 const Picture& Solution::getPicture() const
 {
 	return pict;

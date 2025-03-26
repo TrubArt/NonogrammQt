@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h"
 #include <QMainWindow>
 #include <qgraphicsview.h>
+#include <optional>
 
 #include "table.h"
 #include "queueCells/cellQueue.h"
@@ -12,10 +13,10 @@
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
     void paintCell(const PaintCellInfo& cellInfo);
 
@@ -38,8 +39,8 @@ private:
     QGraphicsView m_view;
     Table m_picture;
 
-    Solution* mp_currSolution;
     LevelsStorage m_levelsStorage;
+    std::optional<Solution> mp_currSolution;
     QString m_currentLevelName;
 };
 
