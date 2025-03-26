@@ -2,7 +2,6 @@
 #define FILEPARSER_H
 
 #include <QList>
-#include <QDebug>
 
 class FileParser
 {

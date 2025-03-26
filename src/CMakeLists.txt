@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME}
     levelsManager/levelLoader/levelLoader.cpp
     levelsManager/levelLoader/fileParser.h
     levelsManager/levelLoader/fileParser.cpp
+    levelsManager/levelLoader/checker.h
+    levelsManager/levelLoader/checker.cpp
 )
 
 add_subdirectory(core)

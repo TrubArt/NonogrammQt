@@ -1,72 +1,11 @@
-#include <memory>
-
 #include "levelLoader.h"
+
+#include <memory>
+#include <QDebug>
+
 #include "../../settings/settings.h"
 #include "fileParser.h"
-
-bool LevelLoader::Checker::checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters)
-{
-    auto findBadParameter = [](const QString& specialization, const QString& value)
-    {
-        qCritical() << "Bad values!"
-                    << " Parameter: " << specialization
-                    << " Value: " << value;
-    };
-
-    for (const QString& value : parameters)
-    {
-        if (category == Categories::levelData || category == Categories::size)
-        {
-            bool goodValue = checkSize(value);
-            if (!goodValue)
-            {
-                findBadParameter(specialization, value);
-                return false;
-            }
-        }
-        else if (category == Categories::additionData)
-        {
-
-        }
-        else if (category == Categories::color)
-        {
-            //-------------------------
-        }
-        else
-        {
-            Q_ASSERT_X(false, "LevelLoader::Checker::checkData" , "Unresolved category");
-        }
-    }
-
-    return true;
-}
-
-bool LevelLoader::Checker::isOneSettingsInLine(const QStringList& parameters)
-{
-    return parameters.size() == 1 ? true : false;
-}
-
-bool LevelLoader::Checker::checkSize(const QString& str)
-{
-    std::unique_ptr<bool> checkToConversion = std::make_unique<bool>(true);
-    int value = str.toInt(checkToConversion.get());
-    if (*checkToConversion == false || value <= 0)
-    {
-        return false;
-    }
-    return true;
-}
-
-bool LevelLoader::Checker::checkAdditionData(const QString& str)
-{
-    std::unique_ptr<bool> checkToConversion = std::make_unique<bool>(true);
-    int value = str.toInt(checkToConversion.get());
-    if (*checkToConversion == false || value < 0)
-    {
-        return false;
-    }
-    return true;
-}
+#include "checker.h"
 
 void LevelLoader::setFile(const std::string& fileName)
 {
@@ -97,11 +36,16 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
         QString line = m_file.readLine();
         FileParser::getSettingsData(line, parametr, values);
 
+        if (!Checker::isOneSettingsInLine(values))
+        {
+            qCritical() << "More then 1 settings in line: " << line;
+        }
+
 
         if (parametr == LevelSettings::rowCount())
         {
             findRowCount = true;
-            if (Checker::checkDataValidation(Categories::size, parametr, values))
+            if (Checker::checkDataValidation(Checker::Categories::size, parametr, values))
             {
                 sizes.first = values[0].toInt();
             }
@@ -109,7 +53,7 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
         if (parametr == LevelSettings::columnCount())
         {
             findColumnCount = true;
-            if (Checker::checkDataValidation(Categories::size, parametr, values))
+            if (Checker::checkDataValidation(Checker::Categories::size, parametr, values))
             {
                 sizes.second = values[0].toInt();
             }
@@ -150,17 +94,12 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
         QStringList values;
         FileParser::getLevelData(line, values);
 
-        if (Checker::checkDataValidation(Categories::additionData, "additional level data value", values))
+        if (Checker::checkDataValidation(Checker::Categories::additionData, "additional level data value", values))
         {
-            if (values.size() != 3)
+            if (!Checker::isGoodAdditionalLine(values))
             {
-                QString lineOfValues;
-                for (const QString& value : values)
-                {
-                    lineOfValues.push_back(value + " ");
-                }
                 qCritical() << "Error in addition color condition. "
-                            << "Must have only 3 arguments in line: " << lineOfValues;
+                            << "Must have only 3 arguments in line: " << line;
             }
             else
             {
@@ -196,7 +135,7 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
     QStringList values;
     FileParser::getLevelData(line, values);
 
-    if (Checker::checkDataValidation(Categories::levelData, "level data value", values))
+    if (Checker::checkDataValidation(Checker::Categories::levelData, "level data value", values))
     {
         condition.reserve(values.size());
         for (const QString& value : values)

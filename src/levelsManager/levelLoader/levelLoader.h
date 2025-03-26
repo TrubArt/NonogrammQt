@@ -19,23 +19,6 @@ public:
 
 private:
     QFile m_file;
-
-    enum class Categories
-    {
-        levelData,
-        additionData,
-        size,
-        color
-    };
-
-    struct Checker
-    {
-        static bool checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters);
-        static bool isOneSettingsInLine(const QStringList& parameters);
-
-        static bool checkSize(const QString& value);
-        static bool checkAdditionData(const QString& value);
-    };
 };
 
 #endif // LEVELLOADER_H

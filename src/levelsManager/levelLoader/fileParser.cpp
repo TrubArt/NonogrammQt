@@ -1,5 +1,7 @@
 #include "fileParser.h"
 
+#include <QDebug>
+
 const QString FileParser::m_separatorForSettings = ":";
 const QStringList FileParser::m_ignoredValues = { "\t", "\r", "\n" };
 
