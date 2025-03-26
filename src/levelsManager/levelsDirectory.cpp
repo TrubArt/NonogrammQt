@@ -16,5 +16,5 @@ QStringList LevelsDirectory::levelsList() const
 
 QString LevelsDirectory::getAbsPath(const QString& levelName) const
 {
-    return path() + QDir::separator() + levelName;
+    return path() + "/" + levelName;
 }

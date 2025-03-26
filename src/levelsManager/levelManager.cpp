@@ -49,10 +49,10 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
         }
     }
 
-    //QString fullpath = m_levelDir.absolutePath() + QDir::separator() + additionDataFile;
-    if (fileLoader->getFileName() != conditionDataFile)
+    std::string fullpath = (m_levelDir.absolutePath() + "/" + conditionDataFile).toStdString();
+    if (fileLoader->getFileName() != fullpath)
     {
-        fileLoader->setFile(conditionDataFile.toStdString());
+        fileLoader->setFile(fullpath);
     }
 
     return fileLoader->getLineSequence(isColumn, lineIndex);

@@ -1,7 +1,7 @@
 #include "fileParser.h"
 
 const QString FileParser::m_separatorForSettings = ":";
-const QStringList FileParser::m_ignoredValues = { "\t" };
+const QStringList FileParser::m_ignoredValues = { "\t", "\r", "\n" };
 
 void FileParser::getSettingsData(const QString& line, QString& category, QStringList& parameters)
 {
@@ -25,7 +25,10 @@ void FileParser::getSettingsData(const QString& line, QString& category, QString
 void FileParser::getLevelData(const QString& line, QStringList& parameters)
 {
     QStringList listParametres = line.split(" ");
-    parameters.reserve(listParametres.size());
+    if (listParametres.size() > listParametres.capacity())
+    {
+        parameters.reserve(listParametres.size());
+    }
 
     for (QString& value : listParametres)
     {

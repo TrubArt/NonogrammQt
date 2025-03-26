@@ -1,4 +1,3 @@
-#include <QTextStream>
 #include <memory>
 
 #include "levelLoader.h"
@@ -24,6 +23,10 @@ bool LevelLoader::Checker::checkDataValidation(Categories category, const QStrin
                 findBadParameter(specialization, value);
                 return false;
             }
+        }
+        else if (category == Categories::additionData)
+        {
+
         }
         else if (category == Categories::color)
         {
@@ -54,6 +57,17 @@ bool LevelLoader::Checker::checkSize(const QString& str)
     return true;
 }
 
+bool LevelLoader::Checker::checkAdditionData(const QString& str)
+{
+    std::unique_ptr<bool> checkToConversion = std::make_unique<bool>(true);
+    int value = str.toInt(checkToConversion.get());
+    if (*checkToConversion == false || value < 0)
+    {
+        return false;
+    }
+    return true;
+}
+
 void LevelLoader::setFile(const std::string& fileName)
 {
     m_file.close();
@@ -74,13 +88,13 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
 {
     std::pair<size_t, size_t> sizes;
 
-    QTextStream in(&m_file);
-    QString parametr;
-    QStringList values;
     bool findRowCount = false, findColumnCount = false;
-    while (!in.atEnd())
+    while (!m_file.atEnd())
     {
-        QString line = in.readLine();
+        QString parametr;
+        QStringList values;
+
+        QString line = m_file.readLine();
         FileParser::getSettingsData(line, parametr, values);
 
 
@@ -125,19 +139,18 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
 {
     std::vector<std::array<size_t, 3>> condition;
 
-    QTextStream in(&m_file);
-    QStringList values;
-    while (!in.atEnd())
+    while (!m_file.atEnd())
     {
-        QString line = in.readLine();
+        QString line = m_file.readLine();
         if (line.isEmpty())
         {
             continue;
         }
 
+        QStringList values;
         FileParser::getLevelData(line, values);
 
-        if (Checker::checkDataValidation(Categories::size, "additional level data value", values))
+        if (Checker::checkDataValidation(Categories::additionData, "additional level data value", values))
         {
             if (values.size() != 3)
             {
@@ -169,25 +182,26 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
 {
     std::vector<size_t> condition;
 
-    QTextStream in(&m_file);
-    QList<QString> values;
-    while (!in.atEnd())
+    QString line;
+    while (!m_file.atEnd())
     {
-        QString line = in.readLine();
-        if (line.isEmpty())
+        line = m_file.readLine();
+        FileParser::deleteBadSymbols(line);
+        if (!line.isEmpty())
         {
-            continue;
+            break;
         }
+    }
 
-        FileParser::getLevelData(line, values);
+    QStringList values;
+    FileParser::getLevelData(line, values);
 
-        if (Checker::checkDataValidation(Categories::size, "level data value", values))
+    if (Checker::checkDataValidation(Categories::levelData, "level data value", values))
+    {
+        condition.reserve(values.size());
+        for (const QString& value : values)
         {
-            condition.reserve(values.size());
-            for (const QString& value : values)
-            {
-                condition.push_back(value.toInt());
-            }
+            condition.push_back(value.toInt());
         }
     }
 

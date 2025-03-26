@@ -70,17 +70,6 @@ void MainWindow::changeNonogram(const QString& lvlName)
         delete mp_currSolution;
     }
 
-    // ***************************** инициализация loader с нужными файлами из директории ******************
-
-    // .txt к названию добавляется в FileLoaderCpp
-    // std::vector<std::string> files = { "additional color condition", "condition", "info" };
-    // QString fullName = m_levelsStorage.getLevelsDirectory().path() + "/" + lvlName;
-    // std::string directoryPath = fullName.toStdString();
-    // LoadManagerCpp loadManager(directoryPath, files);
-
-    // *****************************************************************************************************
-
-    //mp_currSolution = new Solution(loadManager);
     mp_currSolution = new Solution(m_levelsStorage.getManager(lvlName));
 
     // отрисовка нового изображения
@@ -143,8 +132,7 @@ void MainWindow::actionChangeLevel()
 {
     std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>
         (m_currentLevelName
-        , m_levelsStorage.getLevelsList()
-        );
+        , m_levelsStorage.getLevelsList());
 
     if (lvlChangeDlg->exec())
     {
