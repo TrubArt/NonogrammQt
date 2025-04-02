@@ -2,6 +2,7 @@
 #define LEVELSSTORAGE_H
 
 #include <QMap>
+#include <memory>
 
 #include "levelsDirectory.h"
 #include "levelManager.h"
@@ -15,16 +16,15 @@ public:
 
     void loadLevels();
     QList<levelname_al> getLevelsList() const;
-    std::optional<LevelData> getLevelData(const QString& levelName) const;
+    std::shared_ptr<LevelData> getLevelData(const QString& levelName) const;
     LevelManager& getManager(const QString& levelName);
 
 private:
-    std::optional<LevelData> isLoadedData(const QString& levelName) const;
     LevelData loadLevelSettingsWithoutData(const QString& levelName);
-    void setDirectoryAndData(const QString& levelName, const std::optional<LevelData>& loadedData);
+    void setDirectoryAndData(const QString& levelName, std::shared_ptr<LevelData> loadedData);
 
     LevelsDirectory m_levelsDir;
-    QMap<levelname_al, LevelData> m_data;
+    QMap<levelname_al, std::shared_ptr<LevelData>> m_data;
     LevelManager m_manager;
 };
 

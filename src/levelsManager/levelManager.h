@@ -2,7 +2,6 @@
 #define LEVELMANAGER_H
 
 #include <QDir>
-#include <optional>
 
 #include "filesWork/iLoadManager.h"
 #include "levelData.h"
@@ -12,7 +11,7 @@ class LevelManager : public ILoadManager
 public:
     LevelManager();
 
-    void setDirectoryAndData(const QDir& dir, const std::optional<LevelData>& loadedData);
+    void setDirectoryAndData(const QDir& dir, std::shared_ptr<LevelData> loadedData);
 
     std::pair<size_t, size_t> getNonogramSize() override;
     std::vector<std::array<size_t, 3>> getAdditionalCondition() override;
@@ -20,7 +19,7 @@ public:
 
 private:
     QDir m_levelDir;
-    std::optional<LevelData> m_loadedData;
+    std::shared_ptr<LevelData> m_loadedData;
 
     const QString additionDataFile =  "Additional color condition.txt";
     const QString conditionDataFile = "Condition.txt";

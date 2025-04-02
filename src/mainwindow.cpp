@@ -52,8 +52,8 @@ void MainWindow::paintCell(const PaintCellInfo& cellInfo)
 
 void MainWindow::changeNonogram(const QString& lvlName)
 {
-    std::optional<LevelData> data = m_levelsStorage.getLevelData(lvlName);
-    if (data == std::nullopt)
+    std::shared_ptr<LevelData> data = m_levelsStorage.getLevelData(lvlName);
+    if (!data)
     {
         QErrorMessage(this).showMessage(tr("The selected level does not exist!"));
     }
