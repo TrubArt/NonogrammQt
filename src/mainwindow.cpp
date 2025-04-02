@@ -52,7 +52,8 @@ void MainWindow::paintCell(const PaintCellInfo& cellInfo)
 
 void MainWindow::changeNonogram(const QString& lvlName)
 {
-    if (m_levelsStorage.getLevelData(lvlName) == std::nullopt)
+    std::optional<LevelData> data = m_levelsStorage.getLevelData(lvlName);
+    if (data == std::nullopt)
     {
         QErrorMessage(this).showMessage(tr("The selected level does not exist!"));
     }
@@ -60,6 +61,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
     m_currentLevelName = lvlName;
 
     mp_currSolution = Solution(m_levelsStorage.getManager(lvlName));
+    data->isLoadedDataInformation = true;
 
     // отрисовка нового изображения
     const Picture& pict = mp_currSolution->getPicture();

@@ -14,13 +14,15 @@ private:
 
 public:
 
-    // data
+    bool isLoadedDataInformation = false;
+
+    // data information
 
     std::vector<conditionLine> lineConditions;
     std::vector<conditionLine> columnConditions;
     std::vector<additionCondLine> additionConditions;
 
-    // properties
+    // properties information
 
     int rowCount;
     int columnCount;

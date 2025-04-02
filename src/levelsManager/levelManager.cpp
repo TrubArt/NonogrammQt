@@ -43,10 +43,8 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
         {
             return m_loadedData->columnConditions[lineIndex];
         }
-        else
-        {
-            return m_loadedData->lineConditions[lineIndex];
-        }
+
+        return m_loadedData->lineConditions[lineIndex];
     }
 
     std::string fullpath = (m_levelDir.absolutePath() + "/" + conditionDataFile).toStdString();

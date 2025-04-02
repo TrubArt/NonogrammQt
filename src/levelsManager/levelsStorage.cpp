@@ -33,7 +33,7 @@ LevelManager& LevelsStorage::getManager(const QString& levelName)
 std::optional<LevelData> LevelsStorage::isLoadedData(const QString& levelName) const
 {
     std::optional<LevelData> existLevel = getLevelData(levelName);
-    if (existLevel == std::nullopt || existLevel->lineConditions.empty())
+    if (existLevel == std::nullopt || !existLevel->isLoadedDataInformation)
     {
         return std::nullopt;
     }
