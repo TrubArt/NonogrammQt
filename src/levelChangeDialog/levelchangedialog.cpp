@@ -28,7 +28,7 @@ void LevelChangeDialog::createPropertiesData(const LevelsStorage::dataType& lvls
 {
     for (auto it = lvlsData.begin(); it != lvlsData.end(); ++it)
     {
-        m_propertiesData.insert(it.value()->properties.name, it.value()->properties);
+        m_propertiesData.insert(it.key(), it.value()->properties);
     }
 }
 
@@ -101,7 +101,7 @@ void LevelChangeDialog::setLevels()
     {
         ui->levelsTable->insertRow(rowIndex);
 
-        ui->levelsTable->setItem(rowIndex, static_cast<int>(ColumnsName::name), new QTableWidgetItem(it.value().name));
+        ui->levelsTable->setItem(rowIndex, static_cast<int>(ColumnsName::name), new QTableWidgetItem(it.key()));
         ui->levelsTable->setItem(rowIndex, static_cast<int>(ColumnsName::size), new QTableWidgetItem(sizeLikeString(it.value().rowCount, it.value().columnCount)));
 
         ++rowIndex;

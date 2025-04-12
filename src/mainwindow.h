@@ -22,8 +22,8 @@ public:
 
 public slots:
     void changeNonogram(const QString& lvlName);
-    void actiontResetTableCells();
 
+    void actiontResetTableCells();
     void actionExit();
     void actionStartSolution();
     void actionChangeLevel();

@@ -22,7 +22,6 @@ struct PropertiesInformation
 {
     int rowCount;
     int columnCount;
-    QString name;
     ColorStore colors;
 };
 
