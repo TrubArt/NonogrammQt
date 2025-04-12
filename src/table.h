@@ -22,11 +22,10 @@ public:
     void repaintCell(int heightIndex, int widthIndex, CellType col);
     void resetTableCells();
 
-    void createTable();
-    void removeTable();
-
 private:
     void setCellSize();
+    void createTable();
+    void removeTable();
 
     QPoint findTopLeftPointCell(int heightIndex, int widthIndex) const;
     QPoint findCenterCell(int heightIndex, int widthIndex) const;

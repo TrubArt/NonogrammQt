@@ -32,7 +32,7 @@ public slots:
 private:
     void viewInitialization();
     void connectInitialization();
-    void drawCellsFromQueue();
+    void drawCellsFromQueue(const std::vector<PaintCellInfo>& cells);
 
     Ui::mainwindowClass* ui;
 

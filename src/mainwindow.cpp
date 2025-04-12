@@ -69,17 +69,30 @@ void MainWindow::changeNonogram(const QString& lvlName)
     m_picture.repaintTable(pict.getRowCount(), pict.getColumnCount());
 
     // добавление на рисунок клеток из additionColor.txt
-    drawCellsFromQueue();
+    drawCellsFromQueue(mp_currSolution->getQueue().get());
 }
 
 void MainWindow::actiontResetTableCells()
 {
     m_picture.resetTableCells();
+
+    // отрисовка клеток из additionColor
+    std::shared_ptr<LevelData> data = m_levelsStorage.getLevelData(m_currentLevelName);
+    if (!data || !data->isLoadedDataInformation)
+    {
+        return;
+    }
+
+    CellQueue queue;
+    for (const std::array<size_t, 3>& additionInfo : data->data.additionConditions)
+    {
+        queue.customPush(PaintCellInfo(additionInfo[0], additionInfo[1], static_cast<CellType>(additionInfo[2])));
+    }
+    drawCellsFromQueue(queue.get());
 }
 
-void MainWindow::drawCellsFromQueue()
+void MainWindow::drawCellsFromQueue(const std::vector<PaintCellInfo>& cells)
 {
-    const std::vector<PaintCellInfo>& cells = mp_currSolution->getQueue().get();
     for (const PaintCellInfo& cell : cells)
     {
         paintCell(cell);
@@ -117,7 +130,7 @@ void MainWindow::actionStartSolution()
     }
 
     // добавление на рисунок полученного решения
-    drawCellsFromQueue();
+    drawCellsFromQueue(mp_currSolution->getQueue().get());
 }
 
 void MainWindow::actionChangeLevel()
