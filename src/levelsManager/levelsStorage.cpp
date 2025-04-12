@@ -19,6 +19,11 @@ LevelsStorage::dataType& LevelsStorage::getData()
     return m_data;
 }
 
+void LevelsStorage::setProperties(const QString& levelName, const PropertiesInformation& newProperties)
+{
+    m_data[levelName]->properties = newProperties;
+}
+
 const LevelsStorage::dataType& LevelsStorage::getData() const
 {
     return m_data;
@@ -46,12 +51,12 @@ LevelData LevelsStorage::loadLevelSettingsWithoutData(const QString& levelName)
     LevelData data_t;
 
     std::pair<size_t, size_t> sizes = m_manager.getNonogramSize();
-    data_t.lineConditions.resize(sizes.first);
-    data_t.columnConditions.resize(sizes.second);
+    data_t.data.lineConditions.resize(sizes.first);
+    data_t.data.columnConditions.resize(sizes.second);
 
-    data_t.rowCount = sizes.first;
-    data_t.columnCount = sizes.second;
-    data_t.name = levelName;
+    data_t.properties.rowCount = sizes.first;
+    data_t.properties.columnCount = sizes.second;
+    data_t.properties.name = levelName;
 
     return data_t;
 }

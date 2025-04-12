@@ -43,20 +43,20 @@
          <rect>
           <x>20</x>
           <y>40</y>
-          <width>211</width>
-          <height>111</height>
+          <width>216</width>
+          <height>139</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Black color :</string>
+            <string>Undefined color :</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="blackColorLabel">
+         <item row="1" column="1">
+          <widget class="QPushButton" name="whiteColorButton">
            <property name="text">
             <string/>
            </property>
@@ -69,24 +69,38 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="whiteColorLabel">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Undefined color :</string>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="1">
-          <widget class="QLabel" name="undefinedColorLabel">
+          <widget class="QPushButton" name="undefinedColorButton">
            <property name="text">
             <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Black color :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="blackColorButton">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Reset to default: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QPushButton" name="resetButton">
+           <property name="text">
+            <string>Reset</string>
            </property>
           </widget>
          </item>

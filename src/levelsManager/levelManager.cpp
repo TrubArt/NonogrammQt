@@ -15,7 +15,7 @@ std::pair<size_t, size_t> LevelManager::getNonogramSize()
 {
     if (m_loadedData && m_loadedData->isLoadedDataInformation)
     {
-        return { m_loadedData->rowCount, m_loadedData->columnCount };
+        return { m_loadedData->properties.rowCount, m_loadedData->properties.columnCount };
     }
 
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
@@ -24,8 +24,8 @@ std::pair<size_t, size_t> LevelManager::getNonogramSize()
 
     if (m_loadedData)
     {
-        m_loadedData->rowCount = sizes.first;
-        m_loadedData->columnCount = sizes.second;
+        m_loadedData->properties.rowCount = sizes.first;
+        m_loadedData->properties.columnCount = sizes.second;
     }
     return sizes;
 }
@@ -34,14 +34,14 @@ std::vector<std::array<size_t, 3>> LevelManager::getAdditionalCondition()
 {
     if (m_loadedData->isLoadedDataInformation)
     {
-        return m_loadedData->additionConditions;
+        return m_loadedData->data.additionConditions;
     }
 
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + additionDataFile;
     fileLoader->setFile(fullpath.toStdString());
     std::vector<std::array<size_t, 3>> additionInfo = fileLoader->getAdditionalCondition();
 
-    m_loadedData->additionConditions = additionInfo;
+    m_loadedData->data.additionConditions = additionInfo;
     return additionInfo;
 }
 
@@ -51,10 +51,10 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
     {
         if (isColumn)
         {
-            return m_loadedData->columnConditions[lineIndex];
+            return m_loadedData->data.columnConditions[lineIndex];
         }
 
-        return m_loadedData->lineConditions[lineIndex];
+        return m_loadedData->data.lineConditions[lineIndex];
     }
 
     std::string fullpath = (m_levelDir.absolutePath() + "/" + conditionDataFile).toStdString();
@@ -66,11 +66,11 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
 
     if (isColumn)
     {
-        m_loadedData->columnConditions[lineIndex] = condition;
+        m_loadedData->data.columnConditions[lineIndex] = condition;
     }
     else
     {
-        m_loadedData->lineConditions[lineIndex] = condition;
+        m_loadedData->data.lineConditions[lineIndex] = condition;
     }
 
     return condition;

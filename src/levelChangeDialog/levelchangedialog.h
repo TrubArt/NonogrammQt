@@ -17,27 +17,36 @@ class LevelChangeDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LevelChangeDialog(const QString& lastLvlName, LevelsStorage::dataType& lvlsData, QWidget* parent = nullptr);
+    explicit LevelChangeDialog(const QString& lastLvlName, const LevelsStorage::dataType& lvlsData, QWidget* parent = nullptr);
     ~LevelChangeDialog() override;
 
     const QString& getChosenLevelName() const;
+    const QMap<QString, PropertiesInformation>& getProperties() const;
+
+public slots:
+    void nameChanged();
+    void changeBlackColor();
+    void changeWhiteColor();
+    void changeUndefinedColor();
+    void resetColorToDefault();
 
 private:
     enum class ColumnsName { name, size };
 
+    // initial functions
+    void createPropertiesData(const LevelsStorage::dataType& lvlsData);
     void setLevels();
-    void createTableUI();
-
-    void paintColorSetting(QLabel* label, const QColor& color);
-    void updateSettingsViewUI();
-
     void connectInitialization();
     void setPreviousLevelName(const QString& prevName);
+    void createTableUI();
+    void updateSettingsViewUI();
 
-    void nameChanged();
+    //
+    void paintColorSetting(QPushButton* button, const QColor& color);
+
 
     Ui::LevelChangeDialog* ui;
-    LevelsStorage::dataType& m_levelsData;
+    QMap<QString, PropertiesInformation> m_propertiesData;
 
     QString m_chosenLvlName;
 };

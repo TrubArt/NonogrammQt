@@ -6,28 +6,31 @@
 
 #include "colorstore.h"
 
-struct LevelData
+struct DataInformation
 {
 private:
     using conditionLine = std::vector<size_t>;
     using additionCondLine = std::array<size_t, 3>;
 
 public:
-
-    bool isLoadedDataInformation = false;
-
-    // data information
-
     std::vector<conditionLine> lineConditions;
     std::vector<conditionLine> columnConditions;
     std::vector<additionCondLine> additionConditions;
+};
 
-    // properties information
-
+struct PropertiesInformation
+{
     int rowCount;
     int columnCount;
     QString name;
     ColorStore colors;
+};
+
+struct LevelData
+{
+    bool isLoadedDataInformation = false;
+    DataInformation data;
+    PropertiesInformation properties;
 };
 
 #endif // LEVELDATA_H

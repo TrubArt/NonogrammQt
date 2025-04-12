@@ -59,7 +59,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
     }
 
     m_currentLevelName = lvlName;
-    m_picture.setColors(data->colors);
+    m_picture.setColors(data->properties.colors);
 
     mp_currSolution = Solution(m_levelsStorage.getManager(lvlName));
     data->isLoadedDataInformation = true;
@@ -128,6 +128,14 @@ void MainWindow::actionChangeLevel()
 
     if (lvlChangeDlg->exec())
     {
+        const QMap<QString, PropertiesInformation>& newProperties = lvlChangeDlg->getProperties();
+        for (auto it = newProperties.begin(); it != newProperties.end(); ++it)
+        {
+            // проверка на случай изменения имени уровня внутри диалога. В данный момент такое действие не обрабатывается
+            Q_ASSERT_X(m_levelsStorage.getLevelsList().contains(it.value().name), "MainWindow::actionChangeLevel", "name didnt Exist");
+            m_levelsStorage.setProperties(it.value().name, it.value());
+        }
+
         changeNonogram(lvlChangeDlg->getChosenLevelName());
     }
 }
