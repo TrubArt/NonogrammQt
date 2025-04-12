@@ -12,10 +12,13 @@ class LevelsStorage
     using levelname_al = QString;
 
 public:
+    using dataType =  QMap<levelname_al, std::shared_ptr<LevelData>>;
     LevelsStorage() = default;
 
     void loadLevels();
     QList<levelname_al> getLevelsList() const;
+    dataType& getData();
+    const dataType& getData() const;
     std::shared_ptr<LevelData> getLevelData(const QString& levelName) const;
     LevelManager& getManager(const QString& levelName);
 
@@ -24,7 +27,7 @@ private:
     void setDirectoryAndData(const QString& levelName, std::shared_ptr<LevelData> loadedData);
 
     LevelsDirectory m_levelsDir;
-    QMap<levelname_al, std::shared_ptr<LevelData>> m_data;
+    dataType m_data;
     LevelManager m_manager;
 };
 

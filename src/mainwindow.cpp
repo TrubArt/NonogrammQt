@@ -123,7 +123,7 @@ void MainWindow::actionChangeLevel()
 {
     std::unique_ptr<LevelChangeDialog> lvlChangeDlg = std::make_unique<LevelChangeDialog>
         (m_currentLevelName
-        , m_levelsStorage.getLevelsList());
+        , m_levelsStorage.getData());
 
     if (lvlChangeDlg->exec())
     {

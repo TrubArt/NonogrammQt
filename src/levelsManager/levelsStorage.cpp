@@ -14,6 +14,16 @@ QList<LevelsStorage::levelname_al> LevelsStorage::getLevelsList() const
     return m_data.keys();
 }
 
+LevelsStorage::dataType& LevelsStorage::getData()
+{
+    return m_data;
+}
+
+const LevelsStorage::dataType& LevelsStorage::getData() const
+{
+    return m_data;
+}
+
 std::shared_ptr<LevelData> LevelsStorage::getLevelData(const QString& levelName) const
 {
     if (m_data.find(levelName) != m_data.end())
