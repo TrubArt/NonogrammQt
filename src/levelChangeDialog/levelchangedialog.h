@@ -27,6 +27,8 @@ private:
     void setLevels(const LevelsStorage::dataType& lvlsData);
     void createTableUI(const LevelsStorage::dataType& lvlsData);
     void connectInitialization();
+    void setPreviousLevelName(const QString& prevName);
+
     void nameChanged();
 
     Ui::LevelChangeDialog* ui;

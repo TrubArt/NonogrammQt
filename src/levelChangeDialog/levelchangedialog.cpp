@@ -11,16 +11,7 @@ LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, const LevelsSto
 
     createTableUI(lvlsData);
     connectInitialization();
-
-    QList<QTableWidgetItem*> names = ui->levelsTable->findItems(lastLvlName, Qt::MatchExactly);
-    if (!names.empty())
-    {
-        ui->levelsTable->setCurrentItem(names[0]);
-    }
-    else
-    {
-        ui->levelsTable->setCurrentCell(0, static_cast<int>(ColumnsName::name));
-    }
+    setPreviousLevelName(lastLvlName);
 }
 
 LevelChangeDialog::~LevelChangeDialog()
@@ -48,6 +39,19 @@ void LevelChangeDialog::connectInitialization()
 {
     connect(ui->levelsTable, &QTableWidget::itemSelectionChanged, this, LevelChangeDialog::nameChanged);
     connect(ui->levelsTable, &QTableWidget::itemDoubleClicked, this, LevelChangeDialog::accept);
+}
+
+void LevelChangeDialog::setPreviousLevelName(const QString& prevName)
+{
+    QList<QTableWidgetItem*> names = ui->levelsTable->findItems(prevName, Qt::MatchExactly);
+    if (!names.empty())
+    {
+        ui->levelsTable->setCurrentItem(names[0]);
+    }
+    else
+    {
+        ui->levelsTable->setCurrentCell(0, static_cast<int>(ColumnsName::name));
+    }
 }
 
 const QString& LevelChangeDialog::getChosenLevelName() const

@@ -25,7 +25,7 @@ public:
     // special check for categories
 
     static bool checkSize(const QString& value);
-    static bool checkAdditionData(const QString& value);
+    static bool checkData(const QString& value);
 
 private:
     static void messageFindBadParameter(const QString& specialization, const QString& value);

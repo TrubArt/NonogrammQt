@@ -7,13 +7,13 @@ bool Checker::checkDataValidation(Categories category, const QString& specializa
     for (const QString& value : parameters)
     {
         bool goodValue = false;
-        if (category == Categories::levelData || category == Categories::size)
+        if (category == Categories::size)
         {
             goodValue = checkSize(value);
         }
-        else if (category == Categories::additionData)
+        else if (category == Categories::levelData || category == Categories::additionData)
         {
-            goodValue = checkAdditionData(value);
+            goodValue = checkData(value);
         }
         else if (category == Categories::color)
         {
@@ -55,7 +55,7 @@ bool Checker::checkSize(const QString& str)
     return true;
 }
 
-bool Checker::checkAdditionData(const QString& str)
+bool Checker::checkData(const QString& str)
 {
     std::unique_ptr<bool> checkToConversion = std::make_unique<bool>(true);
     int value = str.toInt(checkToConversion.get());
