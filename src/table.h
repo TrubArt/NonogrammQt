@@ -17,6 +17,7 @@ public:
     void repaintTable(int heightCountCell, int widthCountCell);
     int getHeight() const;
     int getWidth() const;
+    void setColors(const ColorStore& newColors);
 
     void repaintCell(int heightIndex, int widthIndex, CellType col);
     void resetTableCells();

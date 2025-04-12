@@ -59,6 +59,7 @@ void MainWindow::changeNonogram(const QString& lvlName)
     }
 
     m_currentLevelName = lvlName;
+    m_picture.setColors(data->colors);
 
     mp_currSolution = Solution(m_levelsStorage.getManager(lvlName));
     data->isLoadedDataInformation = true;

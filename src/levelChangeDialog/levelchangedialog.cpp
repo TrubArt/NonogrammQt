@@ -2,14 +2,17 @@
 #include "ui_levelchangedialog.h"
 #include "../levelsManager/levelsDirectory.h"
 
-LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, const LevelsStorage::dataType& lvlsData, QWidget* parent)
+#include <QPainter>
+
+LevelChangeDialog::LevelChangeDialog(const QString& lastLvlName, LevelsStorage::dataType& lvlsData, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::LevelChangeDialog)
+    , m_levelsData(lvlsData)
 {
     ui->setupUi(this);
     setWindowTitle(tr("Level selection"));
 
-    createTableUI(lvlsData);
+    createTableUI();
     connectInitialization();
     setPreviousLevelName(lastLvlName);
 }
@@ -19,20 +22,41 @@ LevelChangeDialog::~LevelChangeDialog()
     delete ui;
 }
 
-void LevelChangeDialog::createTableUI(const LevelsStorage::dataType& lvlsData)
+void LevelChangeDialog::createTableUI()
 {
     ui->levelsTable->setColumnCount(2);
     ui->levelsTable->setShowGrid(true);
     ui->levelsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->levelsTable->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    QStringList headers = { "Level", "Size" };
+    QStringList headers = { tr("Level"), tr("Size") };
     ui->levelsTable->setHorizontalHeaderLabels(headers);
 
-    setLevels(lvlsData);
+    setLevels();
 
     ui->levelsTable->resizeColumnToContents(static_cast<int>(ColumnsName::size));
     ui->levelsTable->horizontalHeader()->setSectionResizeMode(static_cast<int>(ColumnsName::name), QHeaderView::Stretch);
+}
+
+void LevelChangeDialog::paintColorSetting(QLabel* label, const QColor& color)
+{
+    QPixmap pixmap(16, 16);
+    QPainter painter;
+    painter.begin(&pixmap);
+    painter.drawRect(0, 0, 16 ,16);
+    painter.fillRect(0, 0, 16, 16, QBrush(color));
+    painter.end();
+
+    label->setPixmap(pixmap);
+    label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void LevelChangeDialog::updateSettingsViewUI()
+{
+    std::shared_ptr<LevelData> lvlData = m_levelsData[m_chosenLvlName];
+    paintColorSetting(ui->blackColorLabel, lvlData->colors.getBlack());
+    paintColorSetting(ui->whiteColorLabel, lvlData->colors.getWhite());
+    paintColorSetting(ui->undefinedColorLabel, lvlData->colors.getUndefine());
 }
 
 void LevelChangeDialog::connectInitialization()
@@ -59,7 +83,7 @@ const QString& LevelChangeDialog::getChosenLevelName() const
     return m_chosenLvlName;
 }
 
-void LevelChangeDialog::setLevels(const LevelsStorage::dataType& lvlsData)
+void LevelChangeDialog::setLevels()
 {
     auto sizeLikeString = [](int rowCount, int columnCount) -> QString
     {
@@ -67,7 +91,7 @@ void LevelChangeDialog::setLevels(const LevelsStorage::dataType& lvlsData)
     };
 
     int rowIndex = 0;
-    for (auto it = lvlsData.begin(); it != lvlsData.end(); ++it)
+    for (auto it = m_levelsData.begin(); it != m_levelsData.end(); ++it)
     {
         ui->levelsTable->insertRow(rowIndex);
 
@@ -81,5 +105,8 @@ void LevelChangeDialog::setLevels(const LevelsStorage::dataType& lvlsData)
 void LevelChangeDialog::nameChanged()
 {
     QList<QTableWidgetItem*> selection = ui->levelsTable->selectedItems();
-    m_chosenLvlName = selection[static_cast<int>(ColumnsName::name)]->text();
+    QString newLevelName = selection[static_cast<int>(ColumnsName::name)]->text();
+
+    m_chosenLvlName = newLevelName;
+    updateSettingsViewUI();
 }

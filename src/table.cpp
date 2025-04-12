@@ -39,6 +39,11 @@ int Table::getWidth() const
     return m_width;
 }
 
+void Table::setColors(const ColorStore& newColors)
+{
+    m_colors = newColors;
+}
+
 
 void Table::setCellSize()
 {
