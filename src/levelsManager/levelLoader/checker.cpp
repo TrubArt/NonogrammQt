@@ -1,5 +1,6 @@
 #include "checker.h"
 #include <QDebug>
+#include <QColor>
 
 
 bool Checker::checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters)
@@ -17,7 +18,7 @@ bool Checker::checkDataValidation(Categories category, const QString& specializa
         }
         else if (category == Categories::color)
         {
-            //-------------------------
+            goodValue = checkColor(value);
         }
         else
         {
@@ -34,12 +35,12 @@ bool Checker::checkDataValidation(Categories category, const QString& specializa
     return true;
 }
 
-bool Checker::isOneSettingsInLine(const QStringList& parameters)
+bool Checker::is1SettingsInLine(const QStringList& parameters)
 {
     return parameters.size() == 1 ? true : false;
 }
 
-bool Checker::isGoodAdditionalLine(const QStringList& parameters)
+bool Checker::is3ParametresInAdditionalLine(const QStringList& parameters)
 {
     return parameters.size() == 3 ? true : false;
 }
@@ -64,6 +65,11 @@ bool Checker::checkData(const QString& str)
         return false;
     }
     return true;
+}
+
+bool Checker::checkColor(const QString& str)
+{
+    return QColor::isValidColorName(str);
 }
 
 void Checker::messageFindBadParameter(const QString& specialization, const QString& value)

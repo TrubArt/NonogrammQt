@@ -2,7 +2,7 @@
 
 void LevelsStorage::loadLevels()
 {
-    QStringList listLevelsName = m_levelsDir.levelsList();
+    const QStringList listLevelsName = m_levelsDir.levelsList();
     for (const QString& levelName : listLevelsName)
     {
         m_data[levelName] = std::make_shared<LevelData>(loadLevelSettingsWithoutData(levelName));
@@ -56,6 +56,7 @@ LevelData LevelsStorage::loadLevelSettingsWithoutData(const QString& levelName)
 
     data_t.properties.rowCount = sizes.first;
     data_t.properties.columnCount = sizes.second;
+    data_t.properties.colors = m_manager.getColors();
 
     return data_t;
 }

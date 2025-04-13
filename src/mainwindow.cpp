@@ -74,6 +74,9 @@ void MainWindow::changeNonogram(const QString& lvlName)
 
 void MainWindow::actiontResetTableCells()
 {
+    // Если после вызова этой функции заново запустить решение, на самом деле ничего пересчитываться не будет
+    // Отрисуются уже посчитанные клетки из queue. Возможно стоит переделать,
+    // тк может ввести в заблуждение при дальнейшей разработке
     m_picture.resetTableCells();
 
     // отрисовка клеток из additionColor

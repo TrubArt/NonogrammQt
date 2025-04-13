@@ -13,21 +13,41 @@ void LevelManager::setDirectoryAndData(const QDir& dir, std::shared_ptr<LevelDat
 
 std::pair<size_t, size_t> LevelManager::getNonogramSize()
 {
-    if (m_loadedData && m_loadedData->isLoadedDataInformation)
+    if (m_loadedData)
     {
         return { m_loadedData->properties.rowCount, m_loadedData->properties.columnCount };
     }
 
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
     fileLoader->setFile(fullpath.toStdString());
-    std::pair<size_t, size_t> sizes = fileLoader->getNonogramSize();
+    return fileLoader->getNonogramSize();
+}
 
+ColorStore LevelManager::getColors()
+{
     if (m_loadedData)
     {
-        m_loadedData->properties.rowCount = sizes.first;
-        m_loadedData->properties.columnCount = sizes.second;
+        return ColorStore(m_loadedData->properties.colors);
     }
-    return sizes;
+
+    QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
+    fileLoader->setFile(fullpath.toStdString());
+    QVarLengthArray<std::optional<QColor>, 3> colorsArray = static_cast<LevelLoader*>(fileLoader.get())->getColors();
+
+    ColorStore colors;
+    if (colorsArray[0])
+    {
+        colors.setUndefine(colorsArray[0].value());
+    }
+    if (colorsArray[1])
+    {
+        colors.setWhite(colorsArray[1].value());
+    }
+    if (colorsArray[2])
+    {
+        colors.setBlack(colorsArray[2].value());
+    }
+    return colors;
 }
 
 std::vector<std::array<size_t, 3>> LevelManager::getAdditionalCondition()

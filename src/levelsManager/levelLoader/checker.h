@@ -14,18 +14,18 @@ public:
         color
     };
 
-    Checker() = default;
     static bool checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters);
 
     // count values check
 
-    static bool isOneSettingsInLine(const QStringList& parameters);
-    static bool isGoodAdditionalLine(const QStringList& parameters);
+    static bool is1SettingsInLine(const QStringList& parameters);
+    static bool is3ParametresInAdditionalLine(const QStringList& parameters);
 
     // special check for categories
 
     static bool checkSize(const QString& value);
     static bool checkData(const QString& value);
+    static bool checkColor(const QString& value);
 
 private:
     static void messageFindBadParameter(const QString& specialization, const QString& value);

@@ -3,7 +3,7 @@
 #include <memory>
 #include <QDebug>
 
-#include "../../settings/settings.h"
+#include "settings.h"
 #include "fileParser.h"
 #include "checker.h"
 
@@ -36,9 +36,9 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
         QString line = m_file.readLine();
         FileParser::getSettingsData(line, parametr, values);
 
-        if (!Checker::isOneSettingsInLine(values))
+        if (!Checker::is1SettingsInLine(values))
         {
-            qCritical() << "More then 1 settings in line: " << line;
+            qCritical() << "Not 1 settings in line: " << line;
         }
 
 
@@ -96,7 +96,7 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
 
         if (Checker::checkDataValidation(Checker::Categories::additionData, "additional level data value", values))
         {
-            if (!Checker::isGoodAdditionalLine(values))
+            if (!Checker::is3ParametresInAdditionalLine(values))
             {
                 qCritical() << "Error in addition color condition. "
                             << "Must have only 3 arguments in line: " << line;
@@ -151,4 +151,77 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
                     << "condition number: " << lineIndex;
     }
     return condition;
+}
+
+QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getColors()
+{
+    QVarLengthArray<std::optional<QColor>, 3> colors;  // undef white black
+    colors.resize(3);
+    enum class Color { undefined, white, black };
+
+    bool findUndefine = false, findWhite = false, findBlack = false;
+    while (!m_file.atEnd())
+    {
+        QString parametr;
+        QStringList values;
+
+        QString line = m_file.readLine();
+        FileParser::getSettingsData(line, parametr, values);
+
+        if (!Checker::is1SettingsInLine(values))
+        {
+            qCritical() << "Not 1 settings in line: " << line;
+        }
+
+
+        if (parametr == LevelSettings::colorUndefined())
+        {
+            findUndefine = true;
+            if (Checker::checkDataValidation(Checker::Categories::color, parametr, values))
+            {
+                colors[static_cast<int>(Color::undefined)] = QColor::fromString(values[0]);
+            }
+        }
+        if (parametr == LevelSettings::colorWhite())
+        {
+            findWhite = true;
+            if (Checker::checkDataValidation(Checker::Categories::color, parametr, values))
+            {
+                colors[static_cast<int>(Color::white)] = QColor::fromString(values[0]);
+            }
+        }
+        if (parametr == LevelSettings::colorBlack())
+        {
+            findBlack = true;
+            if (Checker::checkDataValidation(Checker::Categories::color, parametr, values))
+            {
+                colors[static_cast<int>(Color::black)] = QColor::fromString(values[0]);
+            }
+        }
+
+
+        if (findWhite && findBlack && findUndefine)
+        {
+            break;
+        }
+    }
+
+    QString errorMessage = "Dont find parameter: ";
+    if (!findUndefine)
+    {
+        //qMessage() << errorMessage << LevelSettings::colorUndefined();
+        colors[static_cast<int>(Color::undefined)] = std::nullopt;
+    }
+    if (!findWhite)
+    {
+        //qMessage() << errorMessage << LevelSettings::colorWhite();
+        colors[static_cast<int>(Color::white)] = std::nullopt;
+    }
+    if (!findBlack)
+    {
+        //qMessage() << errorMessage << LevelSettings::colorBlack();
+        colors[static_cast<int>(Color::black)] = std::nullopt;
+    }
+
+    return colors;
 }
