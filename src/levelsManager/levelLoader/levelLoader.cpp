@@ -153,7 +153,7 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
     return condition;
 }
 
-QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getColors()
+QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
 {
     QVarLengthArray<std::optional<QColor>, 3> colors;  // undef white black
     colors.resize(3);

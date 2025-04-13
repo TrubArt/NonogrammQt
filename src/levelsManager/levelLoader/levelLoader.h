@@ -20,7 +20,7 @@ public:
     std::vector<std::array<size_t, 3>> getAdditionalCondition() override;
     std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
 
-    QVarLengthArray<std::optional<QColor>, 3> getColors();
+    QVarLengthArray<std::optional<QColor>, 3> getNonogramColors();
 
 private:
     QFile m_file;

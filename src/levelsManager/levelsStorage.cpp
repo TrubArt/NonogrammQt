@@ -56,7 +56,7 @@ LevelData LevelsStorage::loadLevelSettingsWithoutData(const QString& levelName)
 
     data_t.properties.rowCount = sizes.first;
     data_t.properties.columnCount = sizes.second;
-    data_t.properties.colors = m_manager.getColors();
+    data_t.properties.colors = m_manager.getNonogramColors();
 
     return data_t;
 }

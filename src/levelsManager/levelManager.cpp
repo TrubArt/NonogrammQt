@@ -23,16 +23,16 @@ std::pair<size_t, size_t> LevelManager::getNonogramSize()
     return fileLoader->getNonogramSize();
 }
 
-ColorStore LevelManager::getColors()
+ColorStore LevelManager::getNonogramColors()
 {
     if (m_loadedData)
     {
-        return ColorStore(m_loadedData->properties.colors);
+        return m_loadedData->properties.colors;
     }
 
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
     fileLoader->setFile(fullpath.toStdString());
-    QVarLengthArray<std::optional<QColor>, 3> colorsArray = static_cast<LevelLoader*>(fileLoader.get())->getColors();
+    QVarLengthArray<std::optional<QColor>, 3> colorsArray = static_cast<LevelLoader*>(fileLoader.get())->getNonogramColors();
 
     ColorStore colors;
     if (colorsArray[0])
