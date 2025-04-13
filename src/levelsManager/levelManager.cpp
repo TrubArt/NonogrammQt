@@ -95,3 +95,38 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
 
     return condition;
 }
+
+void LevelManager::saveAll()
+{
+    QString levelName = m_levelDir.dirName();
+    if (!m_levelDir.exists())
+    {
+        // не обрабатываем(пока) создание новых уровней или переименование старых
+        Q_ASSERT_X(false, "undefined Level", "created new level???");
+    }
+    saveProperties();
+    saveData();
+}
+
+void LevelManager::saveProperties()
+{
+    QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
+    fileLoader->setFile(fullpath.toStdString());
+
+    LevelLoader* loader = static_cast<LevelLoader*>(fileLoader.get());
+    loader->saveProperty(LevelSettings::rowCount(), QString::number(m_loadedData->properties.rowCount));
+    loader->saveProperty(LevelSettings::columnCount(), QString::number(m_loadedData->properties.columnCount));
+    loader->saveProperty(LevelSettings::colorUndefined(), m_loadedData->properties.colors.getUndefine().name());
+    loader->saveProperty(LevelSettings::colorWhite(), m_loadedData->properties.colors.getWhite().name());
+    loader->saveProperty(LevelSettings::colorBlack(), m_loadedData->properties.colors.getBlack().name());
+}
+
+void LevelManager::saveData()
+{
+    if (!m_loadedData->isLoadedDataInformation)
+    {
+        return;
+    }
+
+    // не обрабатываем(пока), потому что не умеем изменять данные уровней
+}

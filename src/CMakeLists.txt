@@ -35,6 +35,7 @@ add_executable(${PROJECT_NAME}
     levelsManager/levelData.cpp
 
     levelsManager/levelLoader/settings.h
+    levelsManager/levelLoader/settings.cpp
     levelsManager/levelLoader/levelLoader.h
     levelsManager/levelLoader/levelLoader.cpp
     levelsManager/levelLoader/fileParser.h

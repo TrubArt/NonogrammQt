@@ -158,5 +158,11 @@ void MainWindow::actionChangeLevel()
 
 void MainWindow::actionSaveLevels()
 {
+    m_levelsStorage.saveSettings();
+}
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    actionSaveLevels();
+    event->accept();
 }

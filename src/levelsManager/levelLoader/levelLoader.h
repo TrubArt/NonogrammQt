@@ -7,6 +7,7 @@
 #include <optional>
 
 #include "filesWork/iFileLoader.h"
+#include "settings.h"
 
 class LevelLoader : public iFileLoader
 {
@@ -19,8 +20,9 @@ public:
     std::pair<size_t, size_t> getNonogramSize() override;
     std::vector<std::array<size_t, 3>> getAdditionalCondition() override;
     std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
-
     QVarLengthArray<std::optional<QColor>, 3> getNonogramColors();
+
+    void saveProperty(const QString& category, const QString& value);
 
 private:
     QFile m_file;

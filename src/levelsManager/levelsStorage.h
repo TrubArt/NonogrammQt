@@ -16,11 +16,12 @@ public:
     LevelsStorage() = default;
 
     void loadLevels();
+    void setProperties(const QString& levelName, const PropertiesInformation& newProperties);
+    void saveSettings();
+
     QList<levelname_al> getLevelsList() const;
     dataType& getData();
     const dataType& getData() const;
-    void setProperties(const QString& levelName, const PropertiesInformation& newProperties);
-
     std::shared_ptr<LevelData> getLevelData(const QString& levelName) const;
     LevelManager& getManager(const QString& levelName);
 

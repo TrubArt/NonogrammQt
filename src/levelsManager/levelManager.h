@@ -18,7 +18,12 @@ public:
     std::vector<size_t> getLineSequence(bool isColumn, size_t lineIndex) override;
     ColorStore getNonogramColors();
 
+    void saveAll();
+
 private:
+    void saveProperties();
+    void saveData();
+
     QDir m_levelDir;
     std::shared_ptr<LevelData> m_loadedData;
 

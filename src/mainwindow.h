@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <qgraphicsview.h>
 #include <optional>
+#include <QCloseEvent>
 
 #include "table.h"
 #include "queueCells/cellQueue.h"
@@ -27,7 +28,10 @@ public slots:
     void actionExit();
     void actionStartSolution();
     void actionChangeLevel();
-    void actionSaveLevels();   // undefined
+    void actionSaveLevels();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     void viewInitialization();

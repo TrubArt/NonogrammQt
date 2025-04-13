@@ -3,7 +3,6 @@
 #include <memory>
 #include <QDebug>
 
-#include "settings.h"
 #include "fileParser.h"
 #include "checker.h"
 
@@ -12,7 +11,7 @@ void LevelLoader::setFile(const std::string& fileName)
     m_file.close();
 
     m_file.setFileName(QString::fromStdString(fileName));
-    if (!m_file.open(QIODevice::ReadOnly))
+    if (!m_file.open(QIODevice::ReadWrite))
     {
         qCritical() << "File " << fileName << " not open!";
     }
@@ -224,4 +223,10 @@ QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
     }
 
     return colors;
+}
+
+void LevelLoader::saveProperty(const QString& category, const QString& value)
+{
+    QTextStream out(&m_file);
+    out << category << FileParser::m_separatorForSettings << "\t\t" << value << "\n";
 }

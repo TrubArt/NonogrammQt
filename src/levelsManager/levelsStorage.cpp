@@ -24,6 +24,17 @@ void LevelsStorage::setProperties(const QString& levelName, const PropertiesInfo
     m_data[levelName]->properties = newProperties;
 }
 
+void LevelsStorage::saveSettings()
+{
+    for (auto it = m_data.begin(); it != m_data.end(); ++it)
+    {
+        QString levelName = it.key();
+        std::shared_ptr<LevelData> data = it.value();
+        setDirectoryAndData(levelName, data);
+        m_manager.saveAll();
+    }
+}
+
 const LevelsStorage::dataType& LevelsStorage::getData() const
 {
     return m_data;
