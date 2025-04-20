@@ -171,6 +171,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::actionCondionsLevelCreate()
 {
-    std::unique_ptr<ConditionLevelCreate> lvlCreateDlg = std::make_unique<ConditionLevelCreate>(this);
-    lvlCreateDlg->exec();
+    QStringList levelsName = m_levelsStorage.getLevelsList();
+    std::unique_ptr<ConditionLevelCreate> lvlCreateDlg = std::make_unique<ConditionLevelCreate>(levelsName);
+    if (lvlCreateDlg->exec())
+    {
+
+    }
 }

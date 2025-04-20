@@ -1,11 +1,14 @@
 #include "conditionlevelcreate.h"
 #include "ui_conditionlevelcreate.h"
+#include "../utils.h"
 
-ConditionLevelCreate::ConditionLevelCreate(QWidget* parent)
+ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::ConditionLevelCreate)
+    , m_levelsName(levelsName)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("Level Creation"));
     ui->buttonNext->setFocus();
     ui->stackedWidget->setCurrentIndex(0);
 
@@ -33,6 +36,11 @@ ConditionLevelCreate::~ConditionLevelCreate()
 void ConditionLevelCreate::backClicked()
 {
     int oldIndex = ui->stackedWidget->currentIndex();
+    if (!checkDataValidation(oldIndex))
+    {
+        return;
+    }
+
     int newIndex = oldIndex - 1;
     if (newIndex < 0)
     {
@@ -55,6 +63,11 @@ void ConditionLevelCreate::backClicked()
 void ConditionLevelCreate::nextClicked()
 {
     int oldIndex = ui->stackedWidget->currentIndex();
+    if (!checkDataValidation(oldIndex))
+    {
+        return;
+    }
+
     int countPage = ui->stackedWidget->count();
     if (oldIndex == countPage - 1)
     {
@@ -76,6 +89,22 @@ void ConditionLevelCreate::nextClicked()
     }
 }
 
+bool ConditionLevelCreate::checkDataValidation(int pageIndex)
+{
+    switch (pageIndex)
+    {
+    case 0:
+        return firstPageDataCheck();
+    case 1:
+    case 2:
+        return secAndThirdPageDataCheck();
+    case 3:
+        return fourthPageDataCheck();
+    default:
+        return false;
+    }
+}
+
 void ConditionLevelCreate::setSectionsFont(int newPageIndex, ButtonClicked button)
 {
     QFont font = m_sections[0]->font();
@@ -89,4 +118,51 @@ void ConditionLevelCreate::setSectionsFont(int newPageIndex, ButtonClicked butto
         font.setWeight(QFont::Weight::Bold);
         m_sections[newPageIndex]->setFont(font);
     }
+}
+
+bool ConditionLevelCreate::firstPageDataCheck()
+{
+    QString newName = ui->levelName->text();
+    if (newName.isEmpty() || m_levelsName.contains(newName))
+    {
+        ui->labelLevelName->setStyleSheet(m_errorBack);
+        if (newName.isEmpty())
+        {
+            utils::sendMessage(tr("Error"), tr("Level name is empty!"));
+        }
+        else
+        {
+            utils::sendMessage(tr("Error"), tr("Name already exist!"));
+        }
+        return false;
+    }
+    ui->labelLevelName->setStyleSheet(m_normalBack);
+
+    if (ui->rows->value() <= 0)
+    {
+        ui->labelRowCount->setStyleSheet(m_errorBack);
+        utils::sendMessage(tr("Error"), tr("Invalid sizes!"));
+        return false;
+    }
+    ui->labelRowCount->setStyleSheet(m_normalBack);
+
+    if (ui->columns->value() <= 0)
+    {
+        ui->labelColumCount->setStyleSheet(m_errorBack);
+        utils::sendMessage(tr("Error"), tr("Invalid sizes!"));
+        return false;
+    }
+    ui->labelColumCount->setStyleSheet(m_normalBack);
+
+    return true;
+}
+
+bool ConditionLevelCreate::secAndThirdPageDataCheck()
+{
+    return true;
+}
+
+bool ConditionLevelCreate::fourthPageDataCheck()
+{
+    return true;
 }
