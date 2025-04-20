@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
 #include "levelChangeDialog/levelchangedialog.h"
+#include "levelCreate/conditionlevelcreate.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -35,6 +36,7 @@ void MainWindow::connectInitialization()
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::actionStartSolution);
     connect(ui->actionChangeLevel, &QAction::triggered, this, &MainWindow::actionChangeLevel);
     connect(ui->actionResetPicture, &QAction::triggered, this, &MainWindow::actiontResetTableCells);
+    connect(ui->actionWriteConditions, &QAction::triggered, this, &MainWindow::actionCondionsLevelCreate);
 }
 
 MainWindow::~MainWindow()
@@ -165,4 +167,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     actionSaveLevels();
     event->accept();
+}
+
+void MainWindow::actionCondionsLevelCreate()
+{
+    std::unique_ptr<ConditionLevelCreate> lvlCreateDlg = std::make_unique<ConditionLevelCreate>(this);
+    lvlCreateDlg->exec();
 }

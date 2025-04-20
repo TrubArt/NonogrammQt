@@ -40,9 +40,16 @@
     <property name="title">
      <string>Solution</string>
     </property>
+    <widget class="QMenu" name="menuCreateLevel">
+     <property name="title">
+      <string>Create level</string>
+     </property>
+     <addaction name="actionWriteConditions"/>
+    </widget>
     <addaction name="actionChangeLevel"/>
     <addaction name="actionStart"/>
     <addaction name="actionResetPicture"/>
+    <addaction name="menuCreateLevel"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -75,6 +82,11 @@
   <action name="actionResetPicture">
    <property name="text">
     <string>Reset Picture</string>
+   </property>
+  </action>
+  <action name="actionWriteConditions">
+   <property name="text">
+    <string>Write Conditions</string>
    </property>
   </action>
  </widget>

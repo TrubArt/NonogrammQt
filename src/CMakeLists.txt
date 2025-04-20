@@ -23,6 +23,10 @@ add_executable(${PROJECT_NAME}
     levelChangeDialog/levelchangedialog.cpp
     levelChangeDialog/levelchangedialog.ui
 
+    levelCreate/conditionlevelcreate.h
+    levelCreate/conditionlevelcreate.cpp
+    levelCreate/conditionlevelcreate.ui
+
     levelsManager/levelsDirectory.h
     levelsManager/levelsDirectory.cpp
     levelsManager/colorstore.h

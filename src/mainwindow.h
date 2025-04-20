@@ -29,6 +29,7 @@ public slots:
     void actionStartSolution();
     void actionChangeLevel();
     void actionSaveLevels();
+    void actionCondionsLevelCreate();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
