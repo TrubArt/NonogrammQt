@@ -99,7 +99,7 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
 void LevelManager::saveAll()
 {
     QString levelName = m_levelDir.dirName();
-    if (!m_levelDir.exists())
+    if (!QDir(levelName).exists())
     {
         // не обрабатываем(пока) создание новых уровней или переименование старых
         Q_ASSERT_X(false, "undefined Level", "created new level???");
