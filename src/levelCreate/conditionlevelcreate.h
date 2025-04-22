@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QLabel>
 #include <QVector>
+#include <QScrollArea>
+
+#include "conditionelement.h"
 
 namespace Ui
 {
@@ -33,9 +36,15 @@ private:
     bool secAndThirdPageDataCheck();
     bool fourthPageDataCheck();
 
+    void remakeScrollAreaSource();
+    void feelScrollAreaWidget(QScrollArea* scrollArea, QVector<ConditionElement*>& conditions, int newSize);
+
     Ui::ConditionLevelCreate* ui;
     QStringList m_levelsName;
     QVector<QLabel*> m_sections;
+
+    QVector<ConditionElement*> m_linesConditions;
+    QVector<ConditionElement*> m_columnsConditions;
 
     const QString m_errorBack = "QLabel{background-color: rgba(255, 85, 127, 255);}";
     const QString m_normalBack = "QLabel{background-color: rgba(0, 0, 0, 0);}";

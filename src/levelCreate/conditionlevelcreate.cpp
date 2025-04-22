@@ -2,6 +2,8 @@
 #include "ui_conditionlevelcreate.h"
 #include "../utils.h"
 
+#include <QScrollBar>
+
 ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::ConditionLevelCreate)
@@ -74,6 +76,8 @@ void ConditionLevelCreate::nextClicked()
         QDialog::accept();
         return;
     }
+
+    remakeScrollAreaSource();
 
     int newIndex = oldIndex + 1;
     if (newIndex < countPage)
@@ -165,4 +169,54 @@ bool ConditionLevelCreate::secAndThirdPageDataCheck()
 bool ConditionLevelCreate::fourthPageDataCheck()
 {
     return true;
+}
+
+void ConditionLevelCreate::remakeScrollAreaSource()
+{
+    int rowsCount = ui->rows->value();
+    if (rowsCount != m_linesConditions.size())
+    {
+        feelScrollAreaWidget(ui->LineScrollArea, m_linesConditions, rowsCount);
+    }
+
+    int columnCount = ui->columns->value();
+    if (columnCount != m_columnsConditions.size())
+    {
+        feelScrollAreaWidget(ui->ColumnScrollArea, m_columnsConditions, columnCount);
+    }
+}
+
+void ConditionLevelCreate::feelScrollAreaWidget(QScrollArea* scrollArea, QVector<ConditionElement*>& conditions, int newSize)
+{
+    QWidget* scrollAreaContents = scrollArea->widget();
+    const QSize shiftFromTopLeft(10, 10);
+    const int labelWidth = 30;
+
+    int oldSize = conditions.size();
+    int maxWidth = 0;
+    if (oldSize == 0)   // first painting
+    {
+        conditions.reserve(newSize);
+
+        QRect geometry(shiftFromTopLeft.width(), shiftFromTopLeft.height(), 0, 0);
+        for (int i = 0; i < newSize; ++i)
+        {
+            ConditionElement* condition = new ConditionElement(i + 1, scrollAreaContents);
+            condition->setLabelWidth(labelWidth);
+            conditions.push_back(condition);
+
+            int condWidth = condition->width();
+            maxWidth = std::max(maxWidth, condWidth);
+            int condHeight = condition->height();
+
+            geometry.setTop(geometry.bottom() + 1);
+            geometry.setBottom(geometry.top() + condHeight);
+            geometry.setRight(geometry.left() + condWidth);
+
+            condition->setGeometry(geometry);
+        }
+
+        int rightShift = scrollArea->verticalScrollBar()->height() + 10; // 10 - margins
+        scrollAreaContents->setFixedSize(maxWidth + rightShift, geometry.bottom());
+    }
 }

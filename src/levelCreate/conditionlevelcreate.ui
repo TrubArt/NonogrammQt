@@ -103,27 +103,53 @@
     </widget>
    </widget>
    <widget class="QWidget" name="page_2">
-    <widget class="QListWidget" name="linesList">
+    <widget class="QScrollArea" name="LineScrollArea">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>421</width>
+       <width>411</width>
        <height>361</height>
       </rect>
      </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="lineWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>409</width>
+        <height>359</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="page_3">
-    <widget class="QListWidget" name="columnsList">
+    <widget class="QScrollArea" name="ColumnScrollArea">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>421</width>
+       <width>411</width>
        <height>361</height>
       </rect>
      </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="columnsWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>409</width>
+        <height>359</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="page_4"/>
