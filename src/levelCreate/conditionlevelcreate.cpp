@@ -2,8 +2,6 @@
 #include "ui_conditionlevelcreate.h"
 #include "../utils.h"
 
-#include <QScrollBar>
-
 ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::ConditionLevelCreate)
@@ -19,6 +17,13 @@ ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidge
     {
         m_sections.push_back(static_cast<QLabel*>(ui->sectionsLayout->itemAtPosition(i, 0)->widget()));
     }
+
+    m_linesContents = new ScrollAreaConditionContent();
+    m_columnsContents = new ScrollAreaConditionContent();
+    ui->LineScrollArea->setWidget(m_linesContents);
+    m_linesContents->setScrollArea(ui->LineScrollArea);
+    ui->ColumnScrollArea->setWidget(m_columnsContents);
+    m_columnsContents->setScrollArea(ui->ColumnScrollArea);
 
     connectInitialization();
 }
@@ -174,49 +179,14 @@ bool ConditionLevelCreate::fourthPageDataCheck()
 void ConditionLevelCreate::remakeScrollAreaSource()
 {
     int rowsCount = ui->rows->value();
-    if (rowsCount != m_linesConditions.size())
+    if (rowsCount != m_linesContents->getViewSize())
     {
-        feelScrollAreaWidget(ui->LineScrollArea, m_linesConditions, rowsCount);
+        m_linesContents->updateContent(rowsCount);
     }
 
     int columnCount = ui->columns->value();
-    if (columnCount != m_columnsConditions.size())
+    if (columnCount != m_columnsContents->getViewSize())
     {
-        feelScrollAreaWidget(ui->ColumnScrollArea, m_columnsConditions, columnCount);
-    }
-}
-
-void ConditionLevelCreate::feelScrollAreaWidget(QScrollArea* scrollArea, QVector<ConditionElement*>& conditions, int newSize)
-{
-    QWidget* scrollAreaContents = scrollArea->widget();
-    const QSize shiftFromTopLeft(10, 10);
-    const int labelWidth = 30;
-
-    int oldSize = conditions.size();
-    int maxWidth = 0;
-    if (oldSize == 0)   // first painting
-    {
-        conditions.reserve(newSize);
-
-        QRect geometry(shiftFromTopLeft.width(), shiftFromTopLeft.height(), 0, 0);
-        for (int i = 0; i < newSize; ++i)
-        {
-            ConditionElement* condition = new ConditionElement(i + 1, scrollAreaContents);
-            condition->setLabelWidth(labelWidth);
-            conditions.push_back(condition);
-
-            int condWidth = condition->width();
-            maxWidth = std::max(maxWidth, condWidth);
-            int condHeight = condition->height();
-
-            geometry.setTop(geometry.bottom() + 1);
-            geometry.setBottom(geometry.top() + condHeight);
-            geometry.setRight(geometry.left() + condWidth);
-
-            condition->setGeometry(geometry);
-        }
-
-        int rightShift = scrollArea->verticalScrollBar()->height() + 10; // 10 - margins
-        scrollAreaContents->setFixedSize(maxWidth + rightShift, geometry.bottom());
+        m_columnsContents->updateContent(columnCount);
     }
 }

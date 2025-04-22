@@ -25,6 +25,8 @@ add_executable(${PROJECT_NAME}
     levelCreate/conditionelement.h
     levelCreate/conditionelement.cpp
     levelCreate/conditionelement.ui
+    levelCreate/scrollareaconditioncontent.h
+    levelCreate/scrollareaconditioncontent.cpp
 
     levelCreate/conditionlevelcreate.h
     levelCreate/conditionlevelcreate.cpp
