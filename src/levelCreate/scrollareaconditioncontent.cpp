@@ -25,7 +25,8 @@ void ScrollAreaConditionContent::updateContent(int newSize)
     {
         m_conditions.reserve(newSize);
 
-        int maxWidth = 0;
+        QSize sizeContetns = size();
+        int condWidth = ConditionElement(0).size().width();
         QRect geometry(shiftFromTopLeft.width(), shiftFromTopLeft.height(), 0, 0);
 
         for (int i = 0; i < newSize; ++i)
@@ -34,18 +35,16 @@ void ScrollAreaConditionContent::updateContent(int newSize)
             m_conditions.push_back(condition);
             condition->setLabelWidth(labelWidth);
 
-            int condWidth = condition->width();
-            maxWidth = std::max(maxWidth, condWidth);
-
-            geometry.setTop(geometry.bottom() + 1);
-            geometry.setBottom(geometry.top() + condition->height());
+            geometry.setTop(geometry.bottom());
+            int condHeight = condition->height();
+            geometry.setBottom(geometry.top() + condHeight);
             geometry.setRight(geometry.left() + condWidth);
 
             condition->setGeometry(geometry);
         }
 
         int rightShift = m_parentScrollArea->verticalScrollBar()->height() + 10; // 10 - margins
-        setFixedSize(maxWidth + rightShift, geometry.bottom());
+        setFixedSize(condWidth + rightShift, geometry.bottom());
     }
     else if (newSize < m_viewSize)
     {
@@ -53,7 +52,8 @@ void ScrollAreaConditionContent::updateContent(int newSize)
         int finalBottomValue = sizeContetns.height();
         for (int i = newSize; i < m_viewSize; ++i)
         {
-            finalBottomValue -= m_conditions[i]->height();
+            int height = m_conditions[i]->height() - 1; // -1 needs because QT is good mathematic :)
+            finalBottomValue -= height;
             m_conditions[i]->setVisible(false);
         }
         setFixedSize(sizeContetns.width(), finalBottomValue);
@@ -64,18 +64,19 @@ void ScrollAreaConditionContent::updateContent(int newSize)
         int numOfExistConditions = m_conditions.size();
 
         QSize sizeContetns = size();
+        int condWidth = ConditionElement(0).size().width();
         int finalBottomValue = sizeContetns.height();
 
-        if (m_viewSize <= numOfExistConditions)
+        if (m_viewSize < numOfExistConditions)
         {
-            for (; indexStart < numOfExistConditions; ++indexStart)
+            int limit = std::min(newSize, numOfExistConditions);
+            for (; indexStart < limit; ++indexStart)
             {
                 finalBottomValue += m_conditions[indexStart]->height();
                 m_conditions[indexStart]->setVisible(true);
             }
         }
 
-        int maxWidth = 0;
         QRect geometry(shiftFromTopLeft.width(), finalBottomValue, 0, 0);
         for (; indexStart < newSize; ++indexStart)
         {
@@ -83,10 +84,7 @@ void ScrollAreaConditionContent::updateContent(int newSize)
             m_conditions.push_back(condition);
             condition->setLabelWidth(labelWidth);
 
-            int condWidth = condition->width();
-            maxWidth = std::max(maxWidth, condWidth);
-
-            geometry.setTop(geometry.bottom() + 1);
+            geometry.setTop(geometry.bottom());
             geometry.setBottom(geometry.top() + condition->height());
             geometry.setRight(geometry.left() + condWidth);
 
@@ -94,7 +92,7 @@ void ScrollAreaConditionContent::updateContent(int newSize)
         }
 
         int rightShift = m_parentScrollArea->verticalScrollBar()->height() + 10; // 10 - margins
-        setFixedSize(maxWidth + rightShift, geometry.bottom());
+        setFixedSize(condWidth + rightShift, geometry.bottom());
     }
     else
     {
