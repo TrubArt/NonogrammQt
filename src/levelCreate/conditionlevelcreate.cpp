@@ -18,14 +18,25 @@ ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidge
         m_sections.push_back(static_cast<QLabel*>(ui->sectionsLayout->itemAtPosition(i, 0)->widget()));
     }
 
-    m_linesContents = new ScrollAreaConditionContent();
-    m_columnsContents = new ScrollAreaConditionContent();
-    ui->LineScrollArea->setWidget(m_linesContents);
-    m_linesContents->setScrollArea(ui->LineScrollArea);
-    ui->ColumnScrollArea->setWidget(m_columnsContents);
-    m_columnsContents->setScrollArea(ui->ColumnScrollArea);
+    m_linesContents = scrollAreaInit(ui->LineScrollArea);
+    m_columnsContents = scrollAreaInit(ui->ColumnScrollArea);
+    m_additionContents = scrollAreaInit(ui->AdditionScrollArea);
 
     connectInitialization();
+}
+
+ConditionLevelCreate::~ConditionLevelCreate()
+{
+    delete ui;
+}
+
+ScrollAreaConditionContent* ConditionLevelCreate::scrollAreaInit(QScrollArea* scrollArea)
+{
+    ScrollAreaConditionContent* content = new ScrollAreaConditionContent();
+    scrollArea->setWidget(content);
+    content->setScrollArea(scrollArea);
+
+    return content;
 }
 
 void ConditionLevelCreate::connectInitialization()
@@ -33,11 +44,8 @@ void ConditionLevelCreate::connectInitialization()
     connect(ui->buttonCancel, &QPushButton::clicked, this, &ConditionLevelCreate::reject);
     connect(ui->buttonBack, &QPushButton::clicked, this, &ConditionLevelCreate::backClicked);
     connect(ui->buttonNext, &QPushButton::clicked, this, &ConditionLevelCreate::nextClicked);
-}
-
-ConditionLevelCreate::~ConditionLevelCreate()
-{
-    delete ui;
+    connect(ui->pbAdd, &QPushButton::clicked, this, &ConditionLevelCreate::addClicked);
+    connect(ui->pbDelete, &QPushButton::clicked, this, &ConditionLevelCreate::deleteClicked);
 }
 
 void ConditionLevelCreate::backClicked()
@@ -96,6 +104,26 @@ void ConditionLevelCreate::nextClicked()
         ui->stackedWidget->setCurrentIndex(newIndex);
         setSectionsFont(newIndex, ButtonClicked::next);
     }
+}
+
+void ConditionLevelCreate::addClicked()
+{
+    int oldSize = m_additionContents->getViewSize();
+    if (oldSize == 0)
+    {
+        ui->pbDelete->setEnabled(true);
+    }
+    m_additionContents->updateContent(oldSize + 1);
+}
+
+void ConditionLevelCreate::deleteClicked()
+{
+    int oldSize = m_additionContents->getViewSize();
+    if (oldSize == 1)
+    {
+        ui->pbDelete->setEnabled(false);
+    }
+    m_additionContents->updateContent(oldSize - 1);
 }
 
 bool ConditionLevelCreate::checkDataValidation(int pageIndex)

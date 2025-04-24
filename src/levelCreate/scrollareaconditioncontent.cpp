@@ -3,6 +3,7 @@
 
 ScrollAreaConditionContent::ScrollAreaConditionContent(QWidget* parent)
     : QWidget(parent)
+    , m_parentScrollArea(nullptr)
     , m_viewSize(0)
 {}
 
@@ -14,6 +15,11 @@ void ScrollAreaConditionContent::setScrollArea(QScrollArea* sa)
 int ScrollAreaConditionContent::getViewSize() const
 {
     return m_viewSize;
+}
+
+int ScrollAreaConditionContent::getRealSize() const
+{
+    return m_conditions.size();
 }
 
 void ScrollAreaConditionContent::updateContent(int newSize)

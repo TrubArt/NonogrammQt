@@ -14,6 +14,7 @@ public:
     explicit ScrollAreaConditionContent(QWidget* parent = nullptr);
     void setScrollArea(QScrollArea* sa);
     int getViewSize() const;
+    int getRealSize() const;
     void updateContent(int newSize);
 
 private:
