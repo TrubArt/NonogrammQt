@@ -57,10 +57,7 @@ void ConditionLevelCreate::backClicked()
     }
 
     int newIndex = oldIndex - 1;
-    if (newIndex < 0)
-    {
-        return;
-    }
+
     if (oldIndex == ui->stackedWidget->count() - 1)
     {
         ui->buttonNext->setText("Next");
@@ -93,17 +90,15 @@ void ConditionLevelCreate::nextClicked()
     remakeScrollAreaSource();
 
     int newIndex = oldIndex + 1;
-    if (newIndex < countPage)
-    {
-        if (newIndex == countPage - 1)
-        {
-            ui->buttonNext->setText("Finish");
-        }
 
-        ui->buttonBack->setEnabled(true);
-        ui->stackedWidget->setCurrentIndex(newIndex);
-        setSectionsFont(newIndex, ButtonClicked::next);
+    if (newIndex == countPage - 1)
+    {
+        ui->buttonNext->setText("Finish");
     }
+
+    ui->buttonBack->setEnabled(true);
+    ui->stackedWidget->setCurrentIndex(newIndex);
+    setSectionsFont(newIndex, ButtonClicked::next);
 }
 
 void ConditionLevelCreate::addClicked()
@@ -159,26 +154,28 @@ void ConditionLevelCreate::setSectionsFont(int newPageIndex, ButtonClicked butto
 
 bool ConditionLevelCreate::firstPageDataCheck()
 {
+    const QString windowName = tr("Error");
     QString newName = ui->levelName->text();
     if (newName.isEmpty() || m_levelsName.contains(newName))
     {
         ui->labelLevelName->setStyleSheet(m_errorBack);
         if (newName.isEmpty())
         {
-            utils::sendMessage(tr("Error"), tr("Level name is empty!"));
+            utils::sendMessage(windowName, tr("Level name is empty!"));
         }
         else
         {
-            utils::sendMessage(tr("Error"), tr("Name already exist!"));
+            utils::sendMessage(windowName, tr("Name already exist!"));
         }
         return false;
     }
     ui->labelLevelName->setStyleSheet(m_normalBack);
 
+    const QString errorSizeMessage = tr("Invalid sizes!");
     if (ui->rows->value() <= 0)
     {
         ui->labelRowCount->setStyleSheet(m_errorBack);
-        utils::sendMessage(tr("Error"), tr("Invalid sizes!"));
+        utils::sendMessage(windowName, errorSizeMessage);
         return false;
     }
     ui->labelRowCount->setStyleSheet(m_normalBack);
@@ -186,7 +183,7 @@ bool ConditionLevelCreate::firstPageDataCheck()
     if (ui->columns->value() <= 0)
     {
         ui->labelColumCount->setStyleSheet(m_errorBack);
-        utils::sendMessage(tr("Error"), tr("Invalid sizes!"));
+        utils::sendMessage(windowName, errorSizeMessage);
         return false;
     }
     ui->labelColumCount->setStyleSheet(m_normalBack);

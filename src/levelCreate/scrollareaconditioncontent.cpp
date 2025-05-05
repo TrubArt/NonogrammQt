@@ -26,23 +26,23 @@ void ScrollAreaConditionContent::updateContent(int newSize)
 {
     if (newSize < m_viewSize)
     {
-        const QSize sizeContetns = size();
-        int finalBottomValue = sizeContetns.height();
+        const QSize sizeContents = size();
+        int finalBottomValue = sizeContents.height();
         for (int i = newSize; i < m_viewSize; ++i)
         {
             int height = m_conditions[i]->height() - 1; // -1 needs because QT is good mathematic :)
             finalBottomValue -= height;
             m_conditions[i]->setVisible(false);
         }
-        setFixedSize(sizeContetns.width(), finalBottomValue);
+        setFixedSize(sizeContents.width(), finalBottomValue);
     }
     else if (newSize > m_viewSize)
     {
-        const QSize sizeContetns = size();
+        const QSize sizeContents = size();
         const int numOfExistConditions = m_conditions.size();
 
         int indexStart = m_viewSize;
-        int finalBottomValue = sizeContetns.height();
+        int finalBottomValue = sizeContents.height();
 
         if (m_viewSize < numOfExistConditions)
         {
@@ -59,13 +59,13 @@ void ScrollAreaConditionContent::updateContent(int newSize)
         const int condWidth = ConditionElement(0).size().width();
 
         QRect geometry;
-        if (m_viewSize == 0)   // first painting
+        if (numOfExistConditions == 0)   // first painting
         {
-            geometry = QRect(shiftFromTopLeft.width(), shiftFromTopLeft.height(), 0, 0);
+            geometry = QRect(shiftFromTopLeft.width(), shiftFromTopLeft.height() + 1, 0, 0);
         }
         else
         {
-            geometry = QRect(shiftFromTopLeft.width(), finalBottomValue, 0, 0);
+            geometry = QRect(shiftFromTopLeft.width(), finalBottomValue + 1, 0, 0);
         }
 
         m_conditions.reserve(newSize);
@@ -79,7 +79,9 @@ void ScrollAreaConditionContent::updateContent(int newSize)
             geometry.setBottom(geometry.top() + condition->height());
             geometry.setRight(geometry.left() + condWidth);
 
+            condition->setVisible(false);
             condition->setGeometry(geometry);
+            condition->setVisible(true);
         }
 
         const int rightShift = m_parentScrollArea->verticalScrollBar()->height() + 10; // 10 - margins
