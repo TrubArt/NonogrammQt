@@ -14,7 +14,7 @@ public:
         color
     };
 
-    static bool checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters);
+    static bool checkDataValidation(Categories category, const QString& value);
 
     // count values check
 
@@ -26,9 +26,6 @@ public:
     static bool checkSize(const QString& value);
     static bool checkData(const QString& value);
     static bool checkColor(const QString& value);
-
-private:
-    static void messageFindBadParameter(const QString& specialization, const QString& value);
 };
 
 #endif // CHECKER_H

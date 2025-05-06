@@ -12,12 +12,15 @@ class LevelsStorage
     using levelname_al = QString;
 
 public:
-    using dataType =  QMap<levelname_al, std::shared_ptr<LevelData>>;
+    using dataType = QMap<levelname_al, std::shared_ptr<LevelData>>;
     LevelsStorage() = default;
 
     void loadLevels();
     void setProperties(const QString& levelName, const PropertiesInformation& newProperties);
     void saveSettings();
+
+    void addLevel(const QString& levelName, std::shared_ptr<LevelData> level);
+    void deleteLevel(const QString& levelName);  // undef
 
     QList<levelname_al> getLevelsList() const;
     dataType& getData();

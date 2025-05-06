@@ -1,6 +1,8 @@
 #include "conditionlevelcreate.h"
 #include "ui_conditionlevelcreate.h"
 #include "../utils.h"
+#include "../levelsManager/levelLoader/fileParser.h"
+#include "../levelsManager/levelLoader/checker.h"
 
 ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidget* parent)
     : QDialog(parent)
@@ -154,18 +156,17 @@ void ConditionLevelCreate::setSectionsFont(int newPageIndex, ButtonClicked butto
 
 bool ConditionLevelCreate::firstPageDataCheck()
 {
-    const QString windowName = tr("Error");
     QString newName = ui->levelName->text();
     if (newName.isEmpty() || m_levelsName.contains(newName))
     {
         ui->labelLevelName->setStyleSheet(m_errorBack);
         if (newName.isEmpty())
         {
-            utils::sendMessage(windowName, tr("Level name is empty!"));
+            utils::sendMessage(m_windowName, tr("Level name is empty!"));
         }
         else
         {
-            utils::sendMessage(windowName, tr("Name already exist!"));
+            utils::sendMessage(m_windowName, tr("Name already exist!"));
         }
         return false;
     }
@@ -175,7 +176,7 @@ bool ConditionLevelCreate::firstPageDataCheck()
     if (ui->rows->value() <= 0)
     {
         ui->labelRowCount->setStyleSheet(m_errorBack);
-        utils::sendMessage(windowName, errorSizeMessage);
+        utils::sendMessage(m_windowName, errorSizeMessage);
         return false;
     }
     ui->labelRowCount->setStyleSheet(m_normalBack);
@@ -183,7 +184,7 @@ bool ConditionLevelCreate::firstPageDataCheck()
     if (ui->columns->value() <= 0)
     {
         ui->labelColumCount->setStyleSheet(m_errorBack);
-        utils::sendMessage(windowName, errorSizeMessage);
+        utils::sendMessage(m_windowName, errorSizeMessage);
         return false;
     }
     ui->labelColumCount->setStyleSheet(m_normalBack);
@@ -214,4 +215,80 @@ void ConditionLevelCreate::remakeScrollAreaSource()
     {
         m_columnsContents->updateContent(columnCount);
     }
+}
+
+QString ConditionLevelCreate::getLevelName() const
+{
+    return ui->levelName->text();
+}
+
+DataInformation ConditionLevelCreate::getData() const
+{
+    DataInformation data_t;
+
+    const QVector<ConditionElement*>& lines = m_linesContents->getConditions();
+    const QVector<ConditionElement*>& columns = m_columnsContents->getConditions();
+    const QVector<ConditionElement*>& additions = m_additionContents->getConditions();
+
+    data_t.lineConditions = getConditions(lines);
+    data_t.columnConditions = getConditions(columns);
+    data_t.additionConditions = getAdditions(additions);
+
+    return data_t;
+}
+
+PropertiesInformation ConditionLevelCreate::getProperties() const
+{
+    PropertiesInformation properties_t;
+    properties_t.rowCount = ui->rows->value();
+    properties_t.columnCount = ui->columns->value();
+    return properties_t;
+}
+
+std::vector<std::vector<size_t>> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data) const
+{
+    std::vector<std::vector<size_t>> conditionsList;
+    conditionsList.reserve(data.size());
+
+    for (const ConditionElement* cond : data)
+    {
+        std::vector<size_t> condition;
+
+        QStringList values;
+        QString line = cond->getData();
+        FileParser::getLevelData(line, values);
+
+        condition.reserve(values.size());
+        for (const QString& value : values)
+        {
+            condition.push_back(value.toInt());
+        }
+
+        conditionsList.push_back(condition);
+    }
+
+    return conditionsList;
+}
+
+std::vector<std::array<size_t, 3>> ConditionLevelCreate::getAdditions(const QVector<ConditionElement*>& data) const
+{
+    std::vector<std::array<size_t, 3>> condition;
+    condition.reserve(data.size());
+
+    for (const ConditionElement* cond : data)
+    {
+        QStringList values;
+        QString line = cond->getData();
+        FileParser::getLevelData(line, values);
+
+        std::array<size_t, 3> oneAdditionalCondition;
+        for (int i = 0; i < 3; ++i)
+        {
+            oneAdditionalCondition[i] = values[i].toInt();
+        }
+
+        condition.push_back(oneAdditionalCondition);
+    }
+
+    return condition;
 }

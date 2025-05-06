@@ -101,7 +101,7 @@ void LevelManager::saveAll()
     if (!m_levelDir.exists())
     {
         // не обрабатываем(пока) создание новых уровней или переименование старых
-        Q_ASSERT_X(false, "undefined Level", "created new level???");
+        Q_ASSERT_X(false, LevelManager::saveAll(), "created new level???");
     }
     saveProperties();
     saveData();

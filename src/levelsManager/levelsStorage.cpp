@@ -19,6 +19,11 @@ LevelsStorage::dataType& LevelsStorage::getData()
     return m_data;
 }
 
+const LevelsStorage::dataType& LevelsStorage::getData() const
+{
+    return m_data;
+}
+
 void LevelsStorage::setProperties(const QString& levelName, const PropertiesInformation& newProperties)
 {
     m_data[levelName]->properties = newProperties;
@@ -33,11 +38,6 @@ void LevelsStorage::saveSettings()
         setDirectoryAndData(levelName, data);
         m_manager.saveAll();
     }
-}
-
-const LevelsStorage::dataType& LevelsStorage::getData() const
-{
-    return m_data;
 }
 
 std::shared_ptr<LevelData> LevelsStorage::getLevelData(const QString& levelName) const
@@ -75,4 +75,10 @@ LevelData LevelsStorage::loadLevelSettingsWithoutData(const QString& levelName)
 void LevelsStorage::setDirectoryAndData(const QString& levelName, std::shared_ptr<LevelData> loadedData)
 {
     m_manager.setDirectoryAndData(QDir(m_levelsDir.getAbsPath(levelName)), loadedData);
+}
+
+void LevelsStorage::addLevel(const QString& levelName, std::shared_ptr<LevelData> level)
+{
+    Q_ASSERT_X(!getLevelsList().contains(levelName), "LevelsStorage::addLevel", "level exist!");
+    m_data[levelName] = level;
 }

@@ -25,6 +25,8 @@ public:
     void saveProperty(const QString& category, const QString& value);
 
 private:
+    void messageFindBadParameter(const QString& specialization, const QString& value);
+
     QFile m_file;
 };
 

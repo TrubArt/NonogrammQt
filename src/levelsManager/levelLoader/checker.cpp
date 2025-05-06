@@ -1,38 +1,28 @@
 #include "checker.h"
-#include <QDebug>
 #include <QColor>
 
 
-bool Checker::checkDataValidation(Categories category, const QString& specialization, const QStringList& parameters)
+bool Checker::checkDataValidation(Categories category, const QString& value)
 {
-    for (const QString& value : parameters)
+    bool goodValue = false;
+    if (category == Categories::size)
     {
-        bool goodValue = false;
-        if (category == Categories::size)
-        {
-            goodValue = checkSize(value);
-        }
-        else if (category == Categories::levelData || category == Categories::additionData)
-        {
-            goodValue = checkData(value);
-        }
-        else if (category == Categories::color)
-        {
-            goodValue = checkColor(value);
-        }
-        else
-        {
-            Q_ASSERT_X(false, "LevelLoader::Checker::checkData" , "Unresolved category");
-        }
-
-        if (!goodValue)
-        {
-            messageFindBadParameter(specialization, value);
-            return false;
-        }
+        goodValue = checkSize(value);
+    }
+    else if (category == Categories::levelData || category == Categories::additionData)
+    {
+        goodValue = checkData(value);
+    }
+    else if (category == Categories::color)
+    {
+        goodValue = checkColor(value);
+    }
+    else
+    {
+        Q_ASSERT_X(false, "LevelLoader::Checker::checkData" , "Unresolved category");
     }
 
-    return true;
+    return goodValue;
 }
 
 bool Checker::is1SettingsInLine(const QStringList& parameters)
@@ -70,11 +60,4 @@ bool Checker::checkData(const QString& str)
 bool Checker::checkColor(const QString& str)
 {
     return QColor::isValidColorName(str);
-}
-
-void Checker::messageFindBadParameter(const QString& specialization, const QString& value)
-{
-    qCritical() << "Bad values!"
-                << " Parameter: " << specialization
-                << " Value: " << value;
 }

@@ -22,6 +22,13 @@ std::string LevelLoader::getFileName() const
     return m_file.fileName().toStdString();
 }
 
+void LevelLoader::messageFindBadParameter(const QString& specialization, const QString& value)
+{
+    qCritical() << "Bad values!"
+                << " Parameter: " << specialization
+                << " Value: " << value;
+}
+
 std::pair<size_t, size_t> LevelLoader::getNonogramSize()
 {
     std::pair<size_t, size_t> sizes;
@@ -44,17 +51,27 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
         if (parametr == LevelSettings::rowCount())
         {
             findRowCount = true;
-            if (Checker::checkDataValidation(Checker::Categories::size, parametr, values))
+            QString rowSize = values[0];
+            if (Checker::checkDataValidation(Checker::Categories::size, rowSize))
             {
-                sizes.first = values[0].toInt();
+                sizes.first = rowSize.toInt();
+            }
+            else
+            {
+                messageFindBadParameter(parametr, rowSize);
             }
         }
-        if (parametr == LevelSettings::columnCount())
+        else if (parametr == LevelSettings::columnCount())
         {
             findColumnCount = true;
-            if (Checker::checkDataValidation(Checker::Categories::size, parametr, values))
+            QString columnSize = values[0];
+            if (Checker::checkDataValidation(Checker::Categories::size, columnSize))
             {
-                sizes.second = values[0].toInt();
+                sizes.second = columnSize.toInt();
+            }
+            else
+            {
+                messageFindBadParameter(parametr, columnSize);
             }
         }
 
@@ -85,6 +102,7 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
     while (!m_file.atEnd())
     {
         QString line = m_file.readLine();
+        FileParser::deleteBadSymbols(line);
         if (line.isEmpty())
         {
             continue;
@@ -93,24 +111,27 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
         QStringList values;
         FileParser::getLevelData(line, values);
 
-        if (Checker::checkDataValidation(Checker::Categories::additionData, "additional level data value", values))
+        if (!Checker::is3ParametresInAdditionalLine(values))
         {
-            if (!Checker::is3ParametresInAdditionalLine(values))
+            qCritical() << "Error in addition color condition. "
+                        << "Must have only 3 arguments in line: " << line;
+        }
+
+        std::array<size_t, 3> oneAdditionalCondition;
+        for (int i = 0; i < 3; ++i)
+        {
+            QString value = values[i];
+            if (Checker::checkDataValidation(Checker::Categories::additionData, value))
             {
-                qCritical() << "Error in addition color condition. "
-                            << "Must have only 3 arguments in line: " << line;
+                oneAdditionalCondition[i] = value.toInt();
             }
             else
             {
-                std::array<size_t, 3> oneAdditionalCondition =
-                {
-                    values[0].toInt(),
-                    values[1].toInt(),
-                    values[2].toInt()
-                };
-                condition.push_back(oneAdditionalCondition);
+                messageFindBadParameter("additional level data value", value);
             }
         }
+
+        condition.push_back(oneAdditionalCondition);
     }
 
     return condition;
@@ -134,12 +155,17 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
     QStringList values;
     FileParser::getLevelData(line, values);
 
-    if (Checker::checkDataValidation(Checker::Categories::levelData, "level data value", values))
+
+    condition.reserve(values.size());
+    for (const QString& value : values)
     {
-        condition.reserve(values.size());
-        for (const QString& value : values)
+        if (Checker::checkDataValidation(Checker::Categories::levelData, value))
         {
             condition.push_back(value.toInt());
+        }
+        else
+        {
+            messageFindBadParameter("level data value", value);
         }
     }
 
@@ -176,25 +202,40 @@ QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
         if (parametr == LevelSettings::colorUndefined())
         {
             findUndefine = true;
-            if (Checker::checkDataValidation(Checker::Categories::color, parametr, values))
+            QString undefColor = values[0];
+            if (Checker::checkDataValidation(Checker::Categories::color, undefColor))
             {
-                colors[static_cast<int>(Color::undefined)] = QColor::fromString(values[0]);
+                colors[static_cast<int>(Color::undefined)] = QColor::fromString(undefColor);
+            }
+            else
+            {
+                messageFindBadParameter(parametr, undefColor);
             }
         }
-        if (parametr == LevelSettings::colorWhite())
+        else if (parametr == LevelSettings::colorWhite())
         {
             findWhite = true;
-            if (Checker::checkDataValidation(Checker::Categories::color, parametr, values))
+            QString whiteColor = values[0];
+            if (Checker::checkDataValidation(Checker::Categories::color, whiteColor))
             {
-                colors[static_cast<int>(Color::white)] = QColor::fromString(values[0]);
+                colors[static_cast<int>(Color::white)] = QColor::fromString(whiteColor);
+            }
+            else
+            {
+                messageFindBadParameter(parametr, whiteColor);
             }
         }
-        if (parametr == LevelSettings::colorBlack())
+        else if (parametr == LevelSettings::colorBlack())
         {
             findBlack = true;
-            if (Checker::checkDataValidation(Checker::Categories::color, parametr, values))
+            QString blackColor = values[0];
+            if (Checker::checkDataValidation(Checker::Categories::color, blackColor))
             {
-                colors[static_cast<int>(Color::black)] = QColor::fromString(values[0]);
+                colors[static_cast<int>(Color::black)] = QColor::fromString(blackColor);
+            }
+            else
+            {
+                messageFindBadParameter(parametr, blackColor);
             }
         }
 

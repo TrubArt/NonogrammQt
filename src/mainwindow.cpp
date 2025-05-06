@@ -175,6 +175,11 @@ void MainWindow::actionCondionsLevelCreate()
     std::unique_ptr<ConditionLevelCreate> lvlCreateDlg = std::make_unique<ConditionLevelCreate>(levelsName);
     if (lvlCreateDlg->exec())
     {
+        std::shared_ptr<LevelData> newLevel = std::make_shared<LevelData>();
+        newLevel->isLoadedDataInformation = true;
+        newLevel->data = lvlCreateDlg->getData();
+        newLevel->properties = lvlCreateDlg->getProperties();
 
+        m_levelsStorage.addLevel(lvlCreateDlg->getLevelName(), newLevel);
     }
 }

@@ -94,3 +94,8 @@ void ScrollAreaConditionContent::updateContent(int newSize)
 
     m_viewSize = newSize;
 }
+
+const QVector<ConditionElement*>& ScrollAreaConditionContent::getConditions() const
+{
+    return m_conditions;
+}
