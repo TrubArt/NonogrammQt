@@ -271,3 +271,9 @@ void LevelLoader::saveProperty(const QString& category, const QString& value)
     QTextStream out(&m_file);
     out << category << FileParser::m_separatorForSettings << "\t\t" << value << "\n";
 }
+
+void LevelLoader::saveData(const QString& lineData)
+{
+    QTextStream out(&m_file);
+    out << lineData << "\n";
+}

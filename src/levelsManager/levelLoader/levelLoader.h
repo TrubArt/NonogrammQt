@@ -23,6 +23,7 @@ public:
     QVarLengthArray<std::optional<QColor>, 3> getNonogramColors();
 
     void saveProperty(const QString& category, const QString& value);
+    void saveData(const QString& lineData);
 
 private:
     void messageFindBadParameter(const QString& specialization, const QString& value);

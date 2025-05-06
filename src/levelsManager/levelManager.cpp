@@ -100,8 +100,8 @@ void LevelManager::saveAll()
 {
     if (!m_levelDir.exists())
     {
-        // не обрабатываем(пока) создание новых уровней или переименование старых
-        Q_ASSERT_X(false, LevelManager::saveAll(), "created new level???");
+        qDebug() << "Create new level: " << m_levelDir.dirName();
+        m_levelDir.mkpath(".");
     }
     saveProperties();
     saveData();
@@ -110,6 +110,7 @@ void LevelManager::saveAll()
 void LevelManager::saveProperties()
 {
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + infoDataFile;
+    QFile::remove(fullpath);
     fileLoader->setFile(fullpath.toStdString());
 
     LevelLoader* loader = static_cast<LevelLoader*>(fileLoader.get());
@@ -127,5 +128,50 @@ void LevelManager::saveData()
         return;
     }
 
-    // не обрабатываем(пока), потому что не умеем изменять данные уровней
+    auto createConditionLine = [](const std::vector<size_t>& lineData, int countForReserve) -> QString
+    {
+        QString data;
+        data.reserve(countForReserve);
+        for (int i = 0; i < lineData.size(); ++i)
+        {
+            if (i != 0)
+            {
+                data += " ";
+            }
+            data += QString::number(lineData[i]);
+        }
+        return data;
+    };
+
+    LevelLoader* loader = static_cast<LevelLoader*>(fileLoader.get());
+    QString fullpath = m_levelDir.absolutePath() + QDir::separator() + conditionDataFile;
+    QFile::remove(fullpath);
+    fileLoader->setFile(fullpath.toStdString());
+
+    for (const std::vector<size_t>& lineData : m_loadedData->data.lineConditions)
+    {
+        int reserve = lineData.size() * 3; // *3 из расчёта что одно число оптимально двузначное + пробелы между каждым числом
+        loader->saveData(createConditionLine(lineData, reserve));
+    }
+    loader->saveData("");
+    for (const std::vector<size_t>& lineData : m_loadedData->data.columnConditions)
+    {
+        int reserve = lineData.size() * 3; // *3 из расчёта что одно число оптимально двузначное + пробелы между каждым числом
+        loader->saveData(createConditionLine(lineData, reserve));
+    }
+
+
+    fullpath = m_levelDir.absolutePath() + QDir::separator() + additionDataFile;
+    QFile::remove(fullpath);
+    fileLoader->setFile(fullpath.toStdString());
+
+    for (const std::array<size_t, 3>& lineData : m_loadedData->data.additionConditions)
+    {
+        QString line;
+        line.reserve(9); // 9 из расчёта что размер нонограммы 3-х значеное число оптимально + 2 пробела + 1 на цвет
+        line += QString::number(lineData[0]) + " ";
+        line += QString::number(lineData[1]) + " ";
+        line += QString::number(lineData[2]);
+        loader->saveData(line);
+    }
 }

@@ -149,8 +149,6 @@ void MainWindow::actionChangeLevel()
         const QMap<QString, PropertiesInformation>& newProperties = lvlChangeDlg->getProperties();
         for (auto it = newProperties.begin(); it != newProperties.end(); ++it)
         {
-            // проверка на случай изменения имени уровня внутри диалога. В данный момент такое действие не обрабатывается
-            Q_ASSERT_X(m_levelsStorage.getLevelsList().contains(it.key()), "MainWindow::actionChangeLevel", "name didnt Exist");
             m_levelsStorage.setProperties(it.key(), it.value());
         }
 
