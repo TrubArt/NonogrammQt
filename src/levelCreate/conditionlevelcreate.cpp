@@ -230,9 +230,9 @@ DataInformation ConditionLevelCreate::getData() const
     const QVector<ConditionElement*>& columns = m_columnsContents->getConditions();
     const QVector<ConditionElement*>& additions = m_additionContents->getConditions();
 
-    data_t.lineConditions = getConditions(lines);
-    data_t.columnConditions = getConditions(columns);
-    data_t.additionConditions = getAdditions(additions);
+    data_t.lineConditions = getConditions(lines, m_linesContents->getViewSize());
+    data_t.columnConditions = getConditions(columns, m_columnsContents->getViewSize());
+    data_t.additionConditions = getAdditions(additions, m_additionContents->getViewSize());
 
     return data_t;
 }
@@ -245,13 +245,14 @@ PropertiesInformation ConditionLevelCreate::getProperties() const
     return properties_t;
 }
 
-std::vector<std::vector<size_t>> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data) const
+std::vector<std::vector<size_t>> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize) const
 {
     std::vector<std::vector<size_t>> conditionsList;
-    conditionsList.reserve(data.size());
+    conditionsList.reserve(viewSize);
 
-    for (const ConditionElement* cond : data)
+    for (int i = 0; i < viewSize; ++i)
     {
+        const ConditionElement* cond = data[i];
         std::vector<size_t> condition;
 
         QStringList values;
@@ -270,13 +271,15 @@ std::vector<std::vector<size_t>> ConditionLevelCreate::getConditions(const QVect
     return conditionsList;
 }
 
-std::vector<std::array<size_t, 3>> ConditionLevelCreate::getAdditions(const QVector<ConditionElement*>& data) const
+std::vector<std::array<size_t, 3>> ConditionLevelCreate::getAdditions(const QVector<ConditionElement*>& data, int viewSize) const
 {
     std::vector<std::array<size_t, 3>> condition;
-    condition.reserve(data.size());
+    condition.reserve(viewSize);
 
-    for (const ConditionElement* cond : data)
+    for (int i = 0; i < viewSize; ++i)
     {
+        const ConditionElement* cond = data[i];
+
         QStringList values;
         QString line = cond->getData();
         FileParser::getLevelData(line, values);

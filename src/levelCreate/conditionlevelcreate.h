@@ -45,8 +45,8 @@ private:
     bool checkDataValidation(int pageIndex);
     void setSectionsFont(int newPageIndex, ButtonClicked button);
 
-    std::vector<std::vector<size_t>> getConditions(const QVector<ConditionElement*>& data) const;
-    std::vector<std::array<size_t, 3>> getAdditions(const QVector<ConditionElement*>& data) const;
+    std::vector<std::vector<size_t>> getConditions(const QVector<ConditionElement*>& data, int viewSize) const;
+    std::vector<std::array<size_t, 3>> getAdditions(const QVector<ConditionElement*>& data, int viewSize) const;
 
     Ui::ConditionLevelCreate* ui;
     QStringList m_levelsName;
