@@ -1,11 +1,9 @@
-#include <memory>
 #include <QMessageBox>
 #include <QErrorMessage>
 
 #include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
 #include "levelChangeDialog/levelchangedialog.h"
-#include "levelCreate/conditionlevelcreate.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -18,6 +16,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     viewInitialization();
     m_levelsStorage.loadLevels();
+
+    m_tableLevels = new TableLevels(m_levelsStorage, this);
+    ui->leftTab->addTab(m_tableLevels, tr("Levels"));
 
     connectInitialization();
 }
@@ -36,7 +37,12 @@ void MainWindow::connectInitialization()
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::actionStartSolution);
     connect(ui->actionChangeLevel, &QAction::triggered, this, &MainWindow::actionChangeLevel);
     connect(ui->actionResetPicture, &QAction::triggered, this, &MainWindow::actiontResetTableCells);
-    connect(ui->actionWriteConditions, &QAction::triggered, this, &MainWindow::actionCondionsLevelCreate);
+    connect(ui->actionWriteConditions, &QAction::triggered, m_tableLevels, &TableLevels::condionsLevelCreate);
+
+    // leftTab
+    connect(ui->leftTab, &QTabWidget::tabBarClicked, this, &MainWindow::leftTabClicked);
+    connect(m_tableLevels, &TableLevels::newLevelChoice, this, &MainWindow::newLevelChoice);
+    connect(m_tableLevels, &TableLevels::levelDeleteClicked, this, &MainWindow::levelDelete);
 }
 
 MainWindow::~MainWindow()
@@ -167,17 +173,24 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-void MainWindow::actionCondionsLevelCreate()
+void MainWindow::leftTabClicked(int index)
 {
-    QStringList levelsName = m_levelsStorage.getLevelsList();
-    std::unique_ptr<ConditionLevelCreate> lvlCreateDlg = std::make_unique<ConditionLevelCreate>(levelsName);
-    if (lvlCreateDlg->exec())
+    int curTabIndex = ui->leftTab->currentIndex();
+    if (index == curTabIndex)
     {
-        std::shared_ptr<LevelData> newLevel = std::make_shared<LevelData>();
-        newLevel->isLoadedDataInformation = true;
-        newLevel->data = lvlCreateDlg->getData();
-        newLevel->properties = lvlCreateDlg->getProperties();
-
-        m_levelsStorage.addLevel(lvlCreateDlg->getLevelName(), newLevel);
+        QWidget* curWidget = ui->leftTab->currentWidget();
+        if (curWidget->isHidden())
+        {
+            curWidget->show();
+        }
+        else
+        {
+            curWidget->hide();
+        }
     }
+}
+
+void MainWindow::newLevelChoice(QTableWidgetItem *item)
+{
+    changeNonogram(item->text());
 }

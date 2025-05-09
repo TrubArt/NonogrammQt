@@ -11,6 +11,7 @@
 #include "queueCells/cellQueue.h"
 #include "solution.h"
 #include "levelsManager/levelsStorage.h"
+#include "leftTab/tablelevels.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,10 +30,13 @@ public slots:
     void actionStartSolution();
     void actionChangeLevel();
     void actionSaveLevels();
-    void actionCondionsLevelCreate();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+
+private slots:
+    void leftTabClicked(int index);
+    void newLevelChoice(QTableWidgetItem *item);
 
 private:
     void viewInitialization();
@@ -40,6 +44,7 @@ private:
     void drawCellsFromQueue(const std::vector<PaintCellInfo>& cells);
 
     Ui::mainwindowClass* ui;
+    TableLevels* m_tableLevels;
 
     QGraphicsView m_view;
     Table m_picture;

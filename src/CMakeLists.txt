@@ -53,6 +53,10 @@ add_executable(${PROJECT_NAME}
     levelsManager/levelLoader/checker.cpp
     utils.h
     utils.cpp
+
+    leftTab/tablelevels.h
+    leftTab/tablelevels.cpp
+    leftTab/tablelevels.ui
 )
 
 add_subdirectory(core)
