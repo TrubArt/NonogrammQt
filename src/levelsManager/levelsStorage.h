@@ -20,7 +20,7 @@ public:
     void saveSettings();
 
     void addLevel(const QString& levelName, std::shared_ptr<LevelData> level);
-    void deleteLevel(const QString& levelName);  // undef
+    void deleteLevel(const QString& levelName);
 
     QList<levelname_al> getLevelsList() const;
     dataType& getData();

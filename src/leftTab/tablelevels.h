@@ -24,6 +24,10 @@ public:
 
 public slots:
     void condionsLevelCreate();
+    void deleteLevel();
+
+private slots:
+    void selectionChanged();
 
 private:
     enum class ColumnsName { name, size };

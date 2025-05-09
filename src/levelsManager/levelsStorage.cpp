@@ -1,4 +1,5 @@
 #include "levelsStorage.h"
+#include "../utils.h"
 
 void LevelsStorage::loadLevels()
 {
@@ -81,4 +82,15 @@ void LevelsStorage::addLevel(const QString& levelName, std::shared_ptr<LevelData
 {
     Q_ASSERT_X(!getLevelsList().contains(levelName), "LevelsStorage::addLevel", "level exist!");
     m_data[levelName] = level;
+}
+
+void LevelsStorage::deleteLevel(const QString& levelName)
+{
+    bool removed = m_data.remove(levelName);
+    if (!removed)
+    {
+        Q_ASSERT_X(false, "LevelsStorage::deleteLevel", "level not exist!");
+    }
+
+    utils::deleteFullDirectory(m_levelsDir.getAbsPath(levelName));
 }

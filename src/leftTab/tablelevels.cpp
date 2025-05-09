@@ -53,9 +53,10 @@ void TableLevels::addLevelView(int insertIndex, const QString& name, int rowCoun
 
 void TableLevels::connectInitialization()
 {
+    connect(ui->levelsTable, &QTableWidget::itemSelectionChanged, this, &TableLevels::selectionChanged);
     connect(ui->levelsTable, &QTableWidget::itemDoubleClicked, this, &TableLevels::newLevelChoice);
     connect(ui->pbAddLevel, &QPushButton::clicked, this, &TableLevels::condionsLevelCreate);
-    connect(ui->pbDeleteLevel, &QPushButton::clicked, this, &MainWindow::levelDelete);
+    connect(ui->pbDeleteLevel, &QPushButton::clicked, this, &TableLevels::deleteLevel);
 }
 
 void TableLevels::condionsLevelCreate()
@@ -73,4 +74,27 @@ void TableLevels::condionsLevelCreate()
         m_levels.addLevel(newLevelName, newLevel);
         addLevelView(ui->levelsTable->rowCount(), newLevelName, newLevel->properties.rowCount, newLevel->properties.columnCount);
     }
+}
+
+void TableLevels::deleteLevel()
+{
+    QList<QTableWidgetItem*> selection = ui->levelsTable->selectedItems();
+    QString levelName = selection[static_cast<int>(ColumnsName::name)]->text();
+
+    m_levels.deleteLevel(levelName);
+
+    int removeRowIndex = ui->levelsTable->currentRow();
+    ui->levelsTable->removeRow(removeRowIndex);
+}
+
+void TableLevels::selectionChanged()
+{
+    bool enabled = false;
+    if (ui->levelsTable->selectedItems().size() != 0)
+    {
+        enabled = true;
+    }
+
+    ui->pbDeleteLevel->setEnabled(enabled);
+    ui->pbEditLevel->setEnabled(enabled);
 }

@@ -38,6 +38,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pbEditLevel">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Edit</string>
        </property>
@@ -45,6 +48,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pbDeleteLevel">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Delete</string>
        </property>

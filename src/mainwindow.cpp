@@ -42,7 +42,6 @@ void MainWindow::connectInitialization()
     // leftTab
     connect(ui->leftTab, &QTabWidget::tabBarClicked, this, &MainWindow::leftTabClicked);
     connect(m_tableLevels, &TableLevels::newLevelChoice, this, &MainWindow::newLevelChoice);
-    connect(m_tableLevels, &TableLevels::levelDeleteClicked, this, &MainWindow::levelDelete);
 }
 
 MainWindow::~MainWindow()

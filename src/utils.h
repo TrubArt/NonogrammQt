@@ -7,6 +7,7 @@ namespace utils
 {
 
 void sendMessage(const QString& winTitle, const QString& text);
+bool deleteFullDirectory(const QString& path);
 
 }
 
