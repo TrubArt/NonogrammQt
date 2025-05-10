@@ -1,6 +1,7 @@
 #include "tablelevels.h"
 #include "ui_tablelevels.h"
 #include "../levelCreate/datalevelchange.h"
+#include <QMessageBox>
 
 TableLevels::TableLevels(LevelsStorage& levelsStorage, QWidget* parent)
     : QWidget(parent)
@@ -92,6 +93,17 @@ void TableLevels::condionsLevelCreate()
 void TableLevels::deleteLevel()
 {
     QString levelName = curLevelName();
+
+    QMessageBox msg;
+    msg.setWindowTitle(tr("Delete Level"));
+    msg.setText("Do you really want to remove this level - " + levelName + "?");
+
+    msg.setStandardButtons(QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
+    int ret = msg.exec();
+    if (ret == QMessageBox::StandardButton::No)
+    {
+        return;
+    }
 
     m_levels.deleteLevel(levelName);
 
