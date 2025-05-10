@@ -42,6 +42,7 @@ void DataLevelChange::fillAdditions(const std::shared_ptr<LevelData> levelData)
     }
 
     m_additionContents->updateContent(countAddConditions);
+    ui->pbDelete->setEnabled(true);
     const QVector<ConditionElement*>& condUI = m_additionContents->getConditions();
 
     DataInformation::additionCondLine oneCond;

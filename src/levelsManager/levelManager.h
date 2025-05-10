@@ -12,6 +12,7 @@ public:
     LevelManager();
 
     void setDirectoryAndData(const QDir& dir, std::shared_ptr<LevelData> loadedData);
+    const QDir& getCurrentDirectory() const;
     void returnToDefault();
 
     std::pair<size_t, size_t> getNonogramSize() override;

@@ -11,6 +11,11 @@ void LevelManager::setDirectoryAndData(const QDir& dir, std::shared_ptr<LevelDat
     m_loadedData = loadedData;
 }
 
+const QDir& LevelManager::getCurrentDirectory() const
+{
+    return m_levelDir;
+}
+
 void LevelManager::returnToDefault()
 {
     setDirectoryAndData(QDir(), nullptr);

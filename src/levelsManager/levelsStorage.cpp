@@ -113,6 +113,11 @@ void LevelsStorage::deleteLevel(const QString& levelName)
         Q_ASSERT_X(false, "LevelsStorage::deleteLevel", "level not exist!");
     }
 
+    if (m_manager.getCurrentDirectory().dirName() == levelName)
+    {
+        m_manager.returnToDefault();
+    }
+
     utils::deleteFullDirectory(m_levelsDir.getAbsPath(levelName));
 }
 
