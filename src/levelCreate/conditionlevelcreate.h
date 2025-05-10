@@ -35,6 +35,7 @@ public slots:
 
 protected:
     bool firstPageDataCheck();
+    virtual bool nameCheck();
     bool secAndThirdPageDataCheck();
     bool fourthPageDataCheck();
 
@@ -53,13 +54,15 @@ protected:
     ScrollAreaConditionContent* m_columnsContents;
     ScrollAreaConditionContent* m_additionContents;
 
+    const QString m_errorBack = "QLabel{background-color: rgba(255, 85, 127, 255);}";
+    const QString m_normalBack = "QLabel{background-color: rgba(0, 0, 0, 0);}";
+    const QString m_errorWindowName = tr("Data error");
+    const QString m_nameExistError = tr("Name already exist!");
+    const QString m_nameIsEmptyError = tr("Level name is empty!");
+
 private:
     ScrollAreaConditionContent* scrollAreaInit(QScrollArea* scrollArea);
     void connectInitialization();
-
-    const QString m_errorBack = "QLabel{background-color: rgba(255, 85, 127, 255);}";
-    const QString m_normalBack = "QLabel{background-color: rgba(0, 0, 0, 0);}";
-    const QString m_windowName = tr("Data error");
 };
 
 #endif // CONDITIONLEVELCREATE_H

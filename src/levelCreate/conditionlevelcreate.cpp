@@ -156,27 +156,17 @@ void ConditionLevelCreate::setSectionsFont(int newPageIndex, ButtonClicked butto
 
 bool ConditionLevelCreate::firstPageDataCheck()
 {
-    QString newName = ui->levelName->text();
-    if (newName.isEmpty() || m_levelsName.contains(newName))
+    bool good = nameCheck();
+    if (!good)
     {
-        ui->labelLevelName->setStyleSheet(m_errorBack);
-        if (newName.isEmpty())
-        {
-            utils::sendMessage(m_windowName, tr("Level name is empty!"));
-        }
-        else
-        {
-            utils::sendMessage(m_windowName, tr("Name already exist!"));
-        }
         return false;
     }
-    ui->labelLevelName->setStyleSheet(m_normalBack);
 
     const QString errorSizeMessage = tr("Invalid sizes!");
     if (ui->rows->value() <= 0)
     {
         ui->labelRowCount->setStyleSheet(m_errorBack);
-        utils::sendMessage(m_windowName, errorSizeMessage);
+        utils::sendMessage(m_errorWindowName, errorSizeMessage);
         return false;
     }
     ui->labelRowCount->setStyleSheet(m_normalBack);
@@ -184,11 +174,31 @@ bool ConditionLevelCreate::firstPageDataCheck()
     if (ui->columns->value() <= 0)
     {
         ui->labelColumCount->setStyleSheet(m_errorBack);
-        utils::sendMessage(m_windowName, errorSizeMessage);
+        utils::sendMessage(m_errorWindowName, errorSizeMessage);
         return false;
     }
     ui->labelColumCount->setStyleSheet(m_normalBack);
 
+    return true;
+}
+
+bool ConditionLevelCreate::nameCheck()
+{
+    QString newName = ui->levelName->text();
+    if (newName.isEmpty() || m_levelsName.contains(newName))
+    {
+        ui->labelLevelName->setStyleSheet(m_errorBack);
+        if (newName.isEmpty())
+        {
+            utils::sendMessage(m_errorWindowName, m_nameIsEmptyError);
+        }
+        else
+        {
+            utils::sendMessage(m_errorWindowName, m_nameExistError);
+        }
+        return false;
+    }
+    ui->labelLevelName->setStyleSheet(m_normalBack);
     return true;
 }
 

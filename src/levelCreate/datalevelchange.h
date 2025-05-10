@@ -9,6 +9,9 @@ public:
     DataLevelChange(const QString& changedLevelName, const std::shared_ptr<LevelData> levelData,
                     const QStringList& levelsName, QWidget* parent = nullptr);
 
+protected:
+    bool nameCheck() override;
+
 private:
     void fillFirstPage(const QString& levelName, const std::shared_ptr<LevelData> levelData);
     void fillConditions(const std::shared_ptr<LevelData> levelData);
@@ -17,6 +20,8 @@ private:
     void addValueToStr(QString& str, size_t value) const;
     QStringList convertConditionToStr(std::vector<DataInformation::conditionLine> cond) const;
     void writeConditionInfoToUI(const QStringList& condString, const QVector<ConditionElement*>& condUI);
+
+    QString m_originalName;
 };
 
 #endif // DATALEVELCHANGE_H

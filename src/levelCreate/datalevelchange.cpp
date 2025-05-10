@@ -1,11 +1,13 @@
 #include "datalevelchange.h"
 #include "ui_conditionlevelcreate.h"
+#include "../utils.h"
 
 DataLevelChange::DataLevelChange(const QString& changedLevelName,
                                  const std::shared_ptr<LevelData> levelData,
                                  const QStringList& levelsName,
                                  QWidget* parent)
     : ConditionLevelCreate(levelsName, parent)
+    , m_originalName(changedLevelName)
 {
     setWindowTitle(tr("Level Change"));
 
@@ -13,6 +15,26 @@ DataLevelChange::DataLevelChange(const QString& changedLevelName,
     remakeScrollAreaSource();
     fillConditions(levelData);
     fillAdditions(levelData);
+}
+
+bool DataLevelChange::nameCheck()
+{
+    QString newName = ui->levelName->text();
+    if (newName.isEmpty())
+    {
+        ui->labelLevelName->setStyleSheet(m_errorBack);
+        utils::sendMessage(m_errorWindowName, m_nameIsEmptyError);
+        return false;
+    }
+    if (m_levelsName.contains(newName) && newName != m_originalName)
+    {
+        ui->labelLevelName->setStyleSheet(m_errorBack);
+        utils::sendMessage(m_errorWindowName, m_nameExistError);
+        return false;
+    }
+
+    ui->labelLevelName->setStyleSheet(m_normalBack);
+    return true;
 }
 
 void DataLevelChange::fillFirstPage(const QString& levelName, const std::shared_ptr<LevelData> levelData)
