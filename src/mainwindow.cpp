@@ -95,7 +95,7 @@ void MainWindow::actiontResetTableCells()
     }
 
     CellQueue queue;
-    for (const std::array<size_t, 3>& additionInfo : data->data.additionConditions)
+    for (const DataInformation::additionCondLine& additionInfo : data->data.additionConditions)
     {
         queue.customPush(PaintCellInfo(additionInfo[0], additionInfo[1], static_cast<CellType>(additionInfo[2])));
     }

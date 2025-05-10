@@ -71,36 +71,17 @@ void DataLevelChange::fillAdditions(const std::shared_ptr<LevelData> levelData)
     for (int indexCond = 0; indexCond < countAddConditions; ++indexCond)
     {
         oneCond = addConditions[indexCond];
-        QString value;
-        for (size_t val : oneCond)
-        {
-            addValueToStr(value, val);
-        }
-
+        QString value = LevelData::createAdditionStrLine(oneCond);
         condUI[indexCond]->setText(value);
     }
 }
 
-void DataLevelChange::addValueToStr(QString& str, size_t value) const
-{
-    if (!str.isEmpty())
-    {
-        str += " ";
-    }
-
-    str += QString::number(value);
-}
-
-QStringList DataLevelChange::convertConditionToStr(std::vector<DataInformation::conditionLine> cond) const
+QStringList DataLevelChange::convertConditionToStr(const std::vector<DataInformation::conditionLine>& cond) const
 {
     QStringList conditions;
     for (const DataInformation::conditionLine& oneCond : cond)
     {
-        QString value;
-        for (size_t val : oneCond)
-        {
-            addValueToStr(value, val);
-        }
+        QString value = LevelData::createConditionStrLine(oneCond);
         conditions.push_back(value);
     }
     return conditions;

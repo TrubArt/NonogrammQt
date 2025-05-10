@@ -29,6 +29,9 @@ struct LevelData
     bool isLoadedDataInformation = false;
     DataInformation data;
     PropertiesInformation properties;
+
+    static QString createConditionStrLine(const DataInformation::conditionLine& lineData);
+    static QString createAdditionStrLine(const DataInformation::additionCondLine& lineData);
 };
 
 #endif // LEVELDATA_H

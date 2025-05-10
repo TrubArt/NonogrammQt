@@ -61,7 +61,7 @@ ColorStore LevelManager::getNonogramColors()
     return colors;
 }
 
-std::vector<std::array<size_t, 3>> LevelManager::getAdditionalCondition()
+std::vector<DataInformation::additionCondLine> LevelManager::getAdditionalCondition()
 {
     if (m_loadedData->isLoadedDataInformation)
     {
@@ -70,13 +70,13 @@ std::vector<std::array<size_t, 3>> LevelManager::getAdditionalCondition()
 
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + additionDataFile;
     fileLoader->setFile(fullpath.toStdString());
-    std::vector<std::array<size_t, 3>> additionInfo = fileLoader->getAdditionalCondition();
+    std::vector<DataInformation::additionCondLine> additionInfo = fileLoader->getAdditionalCondition();
 
     m_loadedData->data.additionConditions = additionInfo;
     return additionInfo;
 }
 
-std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineIndex)
+DataInformation::conditionLine LevelManager::getLineSequence(bool isColumn, size_t lineIndex)
 {
     if (m_loadedData->isLoadedDataInformation)
     {
@@ -93,7 +93,7 @@ std::vector<size_t> LevelManager::getLineSequence(bool isColumn, size_t lineInde
     {
         fileLoader->setFile(fullpath);
     }
-    std::vector<size_t> condition = fileLoader->getLineSequence(isColumn, lineIndex);
+    DataInformation::conditionLine condition = fileLoader->getLineSequence(isColumn, lineIndex);
 
     if (isColumn)
     {
@@ -139,36 +139,19 @@ void LevelManager::saveData()
         return;
     }
 
-    auto createConditionLine = [](const std::vector<size_t>& lineData, int countForReserve) -> QString
-    {
-        QString data;
-        data.reserve(countForReserve);
-        for (int i = 0; i < lineData.size(); ++i)
-        {
-            if (i != 0)
-            {
-                data += " ";
-            }
-            data += QString::number(lineData[i]);
-        }
-        return data;
-    };
-
     LevelLoader* loader = static_cast<LevelLoader*>(fileLoader.get());
     QString fullpath = m_levelDir.absolutePath() + QDir::separator() + conditionDataFile;
     QFile::remove(fullpath);
     fileLoader->setFile(fullpath.toStdString());
 
-    for (const std::vector<size_t>& lineData : m_loadedData->data.lineConditions)
+    for (const DataInformation::conditionLine& lineData : m_loadedData->data.lineConditions)
     {
-        int reserve = lineData.size() * 3; // *3 из расчёта что одно число оптимально двузначное + пробелы между каждым числом
-        loader->saveData(createConditionLine(lineData, reserve));
+        loader->saveData(LevelData::createConditionStrLine(lineData));
     }
     loader->saveData("");
-    for (const std::vector<size_t>& lineData : m_loadedData->data.columnConditions)
+    for (const DataInformation::conditionLine& lineData : m_loadedData->data.columnConditions)
     {
-        int reserve = lineData.size() * 3; // *3 из расчёта что одно число оптимально двузначное + пробелы между каждым числом
-        loader->saveData(createConditionLine(lineData, reserve));
+        loader->saveData(LevelData::createConditionStrLine(lineData));
     }
 
 
@@ -176,13 +159,8 @@ void LevelManager::saveData()
     QFile::remove(fullpath);
     fileLoader->setFile(fullpath.toStdString());
 
-    for (const std::array<size_t, 3>& lineData : m_loadedData->data.additionConditions)
+    for (const DataInformation::additionCondLine& lineData : m_loadedData->data.additionConditions)
     {
-        QString line;
-        line.reserve(9); // 9 из расчёта что размер нонограммы 3-х значеное число оптимально + 2 пробела + 1 на цвет
-        line += QString::number(lineData[0]) + " ";
-        line += QString::number(lineData[1]) + " ";
-        line += QString::number(lineData[2]);
-        loader->saveData(line);
+        loader->saveData(LevelData::createAdditionStrLine(lineData));
     }
 }

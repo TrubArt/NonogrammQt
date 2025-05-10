@@ -17,8 +17,7 @@ private:
     void fillConditions(const std::shared_ptr<LevelData> levelData);
     void fillAdditions(const std::shared_ptr<LevelData> levelData);
 
-    void addValueToStr(QString& str, size_t value) const;
-    QStringList convertConditionToStr(std::vector<DataInformation::conditionLine> cond) const;
+    QStringList convertConditionToStr(const std::vector<DataInformation::conditionLine>& cond) const;
     void writeConditionInfoToUI(const QStringList& condString, const QVector<ConditionElement*>& condUI);
 
     QString m_originalName;

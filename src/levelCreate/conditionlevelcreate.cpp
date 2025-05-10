@@ -255,15 +255,15 @@ PropertiesInformation ConditionLevelCreate::getProperties() const
     return properties_t;
 }
 
-std::vector<std::vector<size_t>> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize) const
+std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize) const
 {
-    std::vector<std::vector<size_t>> conditionsList;
+    std::vector<DataInformation::conditionLine> conditionsList;
     conditionsList.reserve(viewSize);
 
     for (int i = 0; i < viewSize; ++i)
     {
         const ConditionElement* cond = data[i];
-        std::vector<size_t> condition;
+        DataInformation::conditionLine condition;
 
         QStringList values;
         QString line = cond->getData();
@@ -281,9 +281,9 @@ std::vector<std::vector<size_t>> ConditionLevelCreate::getConditions(const QVect
     return conditionsList;
 }
 
-std::vector<std::array<size_t, 3>> ConditionLevelCreate::getAdditions(const QVector<ConditionElement*>& data, int viewSize) const
+std::vector<DataInformation::additionCondLine> ConditionLevelCreate::getAdditions(const QVector<ConditionElement*>& data, int viewSize) const
 {
-    std::vector<std::array<size_t, 3>> condition;
+    std::vector<DataInformation::additionCondLine> condition;
     condition.reserve(viewSize);
 
     for (int i = 0; i < viewSize; ++i)
@@ -294,7 +294,7 @@ std::vector<std::array<size_t, 3>> ConditionLevelCreate::getAdditions(const QVec
         QString line = cond->getData();
         FileParser::getLevelData(line, values);
 
-        std::array<size_t, 3> oneAdditionalCondition;
+        DataInformation::additionCondLine oneAdditionalCondition;
         for (int i = 0; i < 3; ++i)
         {
             oneAdditionalCondition[i] = values[i].toInt();
