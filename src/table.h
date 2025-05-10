@@ -13,6 +13,7 @@ public:
 
     const QGraphicsScene* get() const;
     QGraphicsScene* get();
+    void clear();
 
     void repaintTable(int heightCountCell, int widthCountCell);
     int getHeight() const;

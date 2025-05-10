@@ -42,6 +42,7 @@ void MainWindow::connectInitialization()
     // leftTab
     connect(ui->leftTab, &QTabWidget::tabBarClicked, this, &MainWindow::leftTabClicked);
     connect(m_tableLevels, &TableLevels::newLevelChoice, this, &MainWindow::newLevelChoice);
+    connect(m_tableLevels, &TableLevels::levelDelete, this, &MainWindow::deleteLevelHandler);
 }
 
 MainWindow::~MainWindow()
@@ -68,15 +69,15 @@ void MainWindow::changeNonogram(const QString& lvlName)
     m_currentLevelName = lvlName;
     m_picture.setColors(data->properties.colors);
 
-    mp_currSolution = Solution(m_levelsStorage.getManager(lvlName));
+    m_currSolution = Solution(m_levelsStorage.getManager(lvlName));
     data->isLoadedDataInformation = true;
 
     // отрисовка нового изображения
-    const Picture& pict = mp_currSolution->getPicture();
+    const Picture& pict = m_currSolution->getPicture();
     m_picture.repaintTable(pict.getRowCount(), pict.getColumnCount());
 
     // добавление на рисунок клеток из additionColor.txt
-    drawCellsFromQueue(mp_currSolution->getQueue().get());
+    drawCellsFromQueue(m_currSolution->getQueue().get());
 }
 
 void MainWindow::actiontResetTableCells()
@@ -116,7 +117,7 @@ void MainWindow::actionExit()
 
 void MainWindow::actionStartSolution()
 {
-    if (!mp_currSolution || m_currentLevelName.isEmpty())
+    if (!m_currSolution || m_currentLevelName.isEmpty())
     {
         QMessageBox msgChange;
         msgChange.setWindowTitle(tr("Hint"));
@@ -127,7 +128,7 @@ void MainWindow::actionStartSolution()
         return;
     }
 
-    bool earlyCycleOut = mp_currSolution->nonogramSolution();
+    bool earlyCycleOut = m_currSolution->nonogramSolution();
 
     // обработка причины прекращения цикла
     if (earlyCycleOut)
@@ -140,7 +141,7 @@ void MainWindow::actionStartSolution()
     }
 
     // добавление на рисунок полученного решения
-    drawCellsFromQueue(mp_currSolution->getQueue().get());
+    drawCellsFromQueue(m_currSolution->getQueue().get());
 }
 
 void MainWindow::actionChangeLevel()
@@ -192,4 +193,16 @@ void MainWindow::leftTabClicked(int index)
 void MainWindow::newLevelChoice(QTableWidgetItem *item)
 {
     changeNonogram(item->text());
+}
+
+void MainWindow::deleteLevelHandler(const QString& levelName)
+{
+    if (levelName != m_currentLevelName)
+    {
+        return;
+    }
+
+    m_currentLevelName = "";
+    m_currSolution = std::nullopt;
+    m_picture.clear();
 }

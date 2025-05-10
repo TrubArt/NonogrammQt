@@ -8,6 +8,7 @@ void LevelsStorage::loadLevels()
     {
         m_data[levelName] = std::make_shared<LevelData>(loadLevelSettingsWithoutData(levelName));
     }
+    m_manager.returnToDefault();
 }
 
 void LevelsStorage::loadDataInformationToApp(const QString& levelName)

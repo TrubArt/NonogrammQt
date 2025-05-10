@@ -11,6 +11,12 @@ void LevelManager::setDirectoryAndData(const QDir& dir, std::shared_ptr<LevelDat
     m_loadedData = loadedData;
 }
 
+void LevelManager::returnToDefault()
+{
+    setDirectoryAndData(QDir(), nullptr);
+    fileLoader->setFile("");
+}
+
 std::pair<size_t, size_t> LevelManager::getNonogramSize()
 {
     if (m_loadedData)

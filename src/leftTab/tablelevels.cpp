@@ -97,6 +97,8 @@ void TableLevels::deleteLevel()
 
     int removeRowIndex = ui->levelsTable->currentRow();
     deleteLevelView(removeRowIndex);
+
+    emit levelDelete(levelName);
 }
 
 void TableLevels::selectionChanged()

@@ -2,10 +2,10 @@
 
 ColorStore::ColorStore()
 {
-    returnToStandart();
+    returnToDefault();
 }
 
-void ColorStore::returnToStandart()
+void ColorStore::returnToDefault()
 {
     setUndefine();
     setWhite();

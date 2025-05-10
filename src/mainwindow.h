@@ -37,6 +37,7 @@ protected:
 private slots:
     void leftTabClicked(int index);
     void newLevelChoice(QTableWidgetItem *item);
+    void deleteLevelHandler(const QString& levelName);
 
 private:
     void viewInitialization();
@@ -50,7 +51,7 @@ private:
     Table m_picture;
 
     LevelsStorage m_levelsStorage;
-    std::optional<Solution> mp_currSolution;
+    std::optional<Solution> m_currSolution;
     QString m_currentLevelName;
 };
 

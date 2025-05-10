@@ -17,6 +17,7 @@ class TableLevels : public QWidget
 
 signals:
     void newLevelChoice(QTableWidgetItem *item);
+    void levelDelete(const QString& lavelName);
 
 public:
     explicit TableLevels(LevelsStorage& levelsStorage, QWidget* parent = nullptr);

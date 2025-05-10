@@ -10,7 +10,7 @@ class ColorStore
 public:
     ColorStore();
 
-    void returnToStandart();
+    void returnToDefault();
 
     void setUndefine(const QColor& u = Qt::lightGray);
     void setWhite(const QColor& w = Qt::white);

@@ -10,6 +10,11 @@ void LevelLoader::setFile(const std::string& fileName)
 {
     m_file.close();
 
+    if (fileName == "") // заглушка для возврата в состояние по умолчанию
+    {
+        return;
+    }
+
     m_file.setFileName(QString::fromStdString(fileName));
     if (!m_file.open(QIODevice::ReadWrite))
     {

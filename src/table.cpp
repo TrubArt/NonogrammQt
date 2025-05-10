@@ -17,6 +17,14 @@ QGraphicsScene* Table::get()
     return &m_scene;
 }
 
+void Table::clear()
+{
+    m_scene.clear();
+    m_height = 0;
+    m_width = 0;
+    m_colors.returnToDefault();
+}
+
 void Table::repaintTable(int heightCountCell, int widthCountCell)
 {
     removeTable();
