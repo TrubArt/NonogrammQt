@@ -45,7 +45,7 @@ private:
     void drawCellsFromQueue(const std::vector<PaintCellInfo>& cells);
 
     Ui::mainwindowClass* ui;
-    TableLevels* m_tableLevels;
+    TableLevels* m_tableLevels_ui;
 
     QGraphicsView m_view;
     Table m_picture;

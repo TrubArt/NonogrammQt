@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget* parent)
     viewInitialization();
     m_levelsStorage.loadLevels();
 
-    m_tableLevels = new TableLevels(m_levelsStorage, this);
-    ui->leftTab->addTab(m_tableLevels, tr("Levels"));
+    m_tableLevels_ui = new TableLevels(m_levelsStorage, this);
+    ui->leftTab->addTab(m_tableLevels_ui, tr("Levels"));
 
     connectInitialization();
 }
@@ -37,12 +37,12 @@ void MainWindow::connectInitialization()
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::actionStartSolution);
     connect(ui->actionChangeLevel, &QAction::triggered, this, &MainWindow::actionChangeLevel);
     connect(ui->actionResetPicture, &QAction::triggered, this, &MainWindow::actiontResetTableCells);
-    connect(ui->actionWriteConditions, &QAction::triggered, m_tableLevels, &TableLevels::condionsLevelCreate);
+    connect(ui->actionWriteConditions, &QAction::triggered, m_tableLevels_ui, &TableLevels::condionsLevelCreate);
 
     // leftTab
     connect(ui->leftTab, &QTabWidget::tabBarClicked, this, &MainWindow::leftTabClicked);
-    connect(m_tableLevels, &TableLevels::newLevelChoice, this, &MainWindow::newLevelChoice);
-    connect(m_tableLevels, &TableLevels::levelDelete, this, &MainWindow::deleteLevelHandler);
+    connect(m_tableLevels_ui, &TableLevels::newLevelChoice, this, &MainWindow::newLevelChoice);
+    connect(m_tableLevels_ui, &TableLevels::levelDelete, this, &MainWindow::deleteLevelHandler);
 }
 
 MainWindow::~MainWindow()
