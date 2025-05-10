@@ -10,6 +10,26 @@ void LevelsStorage::loadLevels()
     }
 }
 
+void LevelsStorage::loadDataInformationToApp(const QString& levelName)
+{
+    std::shared_ptr<LevelData> data = getLevelData(levelName);
+    Q_ASSERT_X(data, "LevelsStorage::loadDataInformationToApp", "level not exist");
+
+    setDirectoryAndData(levelName, data);
+
+    m_manager.getAdditionalCondition();
+    for (int rowIndex = 0; rowIndex < data->properties.rowCount; ++rowIndex)
+    {
+        m_manager.getLineSequence(false, rowIndex);
+    }
+    for (int columnIndex = 0; columnIndex < data->properties.columnCount; ++columnIndex)
+    {
+        m_manager.getLineSequence(true, columnIndex);
+    }
+
+    data->isLoadedDataInformation = true;
+}
+
 QList<LevelsStorage::levelname_al> LevelsStorage::getLevelsList() const
 {
     return m_data.keys();
@@ -93,4 +113,10 @@ void LevelsStorage::deleteLevel(const QString& levelName)
     }
 
     utils::deleteFullDirectory(m_levelsDir.getAbsPath(levelName));
+}
+
+void LevelsStorage::changeLevelData(const QString& oldLevelName, const QString& newLevelName, std::shared_ptr<LevelData> level)
+{
+    deleteLevel(oldLevelName);
+    m_data[newLevelName] = level;
 }

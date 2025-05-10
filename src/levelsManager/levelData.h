@@ -8,11 +8,10 @@
 
 struct DataInformation
 {
-private:
+public:
     using conditionLine = std::vector<size_t>;
     using additionCondLine = std::array<size_t, 3>;
 
-public:
     std::vector<conditionLine> lineConditions;
     std::vector<conditionLine> columnConditions;
     std::vector<additionCondLine> additionConditions;

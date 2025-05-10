@@ -19,6 +19,12 @@ void ConditionElement::setLabelWidth(int width)
 {
     ui->labelNumber->setFixedWidth(width);
 }
+
+void ConditionElement::setText(const QString& value)
+{
+    ui->lineEditData->setText(value);
+}
+
 int ConditionElement::getNumber() const
 {
     return ui->labelNumber->text().toInt();

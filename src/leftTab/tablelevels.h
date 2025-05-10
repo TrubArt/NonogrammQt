@@ -23,8 +23,10 @@ public:
     ~TableLevels() override;
 
 public slots:
+    QString curLevelName() const;
     void condionsLevelCreate();
     void deleteLevel();
+    void changeLevel();
 
 private slots:
     void selectionChanged();
@@ -33,6 +35,7 @@ private:
     enum class ColumnsName { name, size };
 
     void addLevelView(int insertIndex, const QString& name, int rowCount, int columnCount);
+    void deleteLevelView(int index);
     void connectInitialization();
 
     Ui::TableLevels* ui;

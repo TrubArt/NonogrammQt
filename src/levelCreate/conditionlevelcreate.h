@@ -33,10 +33,7 @@ public slots:
     void addClicked();
     void deleteClicked();
 
-private:
-    ScrollAreaConditionContent* scrollAreaInit(QScrollArea* scrollArea);
-    void connectInitialization();
-
+protected:
     bool firstPageDataCheck();
     bool secAndThirdPageDataCheck();
     bool fourthPageDataCheck();
@@ -55,6 +52,10 @@ private:
     ScrollAreaConditionContent* m_linesContents;
     ScrollAreaConditionContent* m_columnsContents;
     ScrollAreaConditionContent* m_additionContents;
+
+private:
+    ScrollAreaConditionContent* scrollAreaInit(QScrollArea* scrollArea);
+    void connectInitialization();
 
     const QString m_errorBack = "QLabel{background-color: rgba(255, 85, 127, 255);}";
     const QString m_normalBack = "QLabel{background-color: rgba(0, 0, 0, 0);}";

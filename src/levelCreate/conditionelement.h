@@ -17,6 +17,7 @@ public:
     ~ConditionElement() override;
 
     void setLabelWidth(int width);
+    void setText(const QString& value);
     int getNumber() const;
     QString getData() const;
 

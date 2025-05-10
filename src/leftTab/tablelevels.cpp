@@ -1,6 +1,6 @@
 #include "tablelevels.h"
 #include "ui_tablelevels.h"
-#include "../levelCreate/conditionlevelcreate.h"
+#include "../levelCreate/datalevelchange.h"
 
 TableLevels::TableLevels(LevelsStorage& levelsStorage, QWidget* parent)
     : QWidget(parent)
@@ -51,12 +51,25 @@ void TableLevels::addLevelView(int insertIndex, const QString& name, int rowCoun
     ui->levelsTable->resizeColumnToContents(static_cast<int>(ColumnsName::size));
 }
 
+void TableLevels::deleteLevelView(int index)
+{
+    ui->levelsTable->removeRow(index);
+}
+
 void TableLevels::connectInitialization()
 {
     connect(ui->levelsTable, &QTableWidget::itemSelectionChanged, this, &TableLevels::selectionChanged);
     connect(ui->levelsTable, &QTableWidget::itemDoubleClicked, this, &TableLevels::newLevelChoice);
     connect(ui->pbAddLevel, &QPushButton::clicked, this, &TableLevels::condionsLevelCreate);
+    connect(ui->pbEditLevel, &QPushButton::clicked, this, &TableLevels::changeLevel);
     connect(ui->pbDeleteLevel, &QPushButton::clicked, this, &TableLevels::deleteLevel);
+}
+
+QString TableLevels::curLevelName() const
+{
+    QList<QTableWidgetItem*> selection = ui->levelsTable->selectedItems();
+    QString levelName = selection[static_cast<int>(ColumnsName::name)]->text();
+    return levelName;
 }
 
 void TableLevels::condionsLevelCreate()
@@ -78,13 +91,12 @@ void TableLevels::condionsLevelCreate()
 
 void TableLevels::deleteLevel()
 {
-    QList<QTableWidgetItem*> selection = ui->levelsTable->selectedItems();
-    QString levelName = selection[static_cast<int>(ColumnsName::name)]->text();
+    QString levelName = curLevelName();
 
     m_levels.deleteLevel(levelName);
 
     int removeRowIndex = ui->levelsTable->currentRow();
-    ui->levelsTable->removeRow(removeRowIndex);
+    deleteLevelView(removeRowIndex);
 }
 
 void TableLevels::selectionChanged()
@@ -97,4 +109,28 @@ void TableLevels::selectionChanged()
 
     ui->pbDeleteLevel->setEnabled(enabled);
     ui->pbEditLevel->setEnabled(enabled);
+}
+
+void TableLevels::changeLevel()
+{
+    QString oldLevelName = curLevelName();
+    m_levels.loadDataInformationToApp(oldLevelName);
+    const std::shared_ptr<LevelData> curLevelData = m_levels.getLevelData(oldLevelName);
+    Q_ASSERT_X(curLevelData, "TableLevels::changeLevel", "level not exist!");
+
+    std::unique_ptr<DataLevelChange> levelChangeDlg = std::make_unique<DataLevelChange>(oldLevelName, curLevelData, m_levels.getLevelsList(), this);
+    if (levelChangeDlg->exec())
+    {
+        std::shared_ptr<LevelData> newLevel = std::make_shared<LevelData>();
+        newLevel->isLoadedDataInformation = true;
+        newLevel->data = levelChangeDlg->getData();
+        newLevel->properties = levelChangeDlg->getProperties();
+        QString newLevelName = levelChangeDlg->getLevelName();
+
+        m_levels.changeLevelData(oldLevelName, newLevelName, newLevel);
+
+        int currentRowIndex = ui->levelsTable->currentRow();
+        deleteLevelView(currentRowIndex);
+        addLevelView(currentRowIndex, newLevelName, newLevel->properties.rowCount, newLevel->properties.columnCount);
+    }
 }
