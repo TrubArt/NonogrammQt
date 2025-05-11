@@ -224,9 +224,7 @@ bool Picture::needChanges(size_t rowNumber, size_t index, CellType cType) const
 	}
 
 	std::cerr << "Repainting of an already painted cell!!!\n";
-	std::exit(1);
-
-	return NeedToDraw::no;
+    throw std::logic_error("bad start data");
 }
 
 void Picture::paint(size_t rowNumber, size_t index, CellType cType)

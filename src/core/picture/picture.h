@@ -50,6 +50,7 @@ public:
 private:
     void destruct();
 	// определяет необходимо ли вносить измененияв изображение или нет
+    // может выкидывать исключение в случае неправильных входных данных нонограммы
 	bool needChanges(size_t rowNumber, size_t index, CellType cType) const;
 	void paint(size_t rowNumber, size_t index, CellType cType);
 };

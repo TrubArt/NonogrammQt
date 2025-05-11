@@ -23,7 +23,18 @@ Solution::Solution(ILoadManager& loader)
 	for (const auto& condition : addCond)
 	{
 		PaintCellInfo cellInfo(condition[0], condition[1], static_cast<CellType>(condition[2]));
-		if (pict.setColor(cellInfo.rowNumber, cellInfo.indexInRow, cellInfo.color))
+        bool isPaint = false;
+
+        try
+        {
+            isPaint = pict.setColor(cellInfo.rowNumber, cellInfo.indexInRow, cellInfo.color);
+        }
+        catch (const std::logic_error& err)
+        {
+            isPaint = false;
+        }
+
+        if (isPaint)
 		{
 			queue.customPush(cellInfo);
 		}
@@ -168,28 +179,35 @@ void Solution::callingMethods()
 	}
 }
 
-bool Solution::nonogramSolution()
+Solution::ReturnStatus Solution::nonogramSolution()
 {
 	size_t step = 0;
 	bool noChangesAfterCycle = false;
 
-	while (!noChangesAfterCycle && !isEndOfWork())
-	{
-		std::cout << "--------------------step" << ++step << "--------------------\n";
+    try
+    {
+        while (!noChangesAfterCycle && !isEndOfWork())
+        {
+            std::cout << "--------------------step" << ++step << "--------------------\n";
 
-		Picture pictureToCompare{ pict };
+            Picture pictureToCompare{ pict };
 
-		// работа методов
-		callingMethods();
+            // работа методов
+            callingMethods();
 
-		// если после работы методов нет изменений
-		if (pictureToCompare == pict && !isEndOfWork())
-		{
-			noChangesAfterCycle = true;
-		}
-	}
+            // если после работы методов нет изменений
+            if (pictureToCompare == pict && !isEndOfWork())
+            {
+                noChangesAfterCycle = true;
+            }
+        }
+    }
+    catch (const std::logic_error& err)
+    {
+        return ReturnStatus::IncorrectInputData;
+    }
 
-	return noChangesAfterCycle;
+    return static_cast<ReturnStatus>(noChangesAfterCycle);
 }
 
 void Solution::printToConsoleDifferences(const Solution& copy, Color color) const

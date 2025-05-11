@@ -3,7 +3,7 @@
 void UnambiguousBlack::realization(const Condition& cond, Picture& pict, CellQueue& queue, bool isColumn, size_t rowOrColIndex) const
 {
 	auto list = cond.getNumInfo();
-	for(const auto& element : list)
+    for (const auto& element : list)
 	{ 
 		for (size_t index = element.getD().second - element.getNum(); index < element.getD().first + element.getNum(); ++index)
 		{

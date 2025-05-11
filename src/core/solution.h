@@ -22,6 +22,13 @@ class Solution
 	CellQueue queue;									// очередь в которой хранятся данные о закрашенных клетках
 
 public:
+    enum class ReturnStatus
+    {
+        Ok,
+        NotFinished,
+        IncorrectInputData
+    };
+
 	// ctors, dctor, operators
 	
 	Solution() = default;
@@ -32,9 +39,6 @@ public:
     Solution(Solution&&) = default;
     Solution& operator=(Solution&&) = default;
 
-    /// <param name="fileLoader:">Загрузчик условия</param>
-    /// <param name="fileCondition:">файл с условиями строк</param>
-    /// <param name="fileAdditCondit:">файл с доп условиями цвета</param>
     Solution(ILoadManager& loader);
 	// getters & setters
 
@@ -44,7 +48,7 @@ public:
 
 	// functions
 
-	bool nonogramSolution();
+    ReturnStatus nonogramSolution();
 
 	// выводит в консоль this, подсвечивая color различия между this и copy
 	void printToConsoleDifferences(const Solution& copy, Color color) const;

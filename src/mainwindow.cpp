@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "core/filesWork/loadManagerCpp.h"
 #include "levelChangeDialog/levelchangedialog.h"
+#include "utils.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -128,16 +129,25 @@ void MainWindow::actionStartSolution()
         return;
     }
 
-    bool earlyCycleOut = m_currSolution->nonogramSolution();
+    Solution::ReturnStatus retCode = m_currSolution->nonogramSolution();
 
-    // обработка причины прекращения цикла
-    if (earlyCycleOut)
+    QString windowTitle = tr("Warning");
+    switch (retCode)
     {
-        ui->statusBar->showMessage(tr("Picture dont finish:("));
-    }
-    else
-    {
+    case Solution::ReturnStatus::Ok:
         ui->statusBar->showMessage(tr("Picture successfully finished"));
+        break;
+    case Solution::ReturnStatus::NotFinished:
+        utils::sendMessage(windowTitle, tr("App cant solve this nonogram.."));
+        ui->statusBar->showMessage(tr("Picture dont finish"));
+        break;
+    case Solution::ReturnStatus::IncorrectInputData:
+        utils::sendMessage(windowTitle, tr("Input data is incorrect! Please check, change and try again!"));
+        ui->statusBar->showMessage(tr("Failed"));
+        break;
+    default:
+        Q_ASSERT_X(false, "MainWindow::actionStartSolution", "undefined return code from solution");
+        break;
     }
 
     // добавление на рисунок полученного решения
