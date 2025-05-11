@@ -4,24 +4,17 @@ void IMethod::setColorAndAddInQueue(Picture& pict, CellQueue& queue, bool isColu
 									, size_t lineIndex, CellType cType) const
 {
 	bool isPaint = false;
-	if (!isColumn)
-	{
-		isPaint = setColorWithInformation(pict, rowOrColIndex, lineIndex, cType);
+    if (isColumn)
+    {
+        std::swap(rowOrColIndex, lineIndex);
+    }
 
-		if (isPaint)
-		{
-			addInfoInQueue(queue, rowOrColIndex, lineIndex, cType);
-		}
+    isPaint = setColorWithInformation(pict, rowOrColIndex, lineIndex, cType);
 
-		return;
-	}
-
-	isPaint = setColorWithInformation(pict, lineIndex, rowOrColIndex, cType);
-
-	if (isPaint)
-	{
-		addInfoInQueue(queue, lineIndex, rowOrColIndex, cType);
-	}
+    if (isPaint)
+    {
+        addInfoInQueue(queue, rowOrColIndex, lineIndex, cType);
+    }
 }
 
 bool IMethod::setColorWithInformation(Picture& pict, size_t rowIndex, size_t lineIndex, CellType cType) const
