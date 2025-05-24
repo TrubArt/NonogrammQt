@@ -139,7 +139,7 @@ const CellQueue& Solution::getQueue() const
 void Solution::callingMethods()
 {
 	// копия, с которой будет сравниваться *this для вывода изменений в консоль
-	Solution copy = *this;
+    // Solution copy = *this;
 
 	// цикл с прогоном всех методов
 	for (const auto& method : methods.get())
@@ -170,26 +170,23 @@ void Solution::callingMethods()
 			}
 		}
 
-		// вывод в консоль изменений после работы метода
+        // вывод в консоль изменений после работы метода
 
-		std::cout << "\nChanges after " << method->methodName() << " method work:\n\n";
-		printToConsoleDifferences(copy, Color::crimson);
+        //std::cout << "\nChanges after " << method->methodName() << " method work:\n\n";
+        //printToConsoleDifferences(copy, Color::crimson);
 
-		copy = *this;
+        // copy = *this;
 	}
 }
 
 Solution::ReturnStatus Solution::nonogramSolution()
 {
-	size_t step = 0;
 	bool noChangesAfterCycle = false;
 
     try
     {
         while (!noChangesAfterCycle && !isEndOfWork())
         {
-            std::cout << "--------------------step" << ++step << "--------------------\n";
-
             Picture pictureToCompare{ pict };
 
             // работа методов
@@ -202,7 +199,7 @@ Solution::ReturnStatus Solution::nonogramSolution()
             }
         }
     }
-    catch (const std::logic_error& err)
+    catch (const std::logic_error&)
     {
         return ReturnStatus::IncorrectInputData;
     }

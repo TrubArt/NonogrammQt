@@ -5,8 +5,6 @@
 #include "condition/condition.h"
 #include "queueCells/cellQueue.h"
 
-#include <string>
-
 // интерфес для методов
 class IMethod
 {

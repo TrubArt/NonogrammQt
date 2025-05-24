@@ -40,6 +40,7 @@ public:
     Solution& operator=(Solution&&) = default;
 
     Solution(ILoadManager& loader);
+
 	// getters & setters
 
     const Picture& getPicture() const;

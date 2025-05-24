@@ -10,14 +10,15 @@ MethodsVectorShell::MethodsVectorShell()
 
 MethodsVectorShell::~MethodsVectorShell()
 {
-	for (auto& i : list)
-	{
-		delete i;
-	}
+    clear();
 }
 
 void MethodsVectorShell::clear()
 {
+    for (auto& i : list)
+    {
+        delete i;
+    }
 	list.clear();
 }
 

@@ -21,10 +21,10 @@ signals:
 
 public:
     explicit TableLevels(LevelsStorage& levelsStorage, QWidget* parent = nullptr);
+    QString curLevelName() const;
     ~TableLevels() override;
 
 public slots:
-    QString curLevelName() const;
     void condionsLevelCreate();
     void deleteLevel();
     void changeLevel();
