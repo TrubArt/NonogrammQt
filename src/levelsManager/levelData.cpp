@@ -19,7 +19,7 @@ QString LevelData::createConditionStrLine(const DataInformation::conditionLine& 
 QString LevelData::createAdditionStrLine(const DataInformation::additionCondLine& lineData)
 {
     QString line;
-    line.reserve(9); // 9 из расчёта что размер нонограммы (трёхзначное число оптимально + 2 пробела) + 1 на цвет
+    line.reserve(7); // 7 из расчёта что размер нонограммы (двузначное число оптимально + 2 пробела) + 1 на цвет
     line += QString::number(lineData[0]) + " ";
     line += QString::number(lineData[1]) + " ";
     line += QString::number(lineData[2]);

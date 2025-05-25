@@ -14,10 +14,6 @@ set(QT_FILES
 set(SOURCE_FILES
     main.cpp
     ${QT_FILES}
-)
-
-add_executable(${PROJECT_NAME}
-    ${SOURCE_FILES}
 
     levelChangeDialog/levelchangedialog.h
     levelChangeDialog/levelchangedialog.cpp
@@ -61,6 +57,12 @@ add_executable(${PROJECT_NAME}
     leftTab/tablelevels.cpp
     leftTab/tablelevels.ui
 )
+
+if(WIN32)
+    add_executable(${PROJECT_NAME} WIN32
+        ${SOURCE_FILES}
+    )
+endif()
 
 add_subdirectory(core)
 

@@ -12,6 +12,8 @@ public:
     static void deleteBadSymbols(QString& parametr);
 
     static const QString m_separatorForSettings;
+
+private:
     static const QStringList m_ignoredValues;
 };
 

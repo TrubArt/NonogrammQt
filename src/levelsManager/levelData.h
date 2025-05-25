@@ -8,7 +8,6 @@
 
 struct DataInformation
 {
-public:
     using conditionLine = std::vector<size_t>;
     using additionCondLine = std::array<size_t, 3>;
 

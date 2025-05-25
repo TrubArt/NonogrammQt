@@ -81,7 +81,7 @@ QStringList DataLevelChange::convertConditionToStr(const std::vector<DataInforma
     QStringList conditions;
     for (const DataInformation::conditionLine& oneCond : cond)
     {
-        QString value = LevelData::createConditionStrLine(oneCond);
+        QString value = LevelData::createConditionStrLine(std::move(oneCond));
         conditions.push_back(value);
     }
     return conditions;
