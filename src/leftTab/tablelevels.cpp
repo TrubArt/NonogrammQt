@@ -96,7 +96,7 @@ void TableLevels::deleteLevel()
 
     QMessageBox msg;
     msg.setWindowTitle(tr("Delete Level"));
-    msg.setText("Do you really want to remove this level - " + levelName + "?");
+    msg.setText(tr("Do you really want to remove this level - ") + levelName + "?");
 
     msg.setStandardButtons(QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No);
     int ret = msg.exec();

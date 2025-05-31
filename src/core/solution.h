@@ -21,6 +21,9 @@ class Solution
 	static const MethodsVectorShell methods;			// набор методов для анализа
 	CellQueue queue;									// очередь в которой хранятся данные о закрашенных клетках
 
+    // enum для обращения к строкам/столбцам в conditions
+    enum LineClassifier { row, col };
+
 public:
     enum class ReturnStatus
     {
@@ -32,7 +35,6 @@ public:
 	// ctors, dctor, operators
 	
 	Solution() = default;
-    ~Solution() = default;
 
     Solution(const Solution&);
     Solution& operator=(const Solution&);

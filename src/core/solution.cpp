@@ -6,17 +6,14 @@ const MethodsVectorShell Solution::methods = MethodsVectorShell();
 
 Solution::Solution(ILoadManager& loader)
 {
-	// enum для обращения к строкам/столбцам в conditions
-	enum LineClassifier { row, col };
-
 	// получение данных о размере изображения
 	auto nonSize = loader.getNonogramSize();
 	size_t rowCount = nonSize.first;
 	size_t colCount = nonSize.second;
 
 	pict = Picture(rowCount, colCount);
-	conditions[row].resize(rowCount);
-	conditions[col].resize(colCount);
+    conditions[row].resize(rowCount);
+    conditions[col].resize(colCount);
 
 	// сначала добавление изначально заданных клеток
 	auto addCond = loader.getAdditionalCondition();
@@ -29,7 +26,7 @@ Solution::Solution(ILoadManager& loader)
         {
             isPaint = pict.setColor(cellInfo.rowNumber, cellInfo.indexInRow, cellInfo.color);
         }
-        catch (const std::logic_error& err)
+        catch (const std::logic_error&)
         {
             isPaint = false;
         }
@@ -43,17 +40,17 @@ Solution::Solution(ILoadManager& loader)
 	// потом получение данных о строках и столбцах
 	for (size_t i = 0; i < rowCount; ++i)
 	{
-		std::pair<size_t, size_t> lineDestination = std::make_pair(row, i);
+        std::pair<size_t, size_t> lineDestination = std::make_pair(row, i);
 		const Line* line = pict.getPtr(lineDestination);
 
-		conditions[row][i] = Condition(line->getSize(), line, loader.getLineSequence(row, i));
+        conditions[row][i] = Condition(line->getSize(), line, loader.getLineSequence(row, i));
 	}
 	for (size_t i = 0; i < colCount; ++i)
 	{
-		std::pair<size_t, size_t> lineDestination = std::make_pair(col, i);
+        std::pair<size_t, size_t> lineDestination = std::make_pair(col, i);
 		const Line* line = pict.getPtr(lineDestination);
 
-		conditions[col][i] = Condition(line->getSize(), line, loader.getLineSequence(col, i));
+        conditions[col][i] = Condition(line->getSize(), line, loader.getLineSequence(col, i));
 	}
 }
 
@@ -62,9 +59,6 @@ Solution::Solution(const Solution& other)
     , conditions(other.conditions)
     , queue(other.queue)
 {
-    // enum для обращения к строкам/столбцам в conditions
-    enum LineClassifier { row, col };
-
     for (size_t i = 0; i < pict.getRowCount(); ++i)
     {
         std::pair<size_t, size_t> lineDestination = std::make_pair(row, i);
@@ -88,9 +82,6 @@ Solution& Solution::operator=(const Solution& other)
         pict = other.pict;
         conditions = other.conditions;
         queue = other.queue;
-
-        // enum для обращения к строкам/столбцам в conditions
-        enum LineClassifier { row, col };
 
         for (size_t i = 0; i < pict.getRowCount(); ++i)
         {
