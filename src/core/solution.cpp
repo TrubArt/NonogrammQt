@@ -19,7 +19,7 @@ Solution::Solution(ILoadManager& loader)
 	auto addCond = loader.getAdditionalCondition();
 	for (const auto& condition : addCond)
 	{
-		PaintCellInfo cellInfo(condition[0], condition[1], static_cast<CellType>(condition[2]));
+        PaintCellInfo cellInfo(condition[0] - 1, condition[1] - 1, static_cast<CellType>(condition[2]));
         bool isPaint = false;
 
         try
