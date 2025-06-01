@@ -36,15 +36,12 @@ public slots:
 protected:
     bool firstPageDataCheck();
     virtual bool nameCheck();
-    bool secAndThirdPageDataCheck();
+    bool conditionPageDataCheck(int curPageIndex);
     bool fourthPageDataCheck();
 
     void remakeScrollAreaSource();
     bool checkDataValidation(int pageIndex);
     void setSectionsFont(int newPageIndex, ButtonClicked button);
-
-    std::vector<DataInformation::conditionLine> getConditions(const QVector<ConditionElement*>& data, int viewSize, bool isColumn) const;
-    std::vector<DataInformation::additionCondLine> getAdditions(const QVector<ConditionElement*>& data, int viewSize) const;
 
     Ui::ConditionLevelCreate* ui;
     QStringList m_levelsName;
@@ -72,6 +69,8 @@ protected:
     const QString m_nameIsEmptyError = tr("Level name is empty!");
 
 private:
+    std::vector<DataInformation::conditionLine> getConditions(const QVector<ConditionElement*>& data, int viewSize) const;
+    std::vector<DataInformation::additionCondLine> getAdditions(const QVector<ConditionElement*>& data, int viewSize) const;
     ScrollAreaConditionContent* scrollAreaInit(QScrollArea* scrollArea);
     void connectInitialization();
 };

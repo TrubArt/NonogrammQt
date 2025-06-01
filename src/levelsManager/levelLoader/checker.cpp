@@ -65,8 +65,22 @@ bool Checker::checkColor(const QString& str)
 bool Checker::checkConditionLine(const std::vector<size_t>& condition, int maxSize)
 {
     size_t sum = 0;
+    bool firstValue = true;
     for (const size_t value : condition)
     {
+        if (!firstValue)
+        {
+            sum += 1; // добавляем один пробел между числами
+        }
+        firstValue = false;
 
+        sum += value;
     }
+
+    if (sum > maxSize)
+    {
+        return false;
+    }
+
+    return true;
 }

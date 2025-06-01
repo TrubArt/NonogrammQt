@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QVarLengthArray>
+#include <memory>
 
 #include "colorstore.h"
 
@@ -29,7 +30,7 @@ struct LevelData
     DataInformation data;
     PropertiesInformation properties;
 
-    static DataInformation::conditionLine createConditionFromStr(const QString& line, bool isColumn, size_t lineIndex, bool check);
+    static DataInformation::conditionLine createConditionFromStr(const QString& line, std::shared_ptr<bool> hasCriticalError = nullptr);
 
     static QString createStrFromCondition(const DataInformation::conditionLine& lineData);
     static QString createStrFromAddition(const DataInformation::additionCondLine& lineData);

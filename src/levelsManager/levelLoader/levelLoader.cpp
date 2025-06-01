@@ -1,6 +1,5 @@
 #include "levelLoader.h"
 
-#include <memory>
 #include <QDebug>
 
 #include "../levelData.h"
@@ -155,7 +154,8 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
     std::vector<size_t> condition;
 
     QString line = firstNotEmptyLine();
-    condition = LevelData::createConditionFromStr(line, isColumn, lineIndex, true);
+    std::shared_ptr<bool> hasCriticalError = std::make_shared<bool>(false); // unused
+    condition = LevelData::createConditionFromStr(line, hasCriticalError);
     return condition;
 }
 

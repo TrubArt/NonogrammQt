@@ -2,7 +2,6 @@
 #define LEVELSSTORAGE_H
 
 #include <QMap>
-#include <memory>
 
 #include "levelsDirectory.h"
 #include "levelManager.h"

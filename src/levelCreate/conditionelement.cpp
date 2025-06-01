@@ -1,6 +1,5 @@
 #include "conditionelement.h"
 #include "ui_conditionelement.h"
-#include <QString>
 
 ConditionElement::ConditionElement(int number, QWidget* parent)
     : QWidget(parent)
@@ -23,6 +22,11 @@ void ConditionElement::setLabelWidth(int width)
 void ConditionElement::setText(const QString& value)
 {
     ui->lineEditData->setText(value);
+}
+
+void ConditionElement::setStyleSheetLineEdit(const QString& styleSheet)
+{
+    ui->lineEditData->setStyleSheet(styleSheet);
 }
 
 int ConditionElement::getNumber() const

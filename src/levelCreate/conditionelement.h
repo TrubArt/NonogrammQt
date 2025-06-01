@@ -2,6 +2,7 @@
 #define CONDITIONELEMENT_H
 
 #include <QWidget>
+#include <QString>
 
 namespace Ui
 {
@@ -18,6 +19,7 @@ public:
 
     void setLabelWidth(int width);
     void setText(const QString& value);
+    void setStyleSheetLineEdit(const QString& styleSheet);
     int getNumber() const;
     QString getData() const;
 

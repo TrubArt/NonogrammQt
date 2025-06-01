@@ -60,11 +60,6 @@ void ConditionLevelCreate::connectInitialization()
 void ConditionLevelCreate::backClicked()
 {
     int oldIndex = ui->stackedWidget->currentIndex();
-    if (!checkDataValidation(oldIndex))
-    {
-        return;
-    }
-
     int newIndex = oldIndex - 1;
 
     if (oldIndex == ui->stackedWidget->count() - 1)
@@ -137,11 +132,13 @@ bool ConditionLevelCreate::checkDataValidation(int pageIndex)
     case 0:
         return firstPageDataCheck();
     case 1:
+        return conditionPageDataCheck(1);
     case 2:
-        return secAndThirdPageDataCheck();
+        return conditionPageDataCheck(2);
     case 3:
         return fourthPageDataCheck();
     default:
+        Q_ASSERT_X(false, "ConditionLevelCreate::checkDataValidation", "undefined page number");
         return false;
     }
 }
@@ -211,8 +208,35 @@ bool ConditionLevelCreate::nameCheck()
     return true;
 }
 
-bool ConditionLevelCreate::secAndThirdPageDataCheck()
+bool ConditionLevelCreate::conditionPageDataCheck(int curPageIndex)
 {
+    int maxSize = curPageIndex == 1 ? ui->columns->value() : ui->rows->value();
+    int viewSize = curPageIndex == 1 ? m_linesContents->getViewSize() : m_columnsContents->getViewSize();
+    QVector<ConditionElement*>& conditions = curPageIndex == 1 ? m_linesContents->getConditions() : m_columnsContents->getConditions();
+
+    for (int i = 0; i < viewSize; ++i)
+    {
+        ConditionElement* cond = conditions[i];
+        QString line = cond->getData();
+
+        std::shared_ptr<bool> hasCriticalError = std::make_shared<bool>(false);
+        DataInformation::conditionLine condition = LevelData::createConditionFromStr(line, hasCriticalError);
+
+        if (*hasCriticalError == true)
+        {
+            cond->setStyleSheetLineEdit(Styles::lineEditEr());
+            return false;
+        }
+
+        if (!Checker::checkConditionLine(condition, maxSize))
+        {
+            cond->setStyleSheetLineEdit(Styles::lineEditEr());
+            return false;
+        }
+
+        cond->setStyleSheetLineEdit(Styles::lineEditNorm());
+    }
+
     return true;
 }
 
@@ -227,12 +251,24 @@ void ConditionLevelCreate::remakeScrollAreaSource()
     if (rowsCount != m_linesContents->getViewSize())
     {
         m_linesContents->updateContent(rowsCount);
+
+        QVector<ConditionElement*>& conds = m_linesContents->getConditions();
+        for (int i = 0; i < rowsCount; ++i)
+        {
+            conds[i]->setStyleSheetLineEdit(Styles::lineEditNorm());
+        }
     }
 
     int columnCount = ui->columns->value();
     if (columnCount != m_columnsContents->getViewSize())
     {
         m_columnsContents->updateContent(columnCount);
+
+        QVector<ConditionElement*>& conds = m_columnsContents->getConditions();
+        for (int i = 0; i < columnCount; ++i)
+        {
+            conds[i]->setStyleSheetLineEdit(Styles::lineEditNorm());
+        }
     }
 }
 
@@ -249,8 +285,8 @@ DataInformation ConditionLevelCreate::getData() const
     const QVector<ConditionElement*>& columns = m_columnsContents->getConditions();
     const QVector<ConditionElement*>& additions = m_additionContents->getConditions();
 
-    data_t.lineConditions = getConditions(lines, m_linesContents->getViewSize(), false);
-    data_t.columnConditions = getConditions(columns, m_columnsContents->getViewSize(), true);
+    data_t.lineConditions = getConditions(lines, m_linesContents->getViewSize());
+    data_t.columnConditions = getConditions(columns, m_columnsContents->getViewSize());
     data_t.additionConditions = getAdditions(additions, m_additionContents->getViewSize());
 
     return data_t;
@@ -264,7 +300,7 @@ PropertiesInformation ConditionLevelCreate::getProperties() const
     return properties_t;
 }
 
-std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize, bool isColumn) const
+std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize) const
 {
     std::vector<DataInformation::conditionLine> conditionsList;
     conditionsList.reserve(viewSize);
@@ -273,7 +309,7 @@ std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(
     {
         const ConditionElement* cond = data[i];
         QString line = cond->getData();
-        DataInformation::conditionLine condition = LevelData::createConditionFromStr(line, isColumn, i, false);
+        DataInformation::conditionLine condition = LevelData::createConditionFromStr(line);
         conditionsList.push_back(condition);
     }
 

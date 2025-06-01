@@ -99,3 +99,8 @@ const QVector<ConditionElement*>& ScrollAreaConditionContent::getConditions() co
 {
     return m_conditions;
 }
+
+QVector<ConditionElement*>& ScrollAreaConditionContent::getConditions()
+{
+    return m_conditions;
+}

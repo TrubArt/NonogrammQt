@@ -5,7 +5,7 @@
 
 #include <QDebug>
 
-DataInformation::conditionLine LevelData::createConditionFromStr(const QString& line, bool isColumn, size_t lineIndex, bool check)
+DataInformation::conditionLine LevelData::createConditionFromStr(const QString& line, std::shared_ptr<bool> hasCriticalError)
 {
     DataInformation::conditionLine condition;
 
@@ -16,13 +16,14 @@ DataInformation::conditionLine LevelData::createConditionFromStr(const QString& 
     condition.reserve(values.size());
     for (const QString& value : std::as_const(values))
     {
-        if (check && !Checker::checkDataValidation(Checker::Categories::levelData, value))
+        if (hasCriticalError && !Checker::checkDataValidation(Checker::Categories::levelData, value))
         {
+            *hasCriticalError = true;
             // TODO: добавить логер, который будет содержать эти записи
 
-            qCritical() << "Bad values!"
-                        << " Parameter: " << "level data value"
-                        << " Value: " << value;
+            // qCritical() << "Bad values!"
+            //             << " Parameter: " << "level data value"
+            //             << " Value: " << value;
         }
         else
         {
@@ -32,14 +33,11 @@ DataInformation::conditionLine LevelData::createConditionFromStr(const QString& 
 
     if (condition.empty())
     {
-        if (check)
-        {
-            // TODO: добавить логер, который будет содержать эти записи
+        // TODO: добавить логер, который будет содержать эти записи
 
-            qCritical() << "Not find condition to" << " "
-                        << (isColumn ? "column" : "line") << " "
-                        << "condition number: " << lineIndex;
-        }
+        // qWarning() << "Not find condition to" << " "
+        //             << (isColumn ? "column" : "line") << " "
+        //             << "condition number: " << lineIndex;
 
         condition.push_back(0);
     }
