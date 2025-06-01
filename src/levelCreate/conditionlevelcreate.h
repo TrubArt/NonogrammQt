@@ -54,8 +54,19 @@ protected:
     ScrollAreaConditionContent* m_columnsContents;
     ScrollAreaConditionContent* m_additionContents;
 
-    const QString m_errorBack = "QLabel{background-color: rgba(255, 85, 127, 255);}";
-    const QString m_normalBack = "QLabel{background-color: rgba(0, 0, 0, 0);}";
+    class Styles
+    {
+    public:
+        static QString lineEditEr() { return "QLineEdit " + errorBack; }
+        static QString lineEditNorm() { return "QLineEdit " + normalBack; }
+        static QString spinBoxEr() { return "QSpinBox " + errorBack; }
+        static QString spinBoxNorm() { return "QSpinBox " + normalBack; }
+
+    private:
+        static const QString errorBack;
+        static const QString normalBack;
+    };
+
     const QString m_errorWindowName = tr("Data error");
     const QString m_nameExistError = tr("Name already exist!");
     const QString m_nameIsEmptyError = tr("Level name is empty!");

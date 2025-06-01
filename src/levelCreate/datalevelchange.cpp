@@ -22,18 +22,18 @@ bool DataLevelChange::nameCheck()
     QString newName = ui->levelName->text();
     if (newName.isEmpty())
     {
-        ui->labelLevelName->setStyleSheet(m_errorBack);
+        ui->levelName->setStyleSheet(Styles::lineEditEr());
         utils::sendMessage(m_errorWindowName, m_nameIsEmptyError);
         return false;
     }
     if (m_levelsName.contains(newName) && newName != m_originalName)
     {
-        ui->labelLevelName->setStyleSheet(m_errorBack);
+        ui->levelName->setStyleSheet(Styles::lineEditEr());
         utils::sendMessage(m_errorWindowName, m_nameExistError);
         return false;
     }
 
-    ui->labelLevelName->setStyleSheet(m_normalBack);
+    ui->levelName->setStyleSheet(Styles::lineEditNorm());
     return true;
 }
 

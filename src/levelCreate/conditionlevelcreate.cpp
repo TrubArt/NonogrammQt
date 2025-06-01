@@ -4,6 +4,9 @@
 #include "../levelsManager/levelLoader/fileParser.h"
 #include "../levelsManager/levelLoader/checker.h"
 
+const QString ConditionLevelCreate::Styles::errorBack = "{border: 2px solid #FF0e1a;}";
+const QString ConditionLevelCreate::Styles::normalBack = "{border: 2px solid black;}";
+
 ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::ConditionLevelCreate)
@@ -163,21 +166,23 @@ bool ConditionLevelCreate::firstPageDataCheck()
     }
 
     const QString errorSizeMessage = tr("Invalid sizes!");
-    if (ui->rows->value() <= 0)
+    QString rowsCount = QString::number(ui->rows->value());
+    if (!Checker::checkSize(rowsCount))
     {
-        ui->labelRowCount->setStyleSheet(m_errorBack);
+        ui->rows->setStyleSheet(Styles::spinBoxEr());
         utils::sendMessage(m_errorWindowName, errorSizeMessage);
         return false;
     }
-    ui->labelRowCount->setStyleSheet(m_normalBack);
+    ui->rows->setStyleSheet(Styles::spinBoxNorm());
 
-    if (ui->columns->value() <= 0)
+    QString columnCount = QString::number(ui->columns->value());
+    if (!Checker::checkSize(columnCount))
     {
-        ui->labelColumCount->setStyleSheet(m_errorBack);
+        ui->columns->setStyleSheet(Styles::spinBoxEr());
         utils::sendMessage(m_errorWindowName, errorSizeMessage);
         return false;
     }
-    ui->labelColumCount->setStyleSheet(m_normalBack);
+    ui->columns->setStyleSheet(Styles::spinBoxNorm());
 
     return true;
 }
@@ -187,7 +192,7 @@ bool ConditionLevelCreate::nameCheck()
     QString newName = ui->levelName->text();
     if (newName.isEmpty() || m_levelsName.contains(newName))
     {
-        ui->labelLevelName->setStyleSheet(m_errorBack);
+        ui->levelName->setStyleSheet(Styles::lineEditEr());
         if (newName.isEmpty())
         {
             utils::sendMessage(m_errorWindowName, m_nameIsEmptyError);
@@ -198,7 +203,7 @@ bool ConditionLevelCreate::nameCheck()
         }
         return false;
     }
-    ui->labelLevelName->setStyleSheet(m_normalBack);
+    ui->levelName->setStyleSheet(Styles::lineEditNorm());
     return true;
 }
 

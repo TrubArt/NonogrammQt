@@ -26,6 +26,7 @@ public:
     void saveData(const QString& lineData);
 
 private:
+    QString firstNotEmptyLine();
     void messageFindBadParameter(const QString& specialization, const QString& value);
 
     QFile m_file;

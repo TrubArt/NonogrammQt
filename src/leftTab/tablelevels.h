@@ -27,7 +27,7 @@ public:
 public slots:
     void condionsLevelCreate();
     void deleteLevel();
-    void changeLevel();
+    void editLevel();
 
 private slots:
     void selectionChanged();

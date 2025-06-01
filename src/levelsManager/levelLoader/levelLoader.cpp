@@ -41,20 +41,23 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
     bool findRowCount = false, findColumnCount = false;
     while (!m_file.atEnd())
     {
-        QString parametr;
-        QStringList values;
-
-        QString line = m_file.readLine();
-        FileParser::getSettingsData(line, parametr, values);
-
-        if (!Checker::is1SettingsInLine(values))
+        QString line = firstNotEmptyLine();
+        if (line.isEmpty())
         {
-            qCritical() << "Not 1 settings in line: " << line;
+            break;
         }
 
+        QString parametr;
+        QStringList values;
+        FileParser::getSettingsData(line, parametr, values);
 
         if (parametr == LevelSettings::rowCount())
-        {
+        {          
+            if (!Checker::is1SettingsInLine(values))
+            {
+                qCritical() << "Not 1 settings in line: " << line;
+            }
+
             findRowCount = true;
             QString rowSize = values[0];
             if (Checker::checkDataValidation(Checker::Categories::size, rowSize))
@@ -106,11 +109,10 @@ std::vector<std::array<size_t, 3>> LevelLoader::getAdditionalCondition()
 
     while (!m_file.atEnd())
     {
-        QString line = m_file.readLine();
-        FileParser::deleteBadSymbols(line);
+        QString line = firstNotEmptyLine();
         if (line.isEmpty())
         {
-            continue;
+            break;
         }
 
         QStringList values;
@@ -146,20 +148,9 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
 {
     std::vector<size_t> condition;
 
-    QString line;
-    while (!m_file.atEnd())
-    {
-        line = m_file.readLine();
-        FileParser::deleteBadSymbols(line);
-        if (!line.isEmpty())
-        {
-            break;
-        }
-    }
-
+    QString line = firstNotEmptyLine();
     QStringList values;
     FileParser::getLevelData(line, values);
-
 
     condition.reserve(values.size());
     for (const QString& value : values)
@@ -192,10 +183,14 @@ QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
     bool findUndefine = false, findWhite = false, findBlack = false;
     while (!m_file.atEnd())
     {
+        QString line = firstNotEmptyLine();
+        if (line.isEmpty())
+        {
+            break;
+        }
+
         QString parametr;
         QStringList values;
-
-        QString line = m_file.readLine();
         FileParser::getSettingsData(line, parametr, values);
 
         if (!Checker::is1SettingsInLine(values))
@@ -281,4 +276,22 @@ void LevelLoader::saveData(const QString& lineData)
 {
     QTextStream out(&m_file);
     out << lineData << "\n";
+}
+
+QString LevelLoader::firstNotEmptyLine()
+{
+    QString line;
+    while (!m_file.atEnd())
+    {
+        line = m_file.readLine();
+        FileParser::deleteBadSymbols(line);
+        if (line.isEmpty())
+        {
+            continue;
+        }
+
+        return line;
+    }
+
+    return QString();
 }

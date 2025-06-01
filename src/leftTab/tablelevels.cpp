@@ -62,7 +62,7 @@ void TableLevels::connectInitialization()
     connect(ui->levelsTable, &QTableWidget::itemSelectionChanged, this, &TableLevels::selectionChanged);
     connect(ui->levelsTable, &QTableWidget::itemDoubleClicked, this, &TableLevels::newLevelChoice);
     connect(ui->pbAddLevel, &QPushButton::clicked, this, &TableLevels::condionsLevelCreate);
-    connect(ui->pbEditLevel, &QPushButton::clicked, this, &TableLevels::changeLevel);
+    connect(ui->pbEditLevel, &QPushButton::clicked, this, &TableLevels::editLevel);
     connect(ui->pbDeleteLevel, &QPushButton::clicked, this, &TableLevels::deleteLevel);
 }
 
@@ -125,7 +125,7 @@ void TableLevels::selectionChanged()
     ui->pbEditLevel->setEnabled(enabled);
 }
 
-void TableLevels::changeLevel()
+void TableLevels::editLevel()
 {
     QString oldLevelName = curLevelName();
     m_levels.loadDataInformationToApp(oldLevelName);
