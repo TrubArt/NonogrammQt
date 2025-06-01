@@ -26,6 +26,8 @@ public:
     static bool checkSize(const QString& value);
     static bool checkData(const QString& value);
     static bool checkColor(const QString& value);
+
+    static bool checkConditionLine(const std::vector<size_t>& condition, int maxSize);
 };
 
 #endif // CHECKER_H

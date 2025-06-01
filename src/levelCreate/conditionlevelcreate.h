@@ -43,7 +43,7 @@ protected:
     bool checkDataValidation(int pageIndex);
     void setSectionsFont(int newPageIndex, ButtonClicked button);
 
-    std::vector<DataInformation::conditionLine> getConditions(const QVector<ConditionElement*>& data, int viewSize) const;
+    std::vector<DataInformation::conditionLine> getConditions(const QVector<ConditionElement*>& data, int viewSize, bool isColumn) const;
     std::vector<DataInformation::additionCondLine> getAdditions(const QVector<ConditionElement*>& data, int viewSize) const;
 
     Ui::ConditionLevelCreate* ui;

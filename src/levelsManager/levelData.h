@@ -29,8 +29,10 @@ struct LevelData
     DataInformation data;
     PropertiesInformation properties;
 
-    static QString createConditionStrLine(const DataInformation::conditionLine& lineData);
-    static QString createAdditionStrLine(const DataInformation::additionCondLine& lineData);
+    static DataInformation::conditionLine createConditionFromStr(const QString& line, bool isColumn, size_t lineIndex, bool check);
+
+    static QString createStrFromCondition(const DataInformation::conditionLine& lineData);
+    static QString createStrFromAddition(const DataInformation::additionCondLine& lineData);
 };
 
 #endif // LEVELDATA_H

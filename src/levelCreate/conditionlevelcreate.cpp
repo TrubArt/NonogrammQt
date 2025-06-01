@@ -4,8 +4,8 @@
 #include "../levelsManager/levelLoader/fileParser.h"
 #include "../levelsManager/levelLoader/checker.h"
 
-const QString ConditionLevelCreate::Styles::errorBack = "{border: 2px solid #FF0e1a;}";
-const QString ConditionLevelCreate::Styles::normalBack = "{border: 2px solid black;}";
+const QString ConditionLevelCreate::Styles::errorBack = "{border: 1px solid #FF0e1a;}";
+const QString ConditionLevelCreate::Styles::normalBack = "{border: 1px solid black;}";
 
 ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidget* parent)
     : QDialog(parent)
@@ -16,6 +16,10 @@ ConditionLevelCreate::ConditionLevelCreate(const QStringList& levelsName, QWidge
     setWindowTitle(tr("Level Creation"));
     ui->buttonNext->setFocus();
     ui->stackedWidget->setCurrentIndex(0);
+
+    ui->levelName->setStyleSheet(Styles::lineEditNorm());
+    ui->rows->setStyleSheet(Styles::spinBoxNorm());
+    ui->columns->setStyleSheet(Styles::spinBoxNorm());
 
     m_sections.reserve(ui->sectionsLayout->rowCount());
     for (int i = 0; i < ui->sectionsLayout->rowCount(); ++i)
@@ -245,8 +249,8 @@ DataInformation ConditionLevelCreate::getData() const
     const QVector<ConditionElement*>& columns = m_columnsContents->getConditions();
     const QVector<ConditionElement*>& additions = m_additionContents->getConditions();
 
-    data_t.lineConditions = getConditions(lines, m_linesContents->getViewSize());
-    data_t.columnConditions = getConditions(columns, m_columnsContents->getViewSize());
+    data_t.lineConditions = getConditions(lines, m_linesContents->getViewSize(), false);
+    data_t.columnConditions = getConditions(columns, m_columnsContents->getViewSize(), true);
     data_t.additionConditions = getAdditions(additions, m_additionContents->getViewSize());
 
     return data_t;
@@ -260,7 +264,7 @@ PropertiesInformation ConditionLevelCreate::getProperties() const
     return properties_t;
 }
 
-std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize) const
+std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(const QVector<ConditionElement*>& data, int viewSize, bool isColumn) const
 {
     std::vector<DataInformation::conditionLine> conditionsList;
     conditionsList.reserve(viewSize);
@@ -268,18 +272,8 @@ std::vector<DataInformation::conditionLine> ConditionLevelCreate::getConditions(
     for (int i = 0; i < viewSize; ++i)
     {
         const ConditionElement* cond = data[i];
-        DataInformation::conditionLine condition;
-
-        QStringList values;
         QString line = cond->getData();
-        FileParser::getLevelData(line, values);
-
-        condition.reserve(values.size());
-        for (const QString& value : values)
-        {
-            condition.push_back(value.toInt());
-        }
-
+        DataInformation::conditionLine condition = LevelData::createConditionFromStr(line, isColumn, i, false);
         conditionsList.push_back(condition);
     }
 

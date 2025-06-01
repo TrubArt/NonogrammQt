@@ -3,6 +3,7 @@
 #include <memory>
 #include <QDebug>
 
+#include "../levelData.h"
 #include "fileParser.h"
 #include "checker.h"
 
@@ -71,6 +72,11 @@ std::pair<size_t, size_t> LevelLoader::getNonogramSize()
         }
         else if (parametr == LevelSettings::columnCount())
         {
+            if (!Checker::is1SettingsInLine(values))
+            {
+                qCritical() << "Not 1 settings in line: " << line;
+            }
+
             findColumnCount = true;
             QString columnSize = values[0];
             if (Checker::checkDataValidation(Checker::Categories::size, columnSize))
@@ -149,28 +155,7 @@ std::vector<size_t> LevelLoader::getLineSequence(bool isColumn, size_t lineIndex
     std::vector<size_t> condition;
 
     QString line = firstNotEmptyLine();
-    QStringList values;
-    FileParser::getLevelData(line, values);
-
-    condition.reserve(values.size());
-    for (const QString& value : values)
-    {
-        if (Checker::checkDataValidation(Checker::Categories::levelData, value))
-        {
-            condition.push_back(value.toInt());
-        }
-        else
-        {
-            messageFindBadParameter("level data value", value);
-        }
-    }
-
-    if (condition.empty())
-    {
-        qCritical() << "Not find condition to" << " "
-                    << (isColumn ? "column" : "line") << " "
-                    << "condition number: " << lineIndex;
-    }
+    condition = LevelData::createConditionFromStr(line, isColumn, lineIndex, true);
     return condition;
 }
 
@@ -193,14 +178,13 @@ QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
         QStringList values;
         FileParser::getSettingsData(line, parametr, values);
 
-        if (!Checker::is1SettingsInLine(values))
-        {
-            qCritical() << "Not 1 settings in line: " << line;
-        }
-
-
         if (parametr == LevelSettings::colorUndefined())
-        {
+        {          
+            if (!Checker::is1SettingsInLine(values))
+            {
+                qCritical() << "Not 1 settings in line: " << line;
+            }
+
             findUndefine = true;
             QString undefColor = values[0];
             if (Checker::checkDataValidation(Checker::Categories::color, undefColor))
@@ -214,6 +198,11 @@ QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
         }
         else if (parametr == LevelSettings::colorWhite())
         {
+            if (!Checker::is1SettingsInLine(values))
+            {
+                qCritical() << "Not 1 settings in line: " << line;
+            }
+
             findWhite = true;
             QString whiteColor = values[0];
             if (Checker::checkDataValidation(Checker::Categories::color, whiteColor))
@@ -227,6 +216,11 @@ QVarLengthArray<std::optional<QColor>, 3> LevelLoader::getNonogramColors()
         }
         else if (parametr == LevelSettings::colorBlack())
         {
+            if (!Checker::is1SettingsInLine(values))
+            {
+                qCritical() << "Not 1 settings in line: " << line;
+            }
+
             findBlack = true;
             QString blackColor = values[0];
             if (Checker::checkDataValidation(Checker::Categories::color, blackColor))

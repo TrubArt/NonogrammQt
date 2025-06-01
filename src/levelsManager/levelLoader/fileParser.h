@@ -10,6 +10,7 @@ public:
     static void getSettingsData(const QString& line, QString& category, QStringList& parameters);
     static void getLevelData(const QString& line, QStringList& parameters);
     static void deleteBadSymbols(QString& parametr);
+    static void deleteNulls(QStringList& condition);
 
     static const QString m_separatorForSettings;
 

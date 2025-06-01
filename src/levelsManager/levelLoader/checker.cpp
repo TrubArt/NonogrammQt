@@ -19,7 +19,7 @@ bool Checker::checkDataValidation(Categories category, const QString& value)
     }
     else
     {
-        Q_ASSERT_X(false, "LevelLoader::Checker::checkData" , "Unresolved category");
+        Q_ASSERT_X(false, "LevelLoader::Checker::checkDataValidation" , "Unresolved category");
     }
 
     return goodValue;
@@ -60,4 +60,13 @@ bool Checker::checkData(const QString& str)
 bool Checker::checkColor(const QString& str)
 {
     return QColor::isValidColorName(str);
+}
+
+bool Checker::checkConditionLine(const std::vector<size_t>& condition, int maxSize)
+{
+    size_t sum = 0;
+    for (const size_t value : condition)
+    {
+
+    }
 }

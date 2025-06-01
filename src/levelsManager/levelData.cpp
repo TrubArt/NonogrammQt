@@ -1,6 +1,53 @@
 #include "levelData.h"
 
-QString LevelData::createConditionStrLine(const DataInformation::conditionLine& lineData)
+#include "levelLoader/checker.h"
+#include "levelLoader/fileParser.h"
+
+#include <QDebug>
+
+DataInformation::conditionLine LevelData::createConditionFromStr(const QString& line, bool isColumn, size_t lineIndex, bool check)
+{
+    DataInformation::conditionLine condition;
+
+    QStringList values;
+    FileParser::getLevelData(line, values);
+    FileParser::deleteNulls(values);
+
+    condition.reserve(values.size());
+    for (const QString& value : std::as_const(values))
+    {
+        if (check && !Checker::checkDataValidation(Checker::Categories::levelData, value))
+        {
+            // TODO: добавить логер, который будет содержать эти записи
+
+            qCritical() << "Bad values!"
+                        << " Parameter: " << "level data value"
+                        << " Value: " << value;
+        }
+        else
+        {
+            condition.push_back(value.toInt());
+        }
+    }
+
+    if (condition.empty())
+    {
+        if (check)
+        {
+            // TODO: добавить логер, который будет содержать эти записи
+
+            qCritical() << "Not find condition to" << " "
+                        << (isColumn ? "column" : "line") << " "
+                        << "condition number: " << lineIndex;
+        }
+
+        condition.push_back(0);
+    }
+
+    return condition;
+}
+
+QString LevelData::createStrFromCondition(const DataInformation::conditionLine& lineData)
 {
     QString data;
     int size = lineData.size();
@@ -16,7 +63,7 @@ QString LevelData::createConditionStrLine(const DataInformation::conditionLine& 
     return data;
 }
 
-QString LevelData::createAdditionStrLine(const DataInformation::additionCondLine& lineData)
+QString LevelData::createStrFromAddition(const DataInformation::additionCondLine& lineData)
 {
     QString line;
     line.reserve(7); // 7 из расчёта что размер нонограммы (двузначное число оптимально + 2 пробела) + 1 на цвет

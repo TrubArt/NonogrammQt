@@ -1,6 +1,7 @@
 #include "fileParser.h"
 
 #include <QDebug>
+#include <memory>
 
 const QString FileParser::m_separatorForSettings = ":";
 const QStringList FileParser::m_ignoredValues = { "\t", "\r", "\n" };
@@ -52,5 +53,29 @@ void FileParser::deleteBadSymbols(QString& parametr)
             parametr.remove(indexValue, value.size());
             indexValue = parametr.indexOf(value);
         }
+    }
+}
+
+void FileParser::deleteNulls(QStringList& condition)
+{
+    int size = condition.size();
+    for (int i = 0; i < size;)
+    {
+        QString elem = condition[i];
+        std::unique_ptr<bool> checkToConversion = std::make_unique<bool>(true);
+        int value = elem.toInt(checkToConversion.get());
+        if (*checkToConversion == false || value != 0)
+        {
+            ++i;
+            continue;
+        }
+
+        if (size == 1)  // если ноль всего 1, не удаляем, тк условие не должно быть пустым
+        {
+            return;
+        }
+
+        condition.removeAt(i);
+        size -= 1;
     }
 }

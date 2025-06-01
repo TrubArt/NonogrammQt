@@ -146,12 +146,12 @@ void LevelManager::saveData()
 
     for (const DataInformation::conditionLine& lineData : m_loadedData->data.lineConditions)
     {
-        loader->saveData(LevelData::createConditionStrLine(lineData));
+        loader->saveData(LevelData::createStrFromCondition(lineData));
     }
     loader->saveData("");
     for (const DataInformation::conditionLine& lineData : m_loadedData->data.columnConditions)
     {
-        loader->saveData(LevelData::createConditionStrLine(lineData));
+        loader->saveData(LevelData::createStrFromCondition(lineData));
     }
 
 
@@ -161,6 +161,6 @@ void LevelManager::saveData()
 
     for (const DataInformation::additionCondLine& lineData : m_loadedData->data.additionConditions)
     {
-        loader->saveData(LevelData::createAdditionStrLine(lineData));
+        loader->saveData(LevelData::createStrFromAddition(lineData));
     }
 }
