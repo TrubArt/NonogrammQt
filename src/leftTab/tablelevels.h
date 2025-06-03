@@ -29,6 +29,9 @@ public slots:
     void deleteLevel();
     void editLevel();
 
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+
 private slots:
     void selectionChanged();
 

@@ -1,7 +1,9 @@
 #include "tablelevels.h"
 #include "ui_tablelevels.h"
 #include "../levelCreate/datalevelchange.h"
+
 #include <QMessageBox>
+#include <QKeyEvent>
 
 TableLevels::TableLevels(LevelsStorage& levelsStorage, QWidget* parent)
     : QWidget(parent)
@@ -147,4 +149,13 @@ void TableLevels::editLevel()
         deleteLevelView(currentRowIndex);
         addLevelView(currentRowIndex, newLevelName, newLevel->properties.rowCount, newLevel->properties.columnCount);
     }
+}
+
+void TableLevels::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Delete)
+    {
+        deleteLevel();
+    }
+    QWidget::keyPressEvent(event);
 }

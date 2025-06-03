@@ -1,7 +1,4 @@
 #include "mainwindow.h"
-
-#include "core/filesWork/loadManagerCpp.h"
-
 #include <QApplication>
 
 int main(int argc, char *argv[])
