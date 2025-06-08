@@ -1,7 +1,6 @@
 #ifndef SCROLLAREACONDITIONCONTENT_H
 #define SCROLLAREACONDITIONCONTENT_H
 
-#include <QWidget>
 #include <QVector>
 #include <QScrollArea>
 #include "conditionelement.h"

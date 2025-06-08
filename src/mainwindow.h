@@ -5,10 +5,8 @@
 #include <QMainWindow>
 #include <qgraphicsview.h>
 #include <optional>
-#include <QCloseEvent>
 
 #include "table.h"
-#include "queueCells/cellQueue.h"
 #include "solution.h"
 #include "levelsManager/levelsStorage.h"
 #include "leftTab/tablelevels.h"

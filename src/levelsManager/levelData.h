@@ -2,7 +2,6 @@
 #define LEVELDATA_H
 
 #include <QList>
-#include <QVarLengthArray>
 #include <memory>
 
 #include "colorstore.h"

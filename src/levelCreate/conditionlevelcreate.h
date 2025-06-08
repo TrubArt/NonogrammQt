@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QLabel>
-#include <QVector>
 
 #include "scrollareaconditioncontent.h"
 #include "../levelsManager/levelData.h"

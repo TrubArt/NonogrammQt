@@ -1,8 +1,6 @@
 #ifndef CONDITIONELEMENT_H
 #define CONDITIONELEMENT_H
 
-#include <QWidget>
-#include <QString>
 #include <QLineEdit>
 
 namespace Ui

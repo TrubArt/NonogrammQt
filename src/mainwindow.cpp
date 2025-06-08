@@ -1,8 +1,8 @@
 #include <QMessageBox>
 #include <QErrorMessage>
+#include <QCloseEvent>
 
 #include "mainwindow.h"
-#include "core/filesWork/loadManagerCpp.h"
 #include "levelChangeDialog/levelchangedialog.h"
 #include "utils.h"
 
