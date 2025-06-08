@@ -142,6 +142,12 @@ void ScrollAreaConditionContent::keyPressEvent(QKeyEvent* event)
 void ScrollAreaConditionContent::focusInHandler(int value)
 {
     m_curFocusIndex = value - 1;
+
+    QRect visibleRect = m_conditions[m_curFocusIndex]->visibleRegion().boundingRect();
+    if (visibleRect.isNull())
+    {
+        emit widgetInvisible(m_conditions[m_curFocusIndex]);
+    }
 }
 
 void ScrollAreaConditionContent::focusOutHandler()

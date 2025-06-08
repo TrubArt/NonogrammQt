@@ -20,6 +20,9 @@ public:
     const QVector<ConditionElement*>& getConditions() const;
     QVector<ConditionElement*>& getConditions();
 
+signals:
+    void widgetInvisible(QWidget*);
+
 protected:
     void keyPressEvent(QKeyEvent* event) override;
 

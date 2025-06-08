@@ -4,6 +4,8 @@
 #include "../levelsManager/levelLoader/fileParser.h"
 #include "../levelsManager/levelLoader/checker.h"
 
+#include <QScrollBar>
+
 const QString ConditionLevelCreate::Styles::errorBack = "{border: 1px solid #FF0e1a;}";
 const QString ConditionLevelCreate::Styles::normalBack = "{border: 1px solid black;}";
 
@@ -44,6 +46,13 @@ ScrollAreaConditionContent* ConditionLevelCreate::scrollAreaInit(QScrollArea* sc
     ScrollAreaConditionContent* content = new ScrollAreaConditionContent();
     scrollArea->setWidget(content);
     content->setScrollArea(scrollArea);
+
+    connect(content, &ScrollAreaConditionContent::widgetInvisible, scrollArea, [scrollArea](QWidget* childWidget)
+            {
+                int horScrollBarValue = scrollArea->horizontalScrollBar()->value();
+                scrollArea->ensureWidgetVisible(childWidget);
+                scrollArea->horizontalScrollBar()->setValue(horScrollBarValue);
+            });
 
     return content;
 }
