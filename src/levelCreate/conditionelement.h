@@ -3,11 +3,29 @@
 
 #include <QWidget>
 #include <QString>
+#include <QLineEdit>
 
 namespace Ui
 {
 class ConditionElement;
 }
+
+class CustomLineEdit : public QLineEdit
+{
+    Q_OBJECT
+public:
+    using QLineEdit::QLineEdit;
+
+signals:
+    void getFocus();
+    void lostFocus();
+
+protected:
+    void focusInEvent(QFocusEvent* event) override;
+    void focusOutEvent(QFocusEvent* event) override;
+};
+
+
 
 class ConditionElement : public QWidget
 {
@@ -22,6 +40,13 @@ public:
     void setStyleSheetLineEdit(const QString& styleSheet);
     int getNumber() const;
     QString getData() const;
+
+signals:
+    void getFocus(int value);
+    void lostFocus();
+
+private slots:
+    void getFocusHandler();
 
 private:
     Ui::ConditionElement* ui;

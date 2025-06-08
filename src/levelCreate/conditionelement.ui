@@ -31,11 +31,18 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEditData"/>
+     <widget class="CustomLineEdit" name="lineEditData"/>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>../../src/levelCreate/conditionelement.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

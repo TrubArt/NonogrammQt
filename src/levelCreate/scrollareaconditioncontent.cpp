@@ -5,6 +5,7 @@ ScrollAreaConditionContent::ScrollAreaConditionContent(QWidget* parent)
     : QWidget(parent)
     , m_parentScrollArea(nullptr)
     , m_viewSize(0)
+    , m_curFocusIndex(-1)
 {}
 
 void ScrollAreaConditionContent::setScrollArea(QScrollArea* sa)
@@ -72,6 +73,9 @@ void ScrollAreaConditionContent::updateContent(int newSize)
         for (; indexStart < newSize; ++indexStart)
         {
             ConditionElement* condition = new ConditionElement(indexStart + 1, this);
+            connect(condition, &ConditionElement::getFocus, this, &ScrollAreaConditionContent::focusInHandler);
+            connect(condition, &ConditionElement::lostFocus, this, &ScrollAreaConditionContent::focusOutHandler);
+
             m_conditions.push_back(condition);
             condition->setLabelWidth(labelWidth);
 
@@ -103,4 +107,19 @@ const QVector<ConditionElement*>& ScrollAreaConditionContent::getConditions() co
 QVector<ConditionElement*>& ScrollAreaConditionContent::getConditions()
 {
     return m_conditions;
+}
+
+void ScrollAreaConditionContent::keyPressEvent(QKeyEvent* event)
+{
+    QWidget::keyPressEvent(event);
+}
+
+void ScrollAreaConditionContent::focusInHandler(int value)
+{
+    m_curFocusIndex = value - 1;
+}
+
+void ScrollAreaConditionContent::focusOutHandler()
+{
+    m_curFocusIndex = -1;
 }

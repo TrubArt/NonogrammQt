@@ -20,10 +20,19 @@ public:
     const QVector<ConditionElement*>& getConditions() const;
     QVector<ConditionElement*>& getConditions();
 
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+
+private slots:
+    void focusInHandler(int value);
+    void focusOutHandler();
+
 private:
     QScrollArea* m_parentScrollArea;
     QVector<ConditionElement*> m_conditions;
     int m_viewSize;
+
+    int m_curFocusIndex;
 };
 
 #endif // SCROLLAREACONDITIONCONTENT_H
