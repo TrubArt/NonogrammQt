@@ -41,6 +41,9 @@ public:
     int getNumber() const;
     QString getData() const;
 
+protected:
+    void focusInEvent(QFocusEvent*) override;
+
 signals:
     void getFocus(int value);
     void lostFocus();

@@ -9,13 +9,13 @@
 
 void CustomLineEdit::focusInEvent(QFocusEvent* event)
 {
-    QWidget::focusInEvent(event);
+    QLineEdit::focusInEvent(event);
     emit getFocus();
 }
 
 void CustomLineEdit::focusOutEvent(QFocusEvent* event)
 {
-    QWidget::focusOutEvent(event);
+    QLineEdit::focusOutEvent(event);
     emit lostFocus();
 }
 
@@ -70,4 +70,9 @@ QString ConditionElement::getData() const
 void ConditionElement::getFocusHandler()
 {
     emit getFocus(getNumber());
+}
+
+void ConditionElement::focusInEvent(QFocusEvent*)
+{
+    ui->lineEditData->setFocus();
 }

@@ -1,5 +1,6 @@
 #include "scrollareaconditioncontent.h"
 #include <QScrollBar>
+#include <QKeyEvent>
 
 ScrollAreaConditionContent::ScrollAreaConditionContent(QWidget* parent)
     : QWidget(parent)
@@ -111,6 +112,30 @@ QVector<ConditionElement*>& ScrollAreaConditionContent::getConditions()
 
 void ScrollAreaConditionContent::keyPressEvent(QKeyEvent* event)
 {
+    if (event->key() == Qt::Key_Down && m_curFocusIndex != -1)
+    {
+        int newFocusWidgetIndex = m_curFocusIndex + 1;
+        if (newFocusWidgetIndex == m_viewSize)
+        {
+            newFocusWidgetIndex = 0;
+        }
+
+        m_conditions[newFocusWidgetIndex]->setFocus();
+        return;
+    }
+
+    if (event->key() == Qt::Key_Up && m_curFocusIndex != -1)
+    {
+        int newFocusWidgetIndex = m_curFocusIndex - 1;
+        if (newFocusWidgetIndex == -1)
+        {
+            newFocusWidgetIndex = m_viewSize - 1;
+        }
+
+        m_conditions[newFocusWidgetIndex]->setFocus();
+        return;
+    }
+
     QWidget::keyPressEvent(event);
 }
 
