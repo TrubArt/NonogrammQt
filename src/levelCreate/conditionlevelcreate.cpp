@@ -43,9 +43,7 @@ ConditionLevelCreate::~ConditionLevelCreate()
 
 ScrollAreaConditionContent* ConditionLevelCreate::scrollAreaInit(QScrollArea* scrollArea)
 {
-    ScrollAreaConditionContent* content = new ScrollAreaConditionContent();
-    scrollArea->setWidget(content);
-    content->setScrollArea(scrollArea);
+    ScrollAreaConditionContent* content = new ScrollAreaConditionContent(scrollArea);
 
     connect(content, &ScrollAreaConditionContent::widgetInvisible, scrollArea, [scrollArea](QWidget* childWidget)
             {

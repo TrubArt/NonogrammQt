@@ -11,8 +11,7 @@ class ScrollAreaConditionContent : public QWidget
     Q_OBJECT
 
 public:
-    explicit ScrollAreaConditionContent(QWidget* parent = nullptr);
-    void setScrollArea(QScrollArea* sa);
+    explicit ScrollAreaConditionContent(QScrollArea* parent);
     int getViewSize() const;
     int getRealSize() const;
     void updateContent(int newSize);
@@ -31,7 +30,6 @@ private slots:
     void focusOutHandler();
 
 private:
-    QScrollArea* m_parentScrollArea;
     QVector<ConditionElement*> m_conditions;
     int m_viewSize;
 

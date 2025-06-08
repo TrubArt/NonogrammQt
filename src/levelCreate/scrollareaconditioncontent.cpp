@@ -1,17 +1,14 @@
 #include "scrollareaconditioncontent.h"
+
 #include <QScrollBar>
 #include <QKeyEvent>
 
-ScrollAreaConditionContent::ScrollAreaConditionContent(QWidget* parent)
-    : QWidget(parent)
-    , m_parentScrollArea(nullptr)
+ScrollAreaConditionContent::ScrollAreaConditionContent(QScrollArea* parentSA)
+    : QWidget(parentSA)
     , m_viewSize(0)
     , m_curFocusIndex(-1)
-{}
-
-void ScrollAreaConditionContent::setScrollArea(QScrollArea* sa)
 {
-    m_parentScrollArea = sa;
+    parentSA->setWidget(this);
 }
 
 int ScrollAreaConditionContent::getViewSize() const
@@ -89,7 +86,8 @@ void ScrollAreaConditionContent::updateContent(int newSize)
             condition->setVisible(true);
         }
 
-        const int rightShift = m_parentScrollArea->verticalScrollBar()->height() + 10; // 10 - margins
+        QScrollArea* par = qobject_cast<QScrollArea*>(parent()->parent());
+        const int rightShift = par->verticalScrollBar()->height() + 10; // 10 - margins
         setFixedSize(condWidth + rightShift, geometry.bottom());
     }
     else
