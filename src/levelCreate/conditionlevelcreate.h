@@ -5,7 +5,7 @@
 #include <QLabel>
 
 #include "scrollareaconditioncontent.h"
-#include "../levelsManager/levelData.h"
+#include "levelsManager/levelData.h"
 
 namespace Ui
 {

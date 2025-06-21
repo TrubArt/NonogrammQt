@@ -68,3 +68,4 @@ add_subdirectory(core)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE CoreLib)
+target_include_directories(${PROJECT_NAME} PRIVATE .)

@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTableWidgetItem>
 
-#include "../levelsManager/levelsStorage.h"
+#include "levelsManager/levelsStorage.h"
 
 namespace Ui
 {

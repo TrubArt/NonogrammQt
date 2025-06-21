@@ -1,6 +1,6 @@
 #include "datalevelchange.h"
 #include "ui_conditionlevelcreate.h"
-#include "../utils.h"
+#include "utils.h"
 
 DataLevelChange::DataLevelChange(const QString& changedLevelName,
                                  const std::shared_ptr<LevelData> levelData,

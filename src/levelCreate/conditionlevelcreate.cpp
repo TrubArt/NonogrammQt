@@ -1,8 +1,8 @@
 #include "conditionlevelcreate.h"
 #include "ui_conditionlevelcreate.h"
-#include "../utils.h"
-#include "../levelsManager/levelLoader/fileParser.h"
-#include "../levelsManager/levelLoader/checker.h"
+#include "utils.h"
+#include "levelsManager/levelLoader/fileParser.h"
+#include "levelsManager/levelLoader/checker.h"
 
 #include <QScrollBar>
 

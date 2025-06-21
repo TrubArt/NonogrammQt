@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QLabel>
-#include "../levelsManager/levelsStorage.h"
+#include "levelsManager/levelsStorage.h"
 
 namespace Ui
 {

@@ -1,6 +1,6 @@
 #include "tablelevels.h"
 #include "ui_tablelevels.h"
-#include "../levelCreate/datalevelchange.h"
+#include "levelCreate/datalevelchange.h"
 
 #include <QMessageBox>
 #include <QKeyEvent>

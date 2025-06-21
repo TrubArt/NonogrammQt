@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-#include "../levelData.h"
+#include "levelsManager/levelData.h"
 #include "fileParser.h"
 #include "checker.h"
 

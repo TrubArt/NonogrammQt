@@ -1,6 +1,6 @@
 #include "levelchangedialog.h"
 #include "ui_levelchangedialog.h"
-#include "../levelsManager/levelsDirectory.h"
+#include "levelsManager/levelsDirectory.h"
 
 #include <QPainter>
 #include <QColorDialog>
